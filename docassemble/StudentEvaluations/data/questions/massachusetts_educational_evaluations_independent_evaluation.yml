@@ -86,12 +86,12 @@ code: |
 code: |
   custom_evaluations = other_evaluations.split('\n')
 ---
-id: confirm independent evaluations screen
+id: select independent evaluations
 question : |
-  Please select the evaluations you want independent evaluations for.
+  What independent evaluations does ${ student.familiar() } need?
+subquestion: |
 fields:
-  - "Select your evaluations here.": selected_evaluations
-
+  - no label: selected_evaluations
     datatype: checkboxes
     choices:
       - Educational Assessment
@@ -103,38 +103,50 @@ fields:
       - Physical Therapy
       - Augmentative and Alternative Communication Evaluation
       - Assistive Technology Evaluation
-      - Transition Assessment
       - Other
     none of the above: |
       I do not know.
-  - Other Evaluation (put each evaluation on a separate line) you may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
+  - Other Evaluation (put each evaluation on a separate line). You may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
     datatype: area
     show if:
       variable: selected_evaluations['Other']
       is: True
 help:
   label: |
-    Need help? Not sure what these are? Click here.
+    How do I choose?
   content: |
     Educational Assessment - Explanatory Text
+    
     Speech and Language Therapy Evaluation - Explanatory Text
+    
     Social Pragmatic Language - Explanatory Text
+    
     Occupational Therapy - Explanatory Text
+    
     Functional Behavior Assessment - Explanatory Text
+    
     Psychological Assessment - Explanatory Text
+    
     Physical Therapy - Explanatory Text
+    
     Augmentative and Alternative Communication Evaluation - Explanatory Text
+    
     Assistive Technology Evaluation - Explanatory Text
 
 ---
 id: independent evaluations intro screen
 question: |
-  This is an interview that will help you request independent evaluations for ${student.name.first}.
+  Requesting an Independent Evaluation
+subquestion: |
+  This is an interview that will help you request independent evaluations for 
+  ${student.name.first}.
   
-under: |  
-  When you see your letter at the end, you can add or remove evaluations from the letter.  
+  When you see your letter at the end, you can add or remove evaluations from 
+  the letter.  
   
-  It is a good idea to talk to ${student.name.first}'s pediatrician or specialists about other evaluations ${student.pronoun()} might need if you are unsure.
+  It is a good idea to talk to ${student.name.first}'s pediatrician or 
+  specialists about other evaluations ${student.pronoun_subjective()} might need if you 
+  are unsure.
 field: independent_evaluations_intro_screen
 
 ---
@@ -168,7 +180,7 @@ fields:
     required: False
     datatype: currency
    
-under: |
+subquestion: |
   You only NEED to put in the evaluator's name. Anything else you want to put is   helpful, but not necessary.  
 ---
 id: is there another evaluator 
@@ -179,7 +191,7 @@ question: |
   * ${ person }
   % endfor
 
-under: |
+subquestion: |
   Are there any other evaluators?
   
 yesno: evaluators.there_is_another
@@ -215,7 +227,7 @@ question: |
   
   ${ pdf_concatenate(independent_evaluation_request_variable) }     
   
-under: |
+subquestion: |
   % if is_child_in_school == False and school.special_education_director.address == None:
   Because your child is not in school, you need to send it to the special education director for your district.
   Please contact  MAC's helpline at 617-357-8431 or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/))
@@ -247,7 +259,7 @@ id: independent evaluation wants reminders screen
 question: |
   The School District is required to provide you with a consent form within five school   days of receiving this form.
 yesno: wants_reminders
-under: |
+subquestion: |
   Would you like a reminder to follow up with the school?
 ---
 id: end screen independent evaluation
