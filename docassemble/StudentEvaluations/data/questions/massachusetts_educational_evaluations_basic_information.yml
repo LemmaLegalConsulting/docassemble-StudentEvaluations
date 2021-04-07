@@ -367,7 +367,7 @@ fields:
     show if: school.special_education_coordinator.requestor_knows_name
   - Recipient Last Name: school.special_education_coordinator.name.last
     show if: school.special_education_coordinator.requestor_knows_name
-under: |
+subquestion: |
    The name of the special education coordinator should be listed on your child’s IEP.  If you do not know the name of the special education coordinator, 
    you can try looking at the school webpage or doing an internet search using your child’s school district.
 terms:
@@ -382,11 +382,11 @@ terms:
 ---
 id: special education director information
 question: |
-  Please fill in the following information.
+  Name of Special Education Director
 fields:
   - "Do you know the name of the Special Education Director for the school district?": school.special_education_director.requestor_knows_name
     datatype: yesnoradio
-  - Education Director Title: school.special_education_director.title
+  - Special Education Director Title: school.special_education_director.title
     input type: radio
     show if: school.special_education_director.requestor_knows_name
     choices: 
@@ -399,7 +399,7 @@ fields:
     show if: school.special_education_director.requestor_knows_name
   - Special Education Director Last Name: school.special_education_director.name.last
     show if: school.special_education_director.requestor_knows_name
-under: |
+subquestion: |
   Because ${student.name.first} is not yet in school, you need to send this letter to the special education director
   for where you live. You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
 comment : |

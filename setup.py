@@ -43,9 +43,9 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.StudentEvaluations',
-      version='0.0.1',
+      version='0.0.2',
       description=(''),
-      long_description='# docassemble.StudentEvaluations\n\n\n\n## Author\n\nSystem Administrator, admin@lemmalegal.com\n\n',
+      long_description='# docassemble.StudentEvaluations\r\n\r\n\r\n\r\n## Author\r\n\r\nSystem Administrator, admin@lemmalegal.com\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Quinten Steenhuis and Matt Brooks',
       author_email='quinten@lemmalegal.com',
