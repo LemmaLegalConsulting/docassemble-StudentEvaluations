@@ -1,0 +1,137 @@
+---
+modules:
+    - docassemble.base.util
+    - docassemble.base.legal
+    - docassemble.income.income
+    - .prs
+---
+metadata:
+    title: | 
+       MAC PRS Complaint (Language Access)
+    description: |
+        An interview to fill in MAC's Parent PRS Complaint Form: Language Access.
+    authors:
+        - name: Matt Brooks and Quinten Steenhuis
+          organization: LemmaLegal
+    revision_date: 2020-07-15
+---
+objects:
+  - translated_documents: PRSTranslatedDocuments
+  - meetings: PRSMeetings
+---
+id: mac prs language access complaint interview order block
+code: |
+  parent.name.first
+  school.district.name
+  translated_documents.gather()
+  gather_individual_documents
+  meetings.gather()
+  gather_individual_meetings
+  gather_interpretation_requests
+  ##  translated_documents.school_evaluations.gather()
+  ##  translated_documents.reports.gather()
+  ##  translated_documents.ieps.gather()
+  ##  translated_documents.consent_forms.gather()
+  ##  translated_documents.meeting_invitations.gather()
+  ##  translated_documents.discipline_hearings.gather()
+  ##  translated_documents.other.gather()
+  ##  meetings.no_interpretation_provided.gather()
+  ##  meetings.unqualified_interpretation.gather()
+  parent.signature
+---
+id: prs gather individual documents code block
+code: |
+  if translated_documents.there_are_any:
+    for individual_document in translated_documents:
+      individual_document.gather()
+  gather_individual_documents = True
+---
+id: prs gather individual meetings code block
+code: |
+  if meetings.there_are_any:
+    for individual_meeting in meetings:
+      individual_meeting.gather()
+  gather_individual_meetings = True
+---
+id: prs gather interpretation requests code block
+code: |
+  if meetings.there_are_any:
+    for individual_meeting in meetings:
+      if individual_meeting.requested:
+        individual_meeting.requested_from
+        individual_meeting.how_requested
+        individual_meeting.date_requested
+        individual_meeting.date_attached
+  gather_interpretation_requests = True
+---
+id: prs translation problems
+question: |
+  Do you have any translation problems?
+yesno: translated_documents.there_are_any
+
+---
+id: prs gather names of translated documents
+question: |
+  What kind of document is the ${ ordinal(i) } document?
+fields:
+  - Kind of document: translated_documents[i].name
+    input type: radio
+    choices:
+      - School Evaluation
+      - Special Education Progress Reports/Grade Reports
+      - Individualized Education Programs (IEPs)
+      - Evaluation Consent Forms
+      - Team Meeting Invitations
+      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions
+      - Other
+---
+id: prs is there another translated document
+question: |
+  Is there another document with a translation problems?
+yesno: translated_documents.there_is_another
+---
+id: prs individual document information
+generic object: PRSIndividualObject
+question: |
+  Tell me about ${ x }
+fields:
+  - Evaluation Type: x.type
+  - Evaluation Date: x.date
+    datatype: date
+---
+id: prs interpretation problems
+question: |
+  Do you have any interpretation problems?
+yesno: meetings.there_are_any
+---
+id: prs gather names of meetings
+question: |
+  What kind of meeting is the ${ ordinal(i) } meeting?
+fields:
+  - Kind of meeting: meetings[i].name
+---
+id: prs is there another meeting
+question: |
+  Is there another meeting with an interpretation problems?
+yesno: meetings.there_is_another
+---
+id: prs individual meeting information
+generic object: PRSIndividualMeeting
+question: |
+  Tell me about ${ x }
+fields:
+  - Meeting Date: x.date
+    datatype: date
+  - Did you request interpretation?: x.requested
+    datatype: yesnoradio
+  - Was the interpretation inadequate or nonexistent?: x.any_interpretation
+    choices:
+      - inadequate
+      - nonexistent
+---
+id: prs complaint form attachment block
+attachment:
+  - name: prs_complaint_name
+    variable name: prs_complaint_variable
+    filename: prs_complaint
+    docx template file: prs_complaint_template_language_access.docx

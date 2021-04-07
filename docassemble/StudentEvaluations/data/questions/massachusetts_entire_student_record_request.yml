@@ -1,0 +1,106 @@
+---
+modules:
+    - docassemble.base.util
+    - docassemble.base.legal
+    - docassemble.income.income
+    - dateutil
+    - .educational_evaluations
+---
+include:
+  - massachusetts_educational_evaluations_basic_information.yml
+---
+features:
+  bootstrap theme: mac-bootstrap.css
+  progress bar: True
+---
+metadata:
+    title: | 
+        MAC Request for Entire Student Record
+    description: |
+        An interview to request a student's entire record.
+    authors:
+        - name: Matt Brooks
+          organization: Lemma Legal
+    revision_date: 2020-06-10
+---
+id: child is in school if you need a school record
+initial: True
+code: |
+  is_child_in_school = True
+---
+id: interview order entire record
+mandatory: True
+code: |
+  entire_record_request_intro_screen
+  student.enrollment_date
+  educational_evaluations_entire_record_request_concatenated = pdf_concatenate(educational_evaluations_entire_record_request_variable)
+  if done['emailed to the person receiving it']:
+    school.recipient.email
+    send_email(to=[school.recipient.email], subject=str(student.name.full()) + " Entire Student Record Request", attachments=[pdf_concatenate(educational_evaluations_entire_record_request_variable)])
+  if done["emailed to me"]:
+    requestor.email
+    send_email(to=[requestor.email], subject=str(student.name.full()) + "Entire Student Record Request", attachments=[educational_evaluations_entire_record_request_variable])
+  end_screen
+
+---
+id: entire record request intro screen
+question: |
+  This interview will let you request ${student.name.first}'s entire student record.
+  
+field: entire_record_request_intro_screen
+---
+id: enrollment date screen
+question: |
+  When did ${student.name.first} start going to ${school.name}?
+fields:
+  - ${student.name.first}'s starting date: student.enrollment_date
+    datatype: date
+---
+id: entire record request signature block
+question: |
+  ${ requestor.name.firstlast() }
+signature: requestor.signature
+under: |
+  Sign your name here by using your mouse or touching your phone's screen.
+  Press clear if you want to start over.
+---
+id: entire record request letter screen
+question: |
+  Here is your letter
+
+  ${ educational_evaluations_entire_record_request_concatenated }
+
+
+fields:
+  - "I want a copy of my letter...": done
+    datatype: checkboxes
+    choices: 
+      - emailed to me
+      - emailed to the person receiving it
+---
+id: entire student record recquest recipient email screen
+question: |
+  What is ${school.recipient.name.full()}'s email?
+fields:
+  - ${school.recipient.name.full()} email: school.recipient.email
+---
+id: entire student record request requestor email screen
+question: |
+  What is your email?
+fields:
+  - your email: requestor.email
+---
+id: end screen entire record request
+event: end_screen
+question: |
+  You are all done!
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+id: entire request attachment block
+attachment:
+  - name: educational_evaluations_entire_record_request_name
+    variable name: educational_evaluations_entire_record_request_variable
+    filename: educational_evaluations_entire_record_request_request
+    docx template file: educational_evaluations_entire_record_request_template.docx

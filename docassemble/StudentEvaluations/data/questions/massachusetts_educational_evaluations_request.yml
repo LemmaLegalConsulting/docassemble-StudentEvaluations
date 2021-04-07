@@ -1,0 +1,554 @@
+---
+modules:
+    - docassemble.base.util
+    - docassemble.base.legal
+    - docassemble.income.income
+    - dateutil
+    - .educational_evaluations
+---
+include:
+  - massachusetts_educational_evaluations_basic_information.yml
+---
+features:
+  bootstrap theme: mac-bootstrap.css
+  progress bar: True
+---
+metadata:
+    title: | 
+        MAC Request for Initial Special Education Evaluation
+    description: |
+        An interview to request an independent evaluation from a school.
+    authors:
+        - name: Matt Brooks
+          organization: Lemma Legal
+    revision_date: 2020-06-16
+---
+id: process action initial request
+initial: True
+code: |
+  process_action()
+---
+id: interview order initial request
+mandatory: True
+code: |
+  allow_chron = True
+  multi_user = True
+  count = 0
+  educational_evaluations_intro_screen
+  if selected_evaluations.all_false():
+    call_the_hotline
+  #   educational_assessment = True
+  #   if speech_and_language_therapy.any_true():
+  #     student.evaluations_list.append('Speech and Language Therapy Evaluation')
+  #   else:
+  #     pass
+  #   if social_pragmatic_language.any_true():
+  #     student.evaluations_list.append('Social Pragmatic Language')
+  #   student.evaluations_list.append('Educational Assessment')
+  #   if occupational_therapy.any_true():
+  #     student.evaluations_list.append('Occupational Therapy')
+  #   else:
+  #     pass
+  #   if functional_behavior_assessment.any_true():
+  #     student.evaluations_list.append('Functional Behavior Assessment')
+  #   else:
+  #     pass
+  #   if psychological_assessment.any_true():
+  #     student.evaluations_list.append('Psychological Assessment')
+  #   else:
+  #     pass
+  #   if physical_therapy.any_true():
+  #     student.evaluations_list.append('Physical Therapy')
+  #   else:
+  #     pass
+  #   if augmentative_and_alternative_communication.any_true():
+  #     student.evaluations_list.append('Augmentative and Alternative Communication Evaluation')
+  #   else:
+  #     pass
+  #   if assistive_technology.any_true():
+  #     student.evaluations_list.append('Assistive Technology Evaluation')
+  #   else:
+  #     pass
+  if selected_evaluations['Other'] == True:
+    while count < 1:
+      custom_evaluations = other_evaluations.split('\n')
+      count = count + 1
+  else:
+    custom_evaluations = list()
+  initial_request_concatenated = pdf_concatenate(initial_request_variable)
+  if wants_reminders:
+    requestor.email
+    letter_created_date = today()
+  
+  if done['emailed to the person receiving it']:
+    school.recipient.email
+    send_email(to=[school.recipient.email], subject=str(student.name.full()) + " Evaluation Request", attachments=[pdf_concatenate(initial_request_variable), pdf_concatenate(educational_evaluations_copy_request_variable), pdf_concatenate(educational_evaluations_transition_assessment_variable)])
+    if done['emailed to me']:
+      requestor.email
+      send_email(to=[requestor.email], subject=str(student.name.full()) + " Evaluation Request", attachments=[initial_request_variable, educational_evaluations_copy_request_variable, educational_evaluations_transition_assessment_variable])
+  end_screen
+---
+if: |
+  student.age < 14
+id: confirm evaluations screen over 14
+question : |
+  What evaluations does ${ student.familiar() } need?
+subquestion: |
+fields:
+  - no label: selected_evaluations
+    datatype: checkboxes
+    choices:
+      - Educational Assessment
+      - Speech and Language Therapy Evaluation
+      - Social Pragmatic Language
+      - Occupational Therapy
+      - Functional Behavior Assessment
+      - Psychological Assessment
+      - Physical Therapy
+      - Augmentative and Alternative Communication Evaluation
+      - Assistive Technology Evaluation
+      - Other
+    none of the above: |
+      I do not know.
+  - Other Evaluation (put each evaluation on a separate line) you may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
+    datatype: area
+    show if:
+      variable: selected_evaluations['Other']
+      is: True
+help:
+  label: |
+    How do I choose?
+  content: |
+    Educational Assessment - Explanatory Text
+    
+    Speech and Language Therapy Evaluation - Explanatory Text
+    
+    Social Pragmatic Language - Explanatory Text
+    
+    Occupational Therapy - Explanatory Text
+    
+    Functional Behavior Assessment - Explanatory Text
+    
+    Psychological Assessment - Explanatory Text
+    
+    Physical Therapy - Explanatory Text
+    
+    Augmentative and Alternative Communication Evaluation - Explanatory Text
+    
+    Assistive Technology Evaluation - Explanatory Text
+---
+if: |
+  student.age >= 14
+id: confirm evaluations screen over 14
+question : |
+  Please select the evaluations you want.
+fields:
+  - "Select your evaluations here.": selected_evaluations
+    datatype: checkboxes
+    choices:
+      - Educational Assessment
+      - Speech and Language Therapy Evaluation
+      - Social Pragmatic Language
+      - Occupational Therapy
+      - Functional Behavior Assessment
+      - Psychological Assessment
+      - Physical Therapy
+      - Augmentative and Alternative Communication Evaluation
+      - Assistive Technology Evaluation
+      - Transition Assessment
+      - Other
+    none of the above: |
+      I do not know.
+  - Other Evaluation (put each evaluation on a separate line) you may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
+    datatype: area
+    show if:
+      variable: selected_evaluations['Other']
+      is: True
+help:
+  label: |
+    Need help? Not sure what these are? Click here.
+  content: |
+    Educational Assessment - Explanatory Text
+    Speech and Language Therapy Evaluation - Explanatory Text
+    Social Pragmatic Language - Explanatory Text
+    Occupational Therapy - Explanatory Text
+    Functional Behavior Assessment - Explanatory Text
+    Psychological Assessment - Explanatory Text
+    Physical Therapy - Explanatory Text
+    Augmentative and Alternative Communication Evaluation - Explanatory Text
+    Assistive Technology Evaluation - Explanatory Text
+
+
+---
+id: skip to end screen
+question: |
+  Please select the evaluations you want.
+fields:
+  - "Select the evaluations you want": known_evaluations
+    datatype: checkboxes
+    choices:
+      - Educational Assessment
+      - Speech and Language Therapy Evaluation
+      - Social Pragmatic Language
+      - Occupational Therapy
+      - Functional Behavior Assessment
+      - Psychological Assessment
+      - Physical Therapy
+      - Augmentative and Alternative Communication Evaluation
+      - Assistive Technology Evaluation
+      - Transition Assessment
+---
+id: initial evaluation intro screen
+question: |
+  Choosing student evaluations
+subquestion: |
+  On the next page, you will have a chance to choose the evaluations
+  you want your school to perform.
+    
+  It is a good idea to talk to ${student.name.first}'s pediatrician or 
+  specialists about other evaluations ${student.pronoun_subjective()} might need if you 
+  are unsure.
+  
+  You may not see the evaluation you want listed. You will have a chance to
+  edit the final letter to add additional evaluations.
+field: educational_evaluations_intro_screen
+---
+id: speech and language therapy
+question: |
+  % if requestor.right_to_send == 'Student':
+  Check any of the following that you think are true about yourself.
+  % else:
+  Check any of the following that are true about ${student.name.first}.
+  % endif
+fields:
+  - "": speech_and_language_therapy
+    datatype: checkboxes
+    choices:
+      - ${ student.name.first } has problems talking.
+
+      - ${ student.name.first } has trouble following directions.
+
+      - People that don't know ${student.name.first} can't understand ${student.pronoun()}.
+     
+      - ${ student.name.first } can't be understood by people not familiar with ${ student.pronoun() }.
+               
+      - ${ student.name.first } does not speak or has limited speech (also known as non-verbal).
+     
+      - ${ student.name.first } has problems finding words to communicate. 
+    none of the above: |
+      I don't know.              
+---
+id: social pragmatic language
+question: |
+  % if requestor.right_to_send == 'Student':
+  Check any of the following that you think are true about yourself.
+  % else:
+  Check any of the following that are true about ${student.name.first}.
+  % endif
+fields:
+  - "": social_pragmatic_language
+    datatype: checkboxes
+    choices:
+      - ${ student.name.first } does not understand back and forth conversation.
+
+      - ${ student.name.first } does not know when others are not or no longer interested in what ${student.pronoun_subjective()} is saying.
+
+      - ${ student.name.first } does not know how to greet people.
+
+      - ${ student.name.first } does not know how to respond to the {social cues} of others.
+    none of the above: |
+      I don't know.
+terms:
+  social cues: |
+    Social cues are signals that people send through body language or facial expressions. When a child misses social cues they can misunderstand people and situations.
+comment: |
+  Why isn't social cues showing up as a term in the interview?
+---
+id: occupational therapy
+question: |
+  % if requestor.right_to_send == 'Student':
+  Check any of the following that you think are true about yourself.
+  % else:
+  Check any of the following that are true about ${student.name.first}.
+  % endif
+fields:
+  - "": occupational_therapy
+    datatype: checkboxes
+    choices:   
+      - ${ student.name.first } cannot independently do activities of daily living (brushing teeth, dressing, do buttons and zippers, use eating utensils, feed self, toilet).
+     
+      - It is hard for ${student.name.first } to write or use a pen or pencil.
+
+      - ${ student.name.first } is sensitive to loud sounds and/or certain textures.
+     
+      - ${ student.name.first } will sometimes bang on things or bump into things more than other children ${student.pronoun_possessive("age")}.
+    none of the above: |
+      I don't know.
+---
+id: functional behavior assessment
+question: |
+  % if requestor.right_to_send == 'Student':
+  Check any of the following that you think are true about yourself.
+  % else:
+  Check any of the following that are true about ${student.name.first}.
+  % endif
+fields:
+  - "": functional_behavior_assessment
+    datatype: checkboxes
+    choices:
+      - I am concerned about ${student.name.first}'s behavior at home or at school.
+  
+      - ${ student.name.first } has behaviors that keep ${student.pronoun()} from learning.
+     
+      - ${student.name.first} has behaviors that make it hard for ${student.pronoun()} to make friends in school. 
+
+      - ${ student.name.first } has tantrums more easily or more often than other children ${student.pronoun_possessive('age')}.
+     
+      - ${ student.name.first } does not know how to communicate ${student.pronoun_possessive("wants/need")} with others.
+               
+      - I have received calls from the school about ${ student.name.first }'s behavior.
+     
+      - ${ student.name.first } has been sent home from school due to behaviors.
+     
+      - I have been told that ${ student.name.first } needed to be restrained or removed from the class due to ${ student.pronoun_possessive("behavior") }.
+     
+      - ${ student.name.first } often refuses to go to school.
+    none of the above: |
+      I don't know.
+
+---
+id: psychological assessment
+question: |
+  % if requestor.right_to_send == 'Student':
+  Check any of the following that you think are true about yourself.
+  % else:
+  Check any of the following that are true about ${student.name.first}.
+  % endif
+fields:
+  - "": psychological_assessment
+    datatype: checkboxes
+    choices:
+      - ${student.name.first} has a mental health disability.
+
+      - I have concerns about ${ student.pronoun_possessive("emotional wellbeing") } or moods.
+    
+      - ${ student.name.first } cannot tell others what ${ student.pronoun_subjective() } wants or needs.
+    
+      - ${ student.name.first } sees a mental health counselor at and/or in the community.
+    
+      - ${ student.name.first } has had traumatic experiences
+    none of the above: |
+      I don't know.
+
+---
+id: physical therapy
+question: |
+  % if requestor.right_to_send == 'Student':
+  Check any of the following that you think are true about yourself.
+  % else:
+  Check any of the following that are true about ${student.name.first}.
+  % endif
+fields:
+  - "": physical_therapy
+    datatype: checkboxes
+    choices:
+      - ${ student.name.first } has a physical disability.
+    
+      - ${ student.name.first } has trouble with coordination.
+    none of the above: |
+      I don't know.
+
+---
+id: augmentative and alternative communication
+question: |
+  % if requestor.right_to_send == 'Student':
+  Check any of the following that you think are true about yourself.
+  % else:
+  Check any of the following that are true about ${student.name.first}.
+  % endif
+fields:
+  - "": augmentative_and_alternative_communication
+    datatype: checkboxes
+    choices:
+      - ${ student.name.first } is nonverbal or has limited speech.
+    
+      - ${ student.name.first } cannot make ${ student.pronoun_possessive("wants") } and needs known.
+    none of the above: |
+      I don't know.
+
+---
+id: assistive technology
+question: |
+  % if requestor.right_to_send == 'Student':
+  Check any of the following that you think are true about yourself.
+  % else:
+  Check any of the following that are true about ${student.name.first}.
+  % endif
+fields:
+  - "": assistive_technology
+    datatype: checkboxes
+    choices: 
+      - ${ student.name.first } has trouble organizing ${ student.pronoun_possessive("thoughts") } or ideas for school projects and homework.
+    
+      - ${ student.name.first } has difficulty initiating tasks.
+    
+      - ${ student.name.first } has a hard time focusing or staying on track.
+    
+      - ${ student.name.first } has a learning disability.
+    
+      - ${ student.name.first } has trouble reading and/or writing.
+    
+      - ${ student.name.first } cannot make ${ student.pronoun_possessive("feelings") } known.
+    none of the above: |
+      I don't know.
+
+---
+id: signature block
+question: |
+  ${ requestor.name.firstlast() }
+signature: requestor.signature
+under: |
+  Sign your name here by using your mouse or touching your phone's screen.
+  Press clear if you want to start over.
+---
+id: letter screen
+question: |
+  Here are your letters:
+
+  >This is the evaluation request letter. You should send it right away: 
+  
+  ${ pdf_concatenate(initial_request_variable) }     
+  
+  % if selected_evaluations.elements.get('Transition Assessment'):     
+  
+  
+   >This is a request for a Transition Assessment. You should send it at the same time as the evaluation request letter. 
+   
+   ${ pdf_concatenate(educational_evaluations_transition_assessment_variable) }
+  % endif
+  
+  >This is a request for copies of the evaluations you have requested. Send it after
+  the evaluations are complete:
+  
+  ${ pdf_concatenate(educational_evaluations_copy_request_variable) }
+    
+
+under: |
+  % if is_child_in_school == False and school.special_education_director.address == None:
+  Because your child is not in school, you need to send it to the special education director for your district.
+  Please contact  MAC’s helpline at 617-357-8431 or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/))
+  for help locating this address. It may take up to three business days for someone to get back to you.
+
+  You may also be able to find the name of your district's special education director  by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
+
+  % endif
+fields:
+  - "I want a copy of my letter...": done
+    datatype: checkboxes
+    choices: 
+      - emailed to me
+      - emailed to the person receiving it
+comment: |
+
+  I tried displaying the images like this, but it didn't work. I need to talk to Quinten:
+
+  
+    This is the evaluation request letter. You should send it right away:
+
+  [FILE lettergraphic.jpg]: ${ initial_request_variable } this doesn't work, talk to Quinten
+
+  % if "Transition Assessment" in selected_evaluations:
+
+  This is a request for a Transition Assessment. You should send it at the same time as 
+  the evaluation request letter.
+
+  [FILE lettergraphic.jpg]: ${ educational_evaluations_transition_assessment_variable } this doesn't work, talk to Quinten.
+
+  % endif
+
+  This is a request for copies of the evaluations you have requested. Send it after
+  the evaluations are complete:
+
+  [FILE lettergraphic.jpg]: ${ educational_evaluations_copy_request_variable } this doesn't work, talk to Quinten
+---
+id: recipient email screen
+question: |
+  What is ${school.recipient.name.full()}'s email?
+fields:
+  - ${school.recipient.name.full()} email: school.recipient.email
+---
+id: requestor email screen
+question: |
+  What is your email?
+fields:
+  - your email: requestor.email
+---
+id: wants reminders screen
+question: |
+  Getting a reminder
+subquestion: |  
+  The School District is required to provide you with a consent form within 
+  five school days of receiving this form.
+
+  Would you like a reminder to follow up with the school?
+yesno: wants_reminders
+---
+id: end screen initial request
+event: end_screen
+question: |
+  You are all done!
+buttons:
+  - Leave: leave
+
+  - Restart: restart
+---
+id: call the hotline initial request
+event: call_the_hotline
+question: |
+  Please contact  MAC’s helpline at 617-357-8431 or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/))
+  It may take up to three business days for someone to get back to you.
+buttons:
+  - Leave: leave
+  - Restart: restart
+---
+id: initial request attachment block
+attachment:
+  - name: initial_request_name
+    variable name: initial_request_variable
+    filename: initial_request
+    docx template file: initial_request_template.docx
+---
+id: copy request attachment block
+attachment:
+  - name: educational_evaluations_copy_request_name
+    variable name: educational_evaluations_copy_request_variable
+    filename: educational_evaluations_copy_request
+    docx template file: educational_evaluations_copy_request_template.docx
+---
+id: transition assessment attachment block
+attachment:
+  - name: educational_evaluations_transition_assessment_request_name
+    variable name: educational_evaluations_transition_assessment_variable
+    filename: educational_evaluations_transition_assessment_request
+    docx template file: educational_evaluations_transition_assessment_request_template.docx
+---
+id: reminder email template
+template: reminder_email_initial_request
+subject: |
+  Hey, it's been 30 days.
+content: |
+  Have you heard from the school yet?
+---
+event: cron_daily
+code: |
+  if task_not_yet_performed('10 day reminder email') and date_difference(starting=letter_created_date).days > 10 and wants_reminders:
+    send_email(to=requestor.email, template=reminder_email_initial_request, task='10 day reminder email')
+  if task_not_yet_performed('10 day reminder text') and date_difference(starting=letter_created_date).days > 10 and wants_reminders:
+    send_sms(to=requestor, body='Have you heard from the school yet?', task='10 day reminder text')
+  response()
+---
+event: cron_monthly
+code: |
+  if last_access_days() > 365:
+    command('exit')
+

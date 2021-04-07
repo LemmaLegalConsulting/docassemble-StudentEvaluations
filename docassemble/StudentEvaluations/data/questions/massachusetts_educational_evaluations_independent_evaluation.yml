@@ -1,0 +1,309 @@
+---
+modules:
+    - docassemble.base.util
+    - docassemble.base.legal
+    - docassemble.income.income
+    - dateutil
+    - .educational_evaluations
+---
+include:
+  - massachusetts_educational_evaluations_basic_information.yml
+---
+features:
+  bootstrap theme: mac-bootstrap.css
+  progress bar: True
+---
+metadata:
+    title: | 
+        MAC Request for Independent Special Education Evaluation
+    description: |
+        An interview to request an independent evaluation from a school.
+    authors:
+        - name: Matt Brooks
+          organization: Lemma Legal
+    revision_date: 2020-03-12
+---
+objects: 
+  - evaluators: | 
+      DAList.using(
+        object_type=Individual, 
+        complete_attribute='complete')
+---
+id: evaluators complete attribute block
+code: |
+  evaluators[i].hourly_rate
+  evaluators[i].complete = True
+  
+---
+mandatory: True
+scan for variables: False
+id: interview order independent eval request
+code: |
+  independent_evaluations_intro_screen
+  if selected_evaluations.all_false():
+    call_the_hotline
+  if selected_evaluations['Other'] == True:
+    custom_evaluations
+  if evaluators.there_are_any == False:
+    call_the_hotline
+  if comfortable_sharing_income == True:
+    if free_or_reduced_lunch:
+      pass
+    elif below_400_percent:
+      pass
+    else:
+      pass
+  else:
+    free_or_reduced_lunch = False
+    below_400_percent = False
+  independent_evaluation_request_concatenated
+  if done['emailed to the person receiving it']:
+    school.recipient.email
+    sent_school_email
+    end_screen
+  if done["emailed to me"]:
+    requestor.email
+    sent_requestor_email
+    end_screen
+---
+code: |
+  if task_not_yet_performed('sent school email'):
+    send_email(to=[school.recipient.email], 
+      subject=str(student.name.full()) + " Independent Evaluation Request", 
+      attachments=[pdf_concatenate(independent_evaluation_request_variable)], task="sent school email")
+  sent_school_email = True
+---
+code: |
+  if task_not_yet_performed("sent requestor email"):
+    send_email(to=[requestor.email], 
+      subject=str(student.name.full()) + " Independent Evaluation Request", 
+      attachments=[independent_evaluation_request_variable], task="sent requestor email")
+  sent_requestor_email = True
+---
+code: |
+  independent_evaluation_request_concatenated = pdf_concatenate(independent_evaluation_request_variable)
+---
+code: |
+  custom_evaluations = other_evaluations.split('\n')
+---
+id: confirm independent evaluations screen
+question : |
+  Please select the evaluations you want independent evaluations for.
+fields:
+  - "Select your evaluations here.": selected_evaluations
+
+    datatype: checkboxes
+    choices:
+      - Educational Assessment
+      - Speech and Language Therapy Evaluation
+      - Social Pragmatic Language
+      - Occupational Therapy
+      - Functional Behavior Assessment
+      - Psychological Assessment
+      - Physical Therapy
+      - Augmentative and Alternative Communication Evaluation
+      - Assistive Technology Evaluation
+      - Transition Assessment
+      - Other
+    none of the above: |
+      I do not know.
+  - Other Evaluation (put each evaluation on a separate line) you may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
+    datatype: area
+    show if:
+      variable: selected_evaluations['Other']
+      is: True
+help:
+  label: |
+    Need help? Not sure what these are? Click here.
+  content: |
+    Educational Assessment - Explanatory Text
+    Speech and Language Therapy Evaluation - Explanatory Text
+    Social Pragmatic Language - Explanatory Text
+    Occupational Therapy - Explanatory Text
+    Functional Behavior Assessment - Explanatory Text
+    Psychological Assessment - Explanatory Text
+    Physical Therapy - Explanatory Text
+    Augmentative and Alternative Communication Evaluation - Explanatory Text
+    Assistive Technology Evaluation - Explanatory Text
+
+---
+id: independent evaluations intro screen
+question: |
+  This is an interview that will help you request independent evaluations for ${student.name.first}.
+  
+under: |  
+  When you see your letter at the end, you can add or remove evaluations from the letter.  
+  
+  It is a good idea to talk to ${student.name.first}'s pediatrician or specialists about other evaluations ${student.pronoun()} might need if you are unsure.
+field: independent_evaluations_intro_screen
+
+---
+id: are there any evaluators screen
+question: |
+  Do you know the names of the independent evaluators you want for ${student.name.first}?
+yesno: evaluators.there_are_any
+---
+id: evaluators name screen
+question: |
+  What is the name of the ${ ordinal(i) } evaluator?
+fields:
+  - First Name: evaluators[i].name.first
+  - Last Name: evaluators[i].name.last
+---
+id: evaluators info screen
+question: |
+  Fill in information about ${ evaluators[i] }.
+fields: 
+  - Address: evaluators[i].address.address
+    required: False
+  - City: evaluators[i].address.city
+    required: False
+  - State: evaluators[i].address.state
+    required: False
+  - Zip: evaluators[i].address.zip
+    required: False
+  - License Number: evaluators[i].license_number
+    required: False
+  - Hourly Rate: evaluators[i].hourly_rate
+    required: False
+    datatype: currency
+   
+under: |
+  You only NEED to put in the evaluator's name. Anything else you want to put is   helpful, but not necessary.  
+---
+id: is there another evaluator 
+question: |
+  So far, you have put in information for the following evaluators:
+  
+  % for person in evaluators:
+  * ${ person }
+  % endfor
+
+under: |
+  Are there any other evaluators?
+  
+yesno: evaluators.there_is_another
+---
+id: comfortable sharing income screen
+question: |
+  Are you comfortable sharing your income information with ${ school.recipient.name }?
+yesno: comfortable_sharing_income
+---
+id: free or reduced lunch screen
+question: |
+  Is ${ student.name.first } eligible for free or reduced lunch?
+yesno: free_or_reduced_lunch
+---
+id: below four hundred percent screen
+question: |
+  Is your family below 400% of the poverty line?
+yesno: below_400_percent
+---
+id: independent evaluation signature block
+question: |
+  ${ requestor.name.firstlast() }
+signature: requestor.signature
+under: |
+  Sign your name here by using your mouse or touching your phone's screen.
+  Press clear if you want to start over.
+---
+id: independent evaluation letter screen
+question: |
+  Here are your letters:
+
+  >This is the independent evaluation request letter. You should send it right away: 
+  
+  ${ pdf_concatenate(independent_evaluation_request_variable) }     
+  
+under: |
+  % if is_child_in_school == False and school.special_education_director.address == None:
+  Because your child is not in school, you need to send it to the special education director for your district.
+  Please contact  MAC's helpline at 617-357-8431 or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/))
+  for help locating this address. It may take up to three business days for someone to get back to you.
+
+  You may also be able to find the name of your district's special education director  by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
+
+  % endif
+fields:
+  - "I want a copy of my letter...": done
+    datatype: checkboxes
+    choices: 
+      - emailed to me
+      - emailed to the person receiving it
+---
+id: independent evaluation recipient email screen
+question: |
+  What is ${school.recipient.name.full()}'s email?
+fields:
+  - ${school.recipient.name.full()} email: school.recipient.email
+---
+id: independent evaluation requestor email screen
+question: |
+  What is your email?
+fields:
+  - your email: requestor.email
+---
+id: independent evaluation wants reminders screen
+question: |
+  The School District is required to provide you with a consent form within five school   days of receiving this form.
+yesno: wants_reminders
+under: |
+  Would you like a reminder to follow up with the school?
+---
+id: end screen independent evaluation
+event: end_screen
+question: |
+  You are all done!
+buttons:
+  - Leave: leave
+
+  - Restart: restart
+---
+id: call the hotline independent evaluation
+event: call_the_hotline
+question: |
+  Please contact  MAC's helpline at 617-357-8431 or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/))
+  It may take up to three business days for someone to get back to you.
+buttons:
+  - Leave: leave
+  - Restart: restart
+---
+id: independent evaluation attachment block
+attachment:
+  - name: independent_evaluation_request_name
+    variable name: independent_evaluation_request_variable
+    filename: independent_evaluation_request
+    docx template file: independent_evaluation_request_template.docx
+---
+id: independent evaluators table block
+table: evaluators_table
+rows: evaluators
+columns:
+  - Name: row_item.name
+  - Street Address: row_item.address.address
+  - City: row_item.address.city
+  - State: row_item.address.state
+  - Zip: row_item.address.zip
+  - License Number: row_item.license_number
+  - Hourly Rate: row_item.hourly_rate
+---
+id: reminder email template
+template: reminder_email_initial_request
+subject: |
+  Hey, it's been 30 days.
+content: |
+  Have you heard from the school yet?
+---
+event: cron_daily
+code: |
+  if task_not_yet_performed('10 day reminder email') and date_difference(starting=letter_created_date).days > 10 and wants_reminders:
+    send_email(to=requestor.email, template=reminder_email_initial_request, task='10 day reminder email')
+  if task_not_yet_performed('10 day reminder text') and date_difference(starting=letter_created_date).days > 10 and wants_reminders:
+    send_sms(to=requestor, body='Have you heard from the school yet?', task='10 day reminder text')
+  response()
+---
+event: cron_monthly
+code: |
+  if last_access_days() > 365:
+    command('exit')
+
