@@ -1,9 +1,14 @@
 ---
 modules:
-    - docassemble.base.util
-    - docassemble.base.legal
-    - docassemble.income.income
-    - .prs
+  - docassemble.income.income
+  - .prs
+  - docassemble.ALToolbox.misc
+  - docassemble.AssemblyLine.al_general
+  - docassemble.AssemblyLine.al_document
+  - docassemble.AssemblyLine.al_courts
+---
+include:
+  - docassemble.AssemblyLine:ql_baseline.yml
 ---
 metadata:
     title: | 
@@ -16,17 +21,41 @@ metadata:
     revision_date: 2020-07-15
 ---
 objects:
-  - translated_documents: PRSTranslatedDocuments
+  - translated_documents: PRSTranslatedDocuments.using(complete_attribute="complete")
   - meetings: PRSMeetings
+  - parent: ALIndividual
+  - school: ALIndividual
+  - student: ALIndividual
 ---
+mandatory: True
 id: mac prs language access complaint interview order block
 code: |
+  prs_intro
+  student.name.first
   parent.name.first
-  school.district.name
+  school.district_name
+  if not (translated_documents.there_are_any or meetings.there_are_any):
+    kickout_no_problems
+  
+  # TODO: ask a general background question about what the school knows
+  # about your language needs.
+  
+  # TODO: have an explanation screen that says we will ask about meetings/docs
+  # one at a time.
+  
+  # Explain what we mean by "the state" (or will we use DESE?)
+  
+  # Is there someone you want to authorize to communicate with the state
+  # about this issue?
+  
+  # You need to email a copy of this to both DESE and the superintendent
+  # of the school.
+  
   translated_documents.gather()
-  gather_individual_documents
+  
+  #gather_individual_documents
   meetings.gather()
-  gather_individual_meetings
+  #gather_individual_meetings
   gather_interpretation_requests
   ##  translated_documents.school_evaluations.gather()
   ##  translated_documents.reports.gather()
@@ -38,6 +67,58 @@ code: |
   ##  meetings.no_interpretation_provided.gather()
   ##  meetings.unqualified_interpretation.gather()
   parent.signature
+  download_prs
+---
+code: |
+  translated_documents[i].name
+  translated_documents[i].complete = True
+---
+id: prs_intro
+continue button field: prs_intro
+question: |
+  Tell the State about a problem with translations in your child's school
+subquestion: |
+  This interview will help you tell the State Department of Elementary
+  and Secondary Education about a problem with translations in your child's
+  school.
+  
+  You can use this interview if:
+  
+  1. You are the parent of a child in a Massachusetts public school, and
+  1. you speak a language other than English as your first language.
+---
+sets:
+  - student.name.first
+  - student.name.last
+id: students name
+question: |
+  What is the name of your child?
+fields:
+  - code: |
+      student.name_fields()
+---
+id: school info
+question: |
+  Where does ${ student } go to school?
+fields:
+  - Name of school: school.name.first
+  - School district name: school.district_name
+    help: |
+      This is often the name of the city where you live.  
+  - code: |
+      school.address_fields()        
+---
+sets:
+  - parent.name.first
+  - parent.name.last
+id: parent name
+question: |
+  What is your name?
+subquestion: |
+  This should be the name of the parent or legal guardian of ${ student }.
+fields:
+  - code: |
+      parent.name_fields()
 ---
 id: prs gather individual documents code block
 code: |
@@ -64,70 +145,119 @@ code: |
         individual_meeting.date_attached
   gather_interpretation_requests = True
 ---
-id: prs translation problems
+id: translation problems
 question: |
-  Do you have any translation problems?
-yesno: translated_documents.there_are_any
+  What kind of language access problems have you had?
+subquestion: |
+  You have the right to have the school communicate with you in your
+  preferred language. That includes both spoken and written communication.
+  
+  What kind of problems have you had with the school communicating in your
+  language?
+fields:
+  - I have gotten emails, letters or documents that were not translated into my language: translated_documents.there_are_any
+    datatype: yesnowide
+  #  - What kind of documents?: translated_documents.kinds
+  #    datatype: checkboxes
+  #    choices:
+  #      - School Evaluation: school_evaluation
+  #      - Special Education Progress Reports/Grade Reports: progress_reports
+  #      - Individualized Education Programs (IEPs): ieps
+  #      - Evaluation Consent Forms: evaluation_consent
+  #      - Team Meeting Invitations: team_meeting
+  #      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions: discipline_notices
+  #      - Other: other
+  #  show if: translated_documents.there_are_any    
+  - I have had meetings or phone calls with the school without an interpreter who speaks my language: meetings.there_are_any
+    datatype: yesnowide
+---
+code: |
+  # preseed the translated documents
+  # if translated_documents.there_are_any:
+---
+id: kickout no problems
+decoration: hand-paper
+question: |
+  This interview may not be for you
+subquestion: |
+  This interview is about language access problems.
+  
+  You said that you have not had any problems with either written or spoken
+  language communication with ${ student }'s school district.
+  
+  You can still download a template letter, but you will need to add your own
+  reasons for the complaint.
+  
+  ${ action_button_html(url_action('translated_documents.there_are_any'), label="Edit your answer") }
 
+field: kickout_no_problems
+buttons:
+  - Continue: continue
+  - Exit: leave
 ---
 id: prs gather names of translated documents
 question: |
-  What kind of document is the ${ ordinal(i) } document?
+  Information about the ${ ordinal(i) } document
 fields:
+  # TODO: make this an open text field for date
+  - Date document was sent: translated_documents[i].date
+    datatype: date
   - Kind of document: translated_documents[i].name
     input type: radio
     choices:
-      - School Evaluation
-      - Special Education Progress Reports/Grade Reports
-      - Individualized Education Programs (IEPs)
-      - Evaluation Consent Forms
-      - Team Meeting Invitations
-      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions
-      - Other
+      - School Evaluation: school_evaluation
+      - Special Education Progress Reports/Grade Reports: progress_reports
+      - Individualized Education Programs (IEPs): ieps
+      - Evaluation Consent Forms: evaluation_consent
+      - Team Meeting Invitations: team_meeting
+      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions: discipline_notices
+      - Letter or email: letter_or_email
+      - Other: other
+  # TODO: make this flexible to let someone list multiple evaluations
+  - What kind of evaluation was it?: translated_documents[i].evaluation_type
+    show if: 
+      variable: translated_documents[i].name
+      is: school_evaluation
+  - Describe the document and what happened (optional): translated_documents[i].description
+    datatype: area
+    required: False
 ---
 id: prs is there another translated document
 question: |
-  Is there another document with a translation problems?
+  Is there another document with a translation problem?
 yesno: translated_documents.there_is_another
----
-id: prs individual document information
-generic object: PRSIndividualObject
-question: |
-  Tell me about ${ x }
-fields:
-  - Evaluation Type: x.type
-  - Evaluation Date: x.date
-    datatype: date
----
-id: prs interpretation problems
-question: |
-  Do you have any interpretation problems?
-yesno: meetings.there_are_any
 ---
 id: prs gather names of meetings
 question: |
   What kind of meeting is the ${ ordinal(i) } meeting?
 fields:
-  - Kind of meeting: meetings[i].name
+  - What kind of meeting was this?: meetings[i].type
+    datatype: radio
+    choices:
+      - In-person meeting: in-person meeting
+      - Telephone call: telephone call
+      - Video meeting or Zoom: video meeting or Zoom meeting      
+  - What was the meeting about?: meetings[i].name
+  # TODO: let people give an approximate date if they do not know exact
+  - When was it?: meetings[i].date
+    datatype: date
+  # TODO: note that someone did not need to ask for an interpreter
+  - Did you ask for an interpreter at the meeting?: meetings[i].requested
+    datatype: yesnoradio
+  - Was there an interpreter at the meeting?: meetings[i].had_interpreter
+    datatype: yesnoradio
+  - Did the interpreter do a good job helping you understand what the school said and help the school understand what you said?: meetings[i].interpreter_was_successful
+    datatype: yesnoradio
+    show if: meetings[i].had_interpreter
+  - What else would you like to tell the State about this meeting? (optional): meetings[i].description
+    datatype: area
+    required: False
+
 ---
 id: prs is there another meeting
 question: |
   Is there another meeting with an interpretation problems?
 yesno: meetings.there_is_another
----
-id: prs individual meeting information
-generic object: PRSIndividualMeeting
-question: |
-  Tell me about ${ x }
-fields:
-  - Meeting Date: x.date
-    datatype: date
-  - Did you request interpretation?: x.requested
-    datatype: yesnoradio
-  - Was the interpretation inadequate or nonexistent?: x.any_interpretation
-    choices:
-      - inadequate
-      - nonexistent
 ---
 id: prs complaint form attachment block
 attachment:
@@ -135,3 +265,10 @@ attachment:
     variable name: prs_complaint_variable
     filename: prs_complaint
     docx template file: prs_complaint_template_language_access.docx
+---
+id: download
+event: download_prs
+question: |
+  Download your attachment
+subquestion: |
+  ${ prs_complaint_variable }
