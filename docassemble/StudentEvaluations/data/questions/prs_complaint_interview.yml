@@ -7,6 +7,9 @@ modules:
   - docassemble.AssemblyLine.al_document
   - docassemble.AssemblyLine.al_courts
 ---
+imports:
+  - pycountry
+---
 include:
   - docassemble.AssemblyLine:ql_baseline.yml
 ---
@@ -18,7 +21,7 @@ metadata:
     authors:
         - name: Matt Brooks and Quinten Steenhuis
           organization: LemmaLegal
-    revision_date: 2020-07-15
+    revision_date: 2021-05-09
 ---
 objects:
   - translated_documents: PRSTranslatedDocuments.using(complete_attribute="complete")
@@ -32,40 +35,27 @@ id: mac prs language access complaint interview order block
 code: |
   prs_intro
   student.name.first
-  parent.name.first
+  parent.name.first  
   school.district_name
+  how_notified_school
+  parent.language
   if not (translated_documents.there_are_any or meetings.there_are_any):
     kickout_no_problems
-  
-  # TODO: ask a general background question about what the school knows
-  # about your language needs.
-  
-  # TODO: have an explanation screen that says we will ask about meetings/docs
-  # one at a time.
-  
-  # Explain what we mean by "the state" (or will we use DESE?)
+  explain_one_at_a_time
+  translated_documents.gather()
+  translated_documents_review
+  meetings.gather()
+  meetings_review
+  edit
   
   # Is there someone you want to authorize to communicate with the state
   # about this issue?
   
   # You need to email a copy of this to both DESE and the superintendent
-  # of the school.
+  # of the school. Or mail it to "The office of the superintendent"
   
-  translated_documents.gather()
+  # Allow people to edit the document at the end.
   
-  #gather_individual_documents
-  meetings.gather()
-  #gather_individual_meetings
-  gather_interpretation_requests
-  ##  translated_documents.school_evaluations.gather()
-  ##  translated_documents.reports.gather()
-  ##  translated_documents.ieps.gather()
-  ##  translated_documents.consent_forms.gather()
-  ##  translated_documents.meeting_invitations.gather()
-  ##  translated_documents.discipline_hearings.gather()
-  ##  translated_documents.other.gather()
-  ##  meetings.no_interpretation_provided.gather()
-  ##  meetings.unqualified_interpretation.gather()
   parent.signature
   download_prs
 ---
@@ -86,6 +76,30 @@ subquestion: |
   
   1. You are the parent of a child in a Massachusetts public school, and
   1. you speak a language other than English as your first language.
+---
+id: background info about language needs
+question: |
+  Your language
+fields:
+  # TODO: this list is really way too long now
+  - What language do you speak best? Type or select one.: parent.language
+    datatype: combobox
+    code: |
+      [lang.name for lang in pycountry.languages]     
+  - How did you tell the school about your language needs?: how_notified_school
+    datatype: object_checkboxes
+    choices: how_notified_school_choices
+  - Tell us more about how the school learned that you prefer a language other than English: how_notified_school_details
+    required: False
+    datatype: area  
+---
+variable name: how_notified_school_choices
+use objects: True
+data:
+  - question: Phone
+    document: phone
+  - question: Letter
+    document: letter
 ---
 sets:
   - student.name.first
@@ -157,23 +171,24 @@ subquestion: |
 fields:
   - I have gotten emails, letters or documents that were not translated into my language: translated_documents.there_are_any
     datatype: yesnowide
-  #  - What kind of documents?: translated_documents.kinds
-  #    datatype: checkboxes
-  #    choices:
-  #      - School Evaluation: school_evaluation
-  #      - Special Education Progress Reports/Grade Reports: progress_reports
-  #      - Individualized Education Programs (IEPs): ieps
-  #      - Evaluation Consent Forms: evaluation_consent
-  #      - Team Meeting Invitations: team_meeting
-  #      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions: discipline_notices
-  #      - Other: other
-  #  show if: translated_documents.there_are_any    
   - I have had meetings or phone calls with the school without an interpreter who speaks my language: meetings.there_are_any
     datatype: yesnowide
 ---
-code: |
-  # preseed the translated documents
-  # if translated_documents.there_are_any:
+id: explain how we ask details
+question: |
+  Language access problems
+subquestion: |  
+  It can help the Department of Elementary and
+  Secondary Education to know about dates and times.
+  If you have letters or emails that show times
+  that you had language access problems, you may
+  want to look at them while you answer these
+  questions.
+  
+  We will ask you for more information about
+  each time you had a language access problem,
+  one at a time.  
+continue button field: explain_one_at_a_time
 ---
 id: kickout no problems
 decoration: hand-paper
@@ -252,7 +267,6 @@ fields:
   - What else would you like to tell the State about this meeting? (optional): meetings[i].description
     datatype: area
     required: False
-
 ---
 id: prs is there another meeting
 question: |
@@ -265,6 +279,35 @@ attachment:
     variable name: prs_complaint_variable
     filename: prs_complaint
     docx template file: prs_complaint_template_language_access.docx
+---
+id: review translated documents
+question: |
+  Here is what your letter will say so far
+subquestion: |
+  Below is a draft of what your letter will tell the
+  Department of Elementary and Secondary Education about the problems
+  you have had with documents, letters and emails from your child's school.
+  
+  Look at the draft below. Make any changes that you need.
+fields:
+  - Draft: translated_documents_review
+    datatype: area
+    rows: 5
+---
+id: review conversations
+question: |
+  Here is what your letter will say so far
+subquestion: |
+  Below is a draft of what your letter will tell the
+  Department of Elementary and Secondary Education about the problems
+  you have had with phone calls, meetings, and video conferences from your 
+  child's school.
+  
+  Look at the draft below. Make any changes that you need.
+fields:
+  - Draft: meetings_review
+    datatype: area
+    rows: 5
 ---
 id: download
 event: download_prs
