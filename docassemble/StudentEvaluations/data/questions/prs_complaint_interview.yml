@@ -25,7 +25,7 @@ metadata:
 ---
 objects:
   - translated_documents: PRSTranslatedDocuments.using(complete_attribute="complete")
-  - meetings: PRSMeetings
+  - meetings: PRSMeetings.using(complete_attribute="complete")
   - parent: ALIndividual
   - school: ALIndividual
   - student: ALIndividual
@@ -43,10 +43,15 @@ code: |
     kickout_no_problems
   explain_one_at_a_time
   translated_documents.gather()
-  translated_documents_review
+  if len(translated_documents):
+    translated_documents_review
+  # TODO: can we have people upload images of the docs?
   meetings.gather()
-  meetings_review
-  edit
+  if len(meetings):
+    meetings_review
+  
+  # TODO: give them an example of what it looks like at the beginning
+  # and end
   
   # Is there someone you want to authorize to communicate with the state
   # about this issue?
@@ -54,14 +59,17 @@ code: |
   # You need to email a copy of this to both DESE and the superintendent
   # of the school. Or mail it to "The office of the superintendent"
   
-  # Allow people to edit the document at the end.
-  
+  add_introduction
   parent.signature
   download_prs
 ---
 code: |
   translated_documents[i].name
   translated_documents[i].complete = True
+---
+code: |
+  meetings[i].name
+  meetings[i].complete = True
 ---
 id: prs_intro
 continue button field: prs_intro
@@ -100,6 +108,12 @@ data:
     document: phone
   - question: Letter
     document: letter
+  - question: In person
+    document: in person
+  - question: Other verbal notice
+    document: verbally notified
+  - question: School language survey 
+    document: school language survey    
 ---
 sets:
   - student.name.first
@@ -134,31 +148,6 @@ fields:
   - code: |
       parent.name_fields()
 ---
-id: prs gather individual documents code block
-code: |
-  if translated_documents.there_are_any:
-    for individual_document in translated_documents:
-      individual_document.gather()
-  gather_individual_documents = True
----
-id: prs gather individual meetings code block
-code: |
-  if meetings.there_are_any:
-    for individual_meeting in meetings:
-      individual_meeting.gather()
-  gather_individual_meetings = True
----
-id: prs gather interpretation requests code block
-code: |
-  if meetings.there_are_any:
-    for individual_meeting in meetings:
-      if individual_meeting.requested:
-        individual_meeting.requested_from
-        individual_meeting.how_requested
-        individual_meeting.date_requested
-        individual_meeting.date_attached
-  gather_interpretation_requests = True
----
 id: translation problems
 question: |
   What kind of language access problems have you had?
@@ -169,9 +158,9 @@ subquestion: |
   What kind of problems have you had with the school communicating in your
   language?
 fields:
-  - I have gotten emails, letters or documents that were not translated into my language: translated_documents.there_are_any
+  - I have gotten emails, letters or documents that were not translated into my language or were poorly translated: translated_documents.there_are_any
     datatype: yesnowide
-  - I have had meetings or phone calls with the school without an interpreter who speaks my language: meetings.there_are_any
+  - I have had meetings or phone calls with the school without an interpreter who speaks my language or which were poorly interpreted: meetings.there_are_any
     datatype: yesnowide
 ---
 id: explain how we ask details
@@ -219,15 +208,8 @@ fields:
     datatype: date
   - Kind of document: translated_documents[i].name
     input type: radio
-    choices:
-      - School Evaluation: school_evaluation
-      - Special Education Progress Reports/Grade Reports: progress_reports
-      - Individualized Education Programs (IEPs): ieps
-      - Evaluation Consent Forms: evaluation_consent
-      - Team Meeting Invitations: team_meeting
-      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions: discipline_notices
-      - Letter or email: letter_or_email
-      - Other: other
+    code: |
+      evaluation_options
   # TODO: make this flexible to let someone list multiple evaluations
   - What kind of evaluation was it?: translated_documents[i].evaluation_type
     show if: 
@@ -236,6 +218,17 @@ fields:
   - Describe the document and what happened (optional): translated_documents[i].description
     datatype: area
     required: False
+---
+variable name: evaluation_options
+data:
+   school_evaluation: School Evaluation
+   progress_reports: Special Education Progress Reports/Grade Reports
+   ieps: Individualized Education Programs (IEPs)
+   evaluation_consent: Evaluation Consent Forms
+   team_meeting: Team Meeting Invitations
+   discipline_notices: Notice of School Discipline Hearings and/or Discipline Hearing Decisions
+   letter_or_email: Letter or email
+   other: Other
 ---
 id: prs is there another translated document
 question: |
@@ -270,7 +263,7 @@ fields:
 ---
 id: prs is there another meeting
 question: |
-  Is there another meeting with an interpretation problems?
+  Is there another meeting with an interpretation problem?
 yesno: meetings.there_is_another
 ---
 id: prs complaint form attachment block
@@ -287,12 +280,21 @@ subquestion: |
   Below is a draft of what your letter will tell the
   Department of Elementary and Secondary Education about the problems
   you have had with documents, letters and emails from your child's school.
-  
+    
   Look at the draft below. Make any changes that you need.
+  
+  Hit the enter key to add a new line any time you want a new paragraph in your
+  letter.  
 fields:
   - Draft: translated_documents_review
     datatype: area
     rows: 5
+    default: |
+      % for document in translated_documents:
+      
+      On ${ document.date }, ${ school } sent a ${ evaluation_options[document.name].lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) }.
+      % endfor
+    
 ---
 id: review conversations
 question: |
@@ -304,10 +306,69 @@ subquestion: |
   child's school.
   
   Look at the draft below. Make any changes that you need.
+  
+  Hit the enter key to add a new line any time you want a new paragraph in your
+  letter.
 fields:
   - Draft: meetings_review
     datatype: area
     rows: 5
+    default: |
+      % for meeting in meetings:
+      
+      On ${ meeting.date }, I had a ${ meeting.type } meeting with ${ school } about ${ meeting.name }.\
+      % if meeting.requested:
+       I requested an interpreter who speaks ${ parent.language } at the meeting.\
+      % endif
+      % if not meeting.had_interpreter:
+       There was no interpreter at the meeting.\
+      % elif not meeting.interpreter_was_successful:
+       The interpretation was poor and I was not able to participate in the meeting.\
+      % endif
+       ${ fix_punctuation(meeting.description) }
+      % endfor
+---
+id: intro paragraph
+question: |
+  What would you like to tell the Department of Elementary and Secondary
+  Education?
+subquestion: |
+  Your letter can include:
+  
+  1. An introduction.
+  1. A list of facts about you, the language you speak, and your child.
+  1. The list of documents that you told us about that had translation 
+  problems.
+  1. The list of meetings that you told us about that had interpretation
+  problems.
+  1. A paragraph that tells DESE about how the translation and interpretation
+  problems affected you.
+  
+  Your letter should be in your own words. Take some time to think about 
+  anything you want to tell DESE about.
+fields:
+  - Do you want to include an introduction?: add_introduction
+    datatype: yesnoradio
+  - note: |
+      This is how your letter will start: 
+      > I am filing this complaint because the ${ school.district_name }
+      > school 
+      > district failed to provide me with adequate interpretation and/or 
+      > translation 
+      > for matters relating to my child ${ student }’s education in the 
+      > primary language of my home.  
+      
+      Finish the paragraph to explain why you are sending this letter.
+      
+      If you are not sure what to say, it is okay to leave this blank.
+    show if: add_introduction
+  - Your introduction: letter_introduction
+    datatype: area
+    show if: add_introduction
+  - How did it affect you that the school did not communicate with you in your own language? Use your own words.: letter_outro
+    datatype: area
+    rows: 5
+    required: False
 ---
 id: download
 event: download_prs
