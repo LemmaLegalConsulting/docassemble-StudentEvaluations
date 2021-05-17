@@ -12,6 +12,7 @@ imports:
 ---
 include:
   - docassemble.AssemblyLine:ql_baseline.yml
+  - docassemble.AssemblyLine:al_document.yml  
 ---
 metadata:
     title: | 
@@ -96,7 +97,7 @@ fields:
       [lang.name for lang in pycountry.languages]     
   - How did you tell the school about your language needs?: how_notified_school
     datatype: object_checkboxes
-    choices: how_notified_school_choices
+    choices: how_notified_school_choices.values()
   - Tell us more about how the school learned that you prefer a language other than English: how_notified_school_details
     required: False
     datatype: area  
@@ -104,16 +105,24 @@ fields:
 variable name: how_notified_school_choices
 use objects: True
 data:
-  - question: Phone
-    document: phone
-  - question: Letter
-    document: letter
-  - question: In person
-    document: in person
-  - question: Other verbal notice
-    document: verbally notified
-  - question: School language survey 
-    document: school language survey    
+  phone: 
+    question: Phone
+    document: calling
+  letter: 
+    question: Letter
+    document: writing a letter
+  email:
+    question: Email
+    document: writing an email
+  in person: 
+    question: In person
+    document: speaking to them in-person
+  other verbal: 
+    question: Other verbal notice
+    document: speaking to them
+  language survey: 
+    question: School language survey 
+    document: completing the school language survey    
 ---
 sets:
   - student.name.first
@@ -266,13 +275,6 @@ question: |
   Is there another meeting with an interpretation problem?
 yesno: meetings.there_is_another
 ---
-id: prs complaint form attachment block
-attachment:
-  - name: prs_complaint_name
-    variable name: prs_complaint_variable
-    filename: prs_complaint
-    docx template file: prs_complaint_template_language_access.docx
----
 id: review translated documents
 question: |
   Here is what your letter will say so far
@@ -350,13 +352,14 @@ fields:
   - Do you want to include an introduction?: add_introduction
     datatype: yesnoradio
   - note: |
-      This is how your letter will start: 
-      > I am filing this complaint because the ${ school.district_name }
-      > school 
-      > district failed to provide me with adequate interpretation and/or 
-      > translation 
-      > for matters relating to my child ${ student }’s education in the 
-      > primary language of my home.  
+      **This is how your letter will start:**
+      
+      "I am filing this complaint because the ${ school.district_name }
+      school 
+      district failed to provide me with adequate interpretation and/or 
+      translation 
+      for matters relating to my child ${ student }’s education in the 
+      primary language of my home."
       
       Finish the paragraph to explain why you are sending this letter.
       
@@ -370,9 +373,65 @@ fields:
     rows: 5
     required: False
 ---
+id: choices
+question: |
+  What do you want the school district to do?
+subquestion: |
+  Your letter can include any or all of the requests below that are common
+  when someone has had language access problems with their school.  
+# TODO: do we want to make all of the relief paragraphs optional?
+---
+id: applicable time period
+question: |
+  What time period does this cover?
+# NOTE: We can infer this from the earliest meeting or document date
+---
+depends on:
+  - meetings
+  - translated_documents
+code: |
+  # School year runs from August-June. If meeting was before August,
+  # use the previous calendar year as the beginning calendar school year.
+  temp_year = today().year if today().month < 8 else today().year - 1
+  for event in meetings + translated_documents: # Take advantage of duck typing
+    if event.date.year < temp_year:
+      if event.date.month < 8:
+        temp_year = event.date.year -1
+      else:
+        temp_year = event.date.year
+  
+  requested_school_year = f"{temp_year}-{temp_year+1}"
+---
+code: |
+  # TODO: when we have robust upload facility
+  translated_documents.attached = False
+---
+objects:
+  - prs_complaint: ALDocument.using(title="Language Access Complaint", filename="language_access_complaint", enabled=True)
+---
+objects:
+  - dese_bundle: ALDocumentBundle.using(elements=[prs_complaint], filename="prs_complaint")
+  - user_bundle: ALDocumentBundle.using(elements=[prs_complaint], filename="prs_complaint")
+---
+id: prs complaint form attachment block
+attachment:
+  - name: prs_complaint_name
+    variable name: prs_complaint[i]
+    filename: prs_complaint
+    docx template file: prs_complaint_template_language_access.docx
+---
 id: download
 event: download_prs
 question: |
-  Download your attachment
+  Your letter is ready
 subquestion: |
-  ${ prs_complaint_variable }
+  ${ user_bundle.download_list_html(format='docx') }
+  
+  ${ user_bundle.send_button_html() }
+---
+generic object: ALDocumentBundle
+template: x.send_email_template
+subject: |
+  Your "Language Access Complaint" document from Mass Advocates for Children is ready
+content: |
+  Please find the document for ${ parent } attached.
