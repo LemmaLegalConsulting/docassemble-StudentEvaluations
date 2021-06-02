@@ -7,6 +7,19 @@ modules:
   - docassemble.AssemblyLine.al_document
   - docassemble.AssemblyLine.al_courts
 ---
+default screen parts:
+  post: |
+    % if not user_logged_in():
+    [:sign-in-alt: Sign-in](${url_of('login', next=interview_url())}) or [register](${url_of('register', next=interview_url())}) to save your progress.
+    % endif
+
+    Feedback, suggestions, or comments? [Complete this survey](${ interview_url(i=user_info().package + ":feedback.yml", github_repo="docassemble-macletters", github_user='nonprofittechy', variable=user_info().variable, question_id=user_info().question_id, local=False,reset=1)} ){:target="_blank"}.
+  pre: |
+    % if get_config('debug'):
+    `Page id: ${ user_info().question_id }`
+    % endif
+
+---
 imports:
   - pycountry
 ---
