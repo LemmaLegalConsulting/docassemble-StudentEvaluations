@@ -24,7 +24,7 @@ imports:
   - pycountry
 ---
 include:
-  - docassemble.AssemblyLine:ql_baseline.yml
+  - docassemble.AssemblyLine:al_package_unstyled.yml
   - docassemble.AssemblyLine:al_document.yml  
 ---
 metadata:
