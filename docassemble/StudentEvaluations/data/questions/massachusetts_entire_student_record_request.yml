@@ -32,6 +32,7 @@ id: interview order entire record
 mandatory: True
 code: |
   entire_record_request_intro_screen
+  mac_shared_intro_questions
   student.enrollment_date
   educational_evaluations_entire_record_request_concatenated = pdf_concatenate(educational_evaluations_entire_record_request_variable)
   if done['emailed to the person receiving it']:
@@ -45,9 +46,9 @@ code: |
 ---
 id: entire record request intro screen
 question: |
-  This interview will let you request ${student.name.first}'s entire student record.
+  This interview will let you request your child's entire student record.
   
-field: entire_record_request_intro_screen
+continue button field: entire_record_request_intro_screen
 ---
 id: enrollment date screen
 question: |

@@ -40,28 +40,29 @@ default screen parts:
     [:sign-in-alt: Sign-in](${url_of('login', next=interview_url())}) or [register](${url_of('register', next=interview_url())}) to save your progress.
     % endif
 
-    Feedback, suggestions, or comments? [Complete this survey](${ interview_url(i=user_info().package + ":feedback.yml", github_repo="docassemble-macletters", github_user='nonprofittechy', variable=user_info().variable, question_id=user_info().question_id, local=False,reset=1)} ){:target="_blank"}.
+    Feedback, suggestions, or comments? [Complete this survey](${ interview_url(i=user_info().package + ":feedback.yml", github_repo="docassemble-StudentEvaluations", github_user='nonprofittechy', variable=user_info().variable, question_id=user_info().question_id, local=False,reset=1)} ){:target="_blank"}.
   pre: |
     % if get_config('debug'):
-    `Page id: ${ user_info().question_id }`
+    `id: ${ user_info().question_id }`
     % endif
 ---
 code: |
   student.age = student.age_in_years()
 ---
 id: interview order
+sets: mac_shared_intro_questions
 scan for variables: False
 comment: |
 	## Mandatory block that determines interview order.
-mandatory: True
+# mandatory: True
 code: |
   allow_cron = True
   multi_user = True
   # welcome_screen_seen
+  before_you_start_screen_seen  
   student.name.first
   if not is_child_in_school:
     call_the_hotline
-  before_you_start_screen_seen
   requestor.language
   if requestor.language == 'Other':
     kick_out_language    
@@ -85,16 +86,16 @@ code: |
     student.name.first
   if student.grade == "Not yet in school":
     student.grade = 'soon-to-be'
-    school.special_education_coordinator.requestor_knows_name = False
+    knows_special_education_director_name = False
     school.recipient.name = school.special_education_director.name
     school.recipient.address = school.special_education_director.address
   else:
     school.recipient.name = school.special_education_coordinator.name
     school.recipient.address = school.special_education_coordinator.address
-    if not school.special_education_coordinator.requestor_knows_name:
+    if not knows_special_education_director_name:
       school.special_education_coordinator.name = "Special Education Coordinator"
   school.recipient.name
-  # if not school.special_education_director.requestor_knows_name:
+  # if not knows_special_education_director_name:
     # school.special_education_director.name = "Special Education Director"
   # else:
     # school.special_education_director.name.first
@@ -108,7 +109,7 @@ code: |
     pass
   # if school.special_education_director.requestor_knows_address == False:
   school.special_education_director.address = None
-
+  mac_shared_intro_questions = True
 ---
 id: welcome screen
 field: welcome_screen_seen
@@ -236,6 +237,7 @@ fields:
   - Phone Number: requestor.phone_number
     required: False
   - Email: requestor.email
+    datatype: email
     required: False
 ---
 id: student name
@@ -263,13 +265,14 @@ question: |
   % endif
 fields:
     - ${student.name.first}'s Birthdate: student.birthdate
-      datatype: date
+      datatype: BirthDate
     - ${student.name.first}'s Gender: student.gender
       input type: radio
       choices:
         - Male: male
         - Female: female
-        - Other: other
+        - Non-binary: other
+        - Other gender: other
     - ${student.name.first}'s Grade: student.grade
       hide if:
         code: |
@@ -278,18 +281,18 @@ fields:
         - Not yet in school
         - Pre-K
         - Kindergarten
-        - First
-        - Second
-        - Third
-        - Fourth
-        - Fifth
-        - Sixth
-        - Seventh
-        - Eighth
-        - Ninth
-        - Tenth
-        - Eleventh
-        - Twelfth
+        - 1st
+        - 2nd
+        - 3rd
+        - 4th
+        - 5th
+        - 6th
+        - 7th
+        - 8th
+        - 9th
+        - 10th
+        - 11th
+        - 12th
     - ${student.name.first}'s language: student.language
       input type: radio
       choices:
@@ -314,7 +317,7 @@ question: |
   Where does ${ student.name.first } go to school?
   % endif
 fields:
-    - School Name: school.name
+    - School Name: school.name.text
     - Street Address: school.address.address
       address autocomplete: True
     - City: school.address.city
@@ -352,11 +355,11 @@ id: special education coordinator information
 question: |
   Special Education Coordinator
 fields:
-  - "Do you know the name of the {special education coordinator} for ${ student.familiar() }?": school.special_education_coordinator.requestor_knows_name
+  - "Do you know the name of the {special education coordinator} for ${ student.familiar() }?": knows_special_education_director_name
     datatype: yesnoradio
   - Recipient Title: school.recipient.title
-    input type: radio
-    show if: school.special_education_coordinator.requestor_knows_name
+    required: False
+    show if: knows_special_education_director_name
     choices:
       - Dr.
       - Mrs.
@@ -364,9 +367,9 @@ fields:
       - Ms.
       - Mr.
   - Recipient First Name: school.special_education_coordinator.name.first
-    show if: school.special_education_coordinator.requestor_knows_name
+    show if: knows_special_education_director_name
   - Recipient Last Name: school.special_education_coordinator.name.last
-    show if: school.special_education_coordinator.requestor_knows_name
+    show if: knows_special_education_director_name
 subquestion: |
    The name of the special education coordinator should be listed on your child’s IEP.  If you do not know the name of the special education coordinator, 
    you can try looking at the school webpage or doing an internet search using your child’s school district.
@@ -384,11 +387,11 @@ id: special education director information
 question: |
   Name of Special Education Director
 fields:
-  - "Do you know the name of the Special Education Director for the school district?": school.special_education_director.requestor_knows_name
+  - "Do you know the name of the Special Education Director for the school district?": knows_special_education_director_name 
     datatype: yesnoradio
   - Special Education Director Title: school.special_education_director.title
-    input type: radio
-    show if: school.special_education_director.requestor_knows_name
+    required: False
+    show if: knows_special_education_director_name
     choices: 
       - Dr.
       - Mrs.
@@ -396,9 +399,9 @@ fields:
       - Ms.
       - Mr.
   - Special Education Director First Name: school.special_education_director.name.first
-    show if: school.special_education_director.requestor_knows_name
+    show if: knows_special_education_director_name
   - Special Education Director Last Name: school.special_education_director.name.last
-    show if: school.special_education_director.requestor_knows_name
+    show if: knows_special_education_director_name
 subquestion: |
   Because ${student.name.first} is not yet in school, you need to send this letter to the special education director
   for where you live. You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).

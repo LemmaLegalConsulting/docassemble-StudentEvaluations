@@ -35,6 +35,7 @@ code: |
   multi_user = True
   count = 0
   educational_evaluations_intro_screen
+  mac_shared_intro_questions
   if selected_evaluations.all_false():
     call_the_hotline
   #   educational_assessment = True
@@ -205,13 +206,13 @@ subquestion: |
   On the next page, you will have a chance to choose the evaluations
   you want your school to perform.
     
-  It is a good idea to talk to ${student.name.first}'s pediatrician or 
-  specialists about other evaluations ${student.pronoun_subjective()} might need if you 
+  It is a good idea to talk to your child's pediatrician or 
+  specialists about other evaluations your child might need if you 
   are unsure.
   
   You may not see the evaluation you want listed. You will have a chance to
   edit the final letter to add additional evaluations.
-field: educational_evaluations_intro_screen
+continue button field: educational_evaluations_intro_screen
 ---
 id: speech and language therapy
 question: |
@@ -405,7 +406,7 @@ fields:
 ---
 id: signature block
 question: |
-  ${ requestor.name.firstlast() }
+  ${ requestor.name.firstlast() }, please sign here
 signature: requestor.signature
 under: |
   Sign your name here by using your mouse or touching your phone's screen.
@@ -413,26 +414,32 @@ under: |
 ---
 id: letter screen
 question: |
-  Here are your letters:
-
-  >This is the evaluation request letter. You should send it right away: 
-  
-  ${ pdf_concatenate(initial_request_variable) }     
-  
+  Here are your letters
+subquestion: |
+  1. Download and print the letter below.
+  1. Keep one copy for your own records.
+  1. Second a copy to the school district.
+    
+  * [Download as PDF](${ initial_request_variable.pdf.url_for() }).
+  * [Download as Microsoft Word file](${ initial_request_variable.docx.url_for() } ).
+    
   % if selected_evaluations.elements.get('Transition Assessment'):     
   
   
    >This is a request for a Transition Assessment. You should send it at the same time as the evaluation request letter. 
    
-   ${ pdf_concatenate(educational_evaluations_transition_assessment_variable) }
+  * [Download as PDF](${ educational_evaluations_transition_assessment_variable.pdf.url_for() }).
+  * [Download as Microsoft Word file](${ educational_evaluations_transition_assessment_variable.docx.url_for() } ).
+  
   % endif
   
   >This is a request for copies of the evaluations you have requested. Send it after
   the evaluations are complete:
-  
-  ${ pdf_concatenate(educational_evaluations_copy_request_variable) }
-    
 
+  * [Download as PDF](${ educational_evaluations_copy_request_variable.pdf.url_for() }).
+  * [Download as Microsoft Word file](${ educational_evaluations_copy_request_variable.docx.url_for() } ).
+
+   
 under: |
   % if is_child_in_school == False and school.special_education_director.address == None:
   Because your child is not in school, you need to send it to the special education director for your district.
@@ -448,28 +455,6 @@ fields:
     choices: 
       - emailed to me
       - emailed to the person receiving it
-comment: |
-
-  I tried displaying the images like this, but it didn't work. I need to talk to Quinten:
-
-  
-    This is the evaluation request letter. You should send it right away:
-
-  [FILE lettergraphic.jpg]: ${ initial_request_variable } this doesn't work, talk to Quinten
-
-  % if "Transition Assessment" in selected_evaluations:
-
-  This is a request for a Transition Assessment. You should send it at the same time as 
-  the evaluation request letter.
-
-  [FILE lettergraphic.jpg]: ${ educational_evaluations_transition_assessment_variable } this doesn't work, talk to Quinten.
-
-  % endif
-
-  This is a request for copies of the evaluations you have requested. Send it after
-  the evaluations are complete:
-
-  [FILE lettergraphic.jpg]: ${ educational_evaluations_copy_request_variable } this doesn't work, talk to Quinten
 ---
 id: recipient email screen
 question: |

@@ -39,7 +39,9 @@ mandatory: True
 scan for variables: False
 id: interview order independent eval request
 code: |
+  letter_created_date
   independent_evaluations_intro_screen
+  mac_shared_intro_questions  
   if selected_evaluations.all_false():
     call_the_hotline
   if selected_evaluations['Other'] == True:
@@ -65,6 +67,7 @@ code: |
     requestor.email
     sent_requestor_email
     end_screen
+  end_screen    
 ---
 code: |
   if task_not_yet_performed('sent school email'):
@@ -138,17 +141,16 @@ id: independent evaluations intro screen
 question: |
   Requesting an Independent Evaluation
 subquestion: |
-  This is an interview that will help you request independent evaluations for 
-  ${student.name.first}.
+  This website will help you request independent evaluations for 
+  your child.
   
   When you see your letter at the end, you can add or remove evaluations from 
   the letter.  
   
-  It is a good idea to talk to ${student.name.first}'s pediatrician or 
-  specialists about other evaluations ${student.pronoun_subjective()} might need if you 
+  It is a good idea to talk to your child's pediatrician or 
+  specialists about other evaluations they might need if you 
   are unsure.
-field: independent_evaluations_intro_screen
-
+continue button field: independent_evaluations_intro_screen
 ---
 id: are there any evaluators screen
 question: |
@@ -168,6 +170,7 @@ question: |
 fields: 
   - Address: evaluators[i].address.address
     required: False
+    address autocomplete: True
   - City: evaluators[i].address.city
     required: False
   - State: evaluators[i].address.state
@@ -213,24 +216,28 @@ yesno: below_400_percent
 ---
 id: independent evaluation signature block
 question: |
-  ${ requestor.name.firstlast() }
+  ${ requestor.name.firstlast() }, please sign below
 signature: requestor.signature
 under: |
   Sign your name here by using your mouse or touching your phone's screen.
   Press clear if you want to start over.
+progress: 99
 ---
 id: independent evaluation letter screen
 question: |
-  Here are your letters:
-
-  >This is the independent evaluation request letter. You should send it right away: 
-  
-  ${ pdf_concatenate(independent_evaluation_request_variable) }     
-  
+  Here are your letters
 subquestion: |
-  % if is_child_in_school == False and school.special_education_director.address == None:
+  1. Download and print the letter below.
+  1. Keep one copy for your own records.
+  1. Second a copy to the school district.
+    
+  * [Download as PDF](${ independent_evaluation_request_variable.pdf.url_for() }).
+  * [Download as Microsoft Word file](${ independent_evaluation_request_variable.docx.url_for() } ).
+  
+  % if is_child_in_school == False and school.special_education_director.address is None:
   Because your child is not in school, you need to send it to the special education director for your district.
-  Please contact  MAC's helpline at 617-357-8431 or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/))
+  
+  Please contact  MAC's helpline at 617-357-8431 or [online](https://massadvocates.org/helpline/)
   for help locating this address. It may take up to three business days for someone to get back to you.
 
   You may also be able to find the name of your district's special education director  by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
@@ -305,6 +312,9 @@ subject: |
   Hey, it's been 30 days.
 content: |
   Have you heard from the school yet?
+---
+code: |
+  letter_created_date = today()
 ---
 event: cron_daily
 code: |
