@@ -86,23 +86,12 @@ code: |
     student.name.first
   if student.grade == "Not yet in school":
     student.grade = 'soon-to-be'
-    knows_special_education_director_name = False
-    school.recipient.name = school.special_education_director.name
-    school.recipient.address = school.special_education_director.address
   else:
     school.recipient.name = school.special_education_coordinator.name
     school.recipient.address = school.special_education_coordinator.address
     if not knows_special_education_director_name:
       school.special_education_coordinator.name = "Special Education Coordinator"
   school.recipient.name
-  # if not knows_special_education_director_name:
-    # school.special_education_director.name = "Special Education Director"
-  # else:
-    # school.special_education_director.name.first
-  # if not (school.special_education_director.requestor_knows_address and (student.grade != "soon-to-be")):
-    # pass
-  # else:
-    # school.special_education_director.address.address
   if not student.grade == "soon-to-be": 
     school.address.address
   else:

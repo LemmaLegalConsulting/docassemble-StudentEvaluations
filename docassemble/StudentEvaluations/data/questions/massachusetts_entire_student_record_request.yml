@@ -33,6 +33,11 @@ mandatory: True
 code: |
   entire_record_request_intro_screen
   mac_shared_intro_questions
+  if knows_special_education_director_name:
+    school.recipient.name = school.special_education_director.name
+    school.recipient.address = school.special_education_director.address
+  else:
+    school.recipient.name.first = "Special Education Director"  
   student.enrollment_date
   educational_evaluations_entire_record_request_concatenated = pdf_concatenate(educational_evaluations_entire_record_request_variable)
   if done['emailed to the person receiving it']:
@@ -68,9 +73,13 @@ under: |
 id: entire record request letter screen
 question: |
   Here is your letter
-
-  ${ educational_evaluations_entire_record_request_concatenated }
-
+subquestion: |  
+  1. Download and print the letter below.
+  1. Keep one copy for your own records.
+  1. Second a copy to the school district.
+    
+  * [Download as PDF](${ educational_evaluations_entire_record_request_variable.pdf.url_for() }).
+  * [Download as Microsoft Word file](${ educational_evaluations_entire_record_request_variable.docx.url_for() } ).
 
 fields:
   - "I want a copy of my letter...": done
