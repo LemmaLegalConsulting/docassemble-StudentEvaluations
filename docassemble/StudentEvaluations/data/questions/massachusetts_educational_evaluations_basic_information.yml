@@ -1,10 +1,19 @@
 ---
 modules:
-    - docassemble.base.util
-    - docassemble.base.legal
-    - docassemble.income.income
-    - dateutil
-    - .educational_evaluations
+  - docassemble.base.util
+  - docassemble.base.legal
+  - docassemble.income.income
+  - dateutil
+  - .educational_evaluations
+  - .prs
+  - docassemble.ALToolbox.misc
+  - docassemble.AssemblyLine.al_general
+  - docassemble.AssemblyLine.al_document
+  - docassemble.AssemblyLine.al_courts
+---
+include:
+  - docassemble.AssemblyLine:al_package_unstyled.yml
+  - docassemble.AssemblyLine:al_document.yml  
 ---
 metadata:
     description: |
@@ -25,7 +34,6 @@ features:
   question back button: True
   question help button: True
 ---
-mandatory: True
 objects:
     - school.recipient: Individual
     - school.special_education_director: Individual

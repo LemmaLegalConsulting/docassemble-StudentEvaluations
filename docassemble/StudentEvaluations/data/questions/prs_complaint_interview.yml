@@ -7,6 +7,9 @@ modules:
   - docassemble.AssemblyLine.al_document
   - docassemble.AssemblyLine.al_courts
 ---
+include:
+  - massachusetts_educational_evaluations_basic_information.yml
+---
 default screen parts:
   post: |
     % if not user_logged_in():
@@ -18,14 +21,9 @@ default screen parts:
     % if get_config('debug'):
     `Page id: ${ user_info().question_id }`
     % endif
-
 ---
 imports:
   - pycountry
----
-include:
-  - docassemble.AssemblyLine:al_package_unstyled.yml
-  - docassemble.AssemblyLine:al_document.yml  
 ---
 metadata:
     title: | 
@@ -307,7 +305,7 @@ fields:
     default: |
       % for document in translated_documents:
       
-      On ${ document.date }, ${ school } sent a ${ evaluation_options[document.name].lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) }.
+      On ${ document.date }, ${ school } sent a ${ evaluation_options[document.name].lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) if document.description else '' }
       % endfor
     
 ---
