@@ -88,11 +88,11 @@ continue button field: prs_intro
 question: |
   Tell the State about a problem with translations in your child's school
 subquestion: |
-  This interview will help you tell the State Department of Elementary
+  This website will help you tell the State Department of Elementary
   and Secondary Education about a problem with translations in your child's
   school.
   
-  You can use this interview if:
+  You can use this website if:
   
   1. You are the parent of a child in a Massachusetts public school, and
   1. you speak a language other than English as your first language.
@@ -202,9 +202,9 @@ continue button field: explain_one_at_a_time
 id: kickout no problems
 decoration: hand-paper
 question: |
-  This interview may not be for you
+  This website may not be for you
 subquestion: |
-  This interview is about language access problems.
+  This website is about language access problems.
   
   You said that you have not had any problems with either written or spoken
   language communication with ${ student }'s school district.

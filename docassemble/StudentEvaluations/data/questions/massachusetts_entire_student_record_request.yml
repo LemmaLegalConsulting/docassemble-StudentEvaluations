@@ -51,7 +51,7 @@ code: |
 ---
 id: entire record request intro screen
 question: |
-  This interview will let you request your child's entire student record.
+  This letter will let you request your child's entire student record.
   
 continue button field: entire_record_request_intro_screen
 ---
