@@ -305,7 +305,7 @@ fields:
     default: |
       % for document in translated_documents:
       
-      On ${ document.date }, ${ school } sent a ${ evaluation_options[document.name].lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) if document.description else '' }
+      On ${ document.date }, ${ school } sent a ${ noun_singular(evaluation_options[document.name]).lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) if document.description else '' }
       % endfor
     
 ---

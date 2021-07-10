@@ -72,8 +72,8 @@ code: |
   if not is_child_in_school:
     call_the_hotline
   requestor.language
-  if requestor.language == 'Other':
-    kick_out_language    
+  #if requestor.language == 'Other':
+  #  kick_out_language    
   requestor.right_to_send
   if requestor.right_to_send == 'Other':
     kick_out_requestor
