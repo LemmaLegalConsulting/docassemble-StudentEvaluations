@@ -96,6 +96,9 @@ subquestion: |
   
   1. You are the parent of a child in a Massachusetts public school, and
   1. you speak a language other than English as your first language.
+fields:
+  - code: |
+      terms_of_use_field
 ---
 id: background info about language needs
 question: |

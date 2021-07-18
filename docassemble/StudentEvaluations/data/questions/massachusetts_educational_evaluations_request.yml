@@ -199,6 +199,7 @@ fields:
       - Assistive Technology Evaluation
       - Transition Assessment
 ---
+id: ask for evaluation intro
 question: |
   Ask for an evaluation for your child
 subquestion: |
@@ -211,6 +212,10 @@ subquestion: |
   * You need to know which evaluations you want to ask for.
   
 continue button field: educational_evaluations_intro
+fields:
+  - code: |
+      terms_of_use_field
+
 ---
 id: initial evaluation intro screen
 question: |

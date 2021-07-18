@@ -494,3 +494,26 @@ comment: |
     Augmentative and Alternative Communication Evaluation - Explanatory Text
     
     Assistive Technology Evaluation - Explanatory Text
+---
+code: |
+  terms_of_use_field = [ {"label": str(terms_of_use_label), 
+    "field": "acknowledged_information_use",
+    "datatype": "checkboxes",
+    "minlength": 1,
+    "choices": [str(terms_of_use_I_accept_label)],
+    "validation messages": {
+      "minlength": str(terms_of_use_validation_message_label),
+    },
+    }]
+---
+template: terms_of_use_label
+content: |
+  To continue, you must accept the [terms of use](https://www.gbls.org/self-help/eviction/terms-of-use)
+---
+template: terms_of_use_I_accept_label
+content: |
+  I accept the terms of use.
+---
+template: terms_of_use_validation_message_label
+content: |
+  You cannot continue unless you agree to the terms of use.

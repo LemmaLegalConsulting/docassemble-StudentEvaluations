@@ -114,6 +114,9 @@ subquestion: |
     sure, you may want to talk to an advocate or your child's doctor to get
     a recommendation first.
 continue button field: independent_evaluations_intro_screen
+fields:
+  - code: |
+      terms_of_use_field
 ---
 id: are there any evaluators screen
 question: |
