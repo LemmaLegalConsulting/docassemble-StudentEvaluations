@@ -35,6 +35,8 @@ features:
   progress bar: True
   question back button: True
   question help button: True
+  css:
+    - docassemble.ALToolbox:collapse_template.css
 ---
 objects:
     - school.recipient: ALIndividual
@@ -197,6 +199,8 @@ fields:
 id: requestor right to send
 question: |
   How are **you** related to ${ student.familiar() }?
+subquestion: |
+  ${ collapse_template(what_if_I_am_advocate) }
 fields:
     - Relationship: requestor.right_to_send
       input type: radio
@@ -204,8 +208,15 @@ fields:
         - Parent: Parent
         - Legal Guardian: Legal Guardian
         - I am ${ student.familiar() }: Student
-        - I am an attorney or advocate representing ${ student.familiar() } or their legal guardian: Advocate
         - Other: Other
+---
+template: what_if_I_am_advocate
+subject: |
+  What if I am an advocate representing ${ student.familiar() }?
+content: |
+  Choose the option that represents the person that you want the letter to
+  be **from**. If you are requesting the documents to be sent directly to
+  you, you will need a release of information.
 ---
 sets:
   - requestor.name.first
