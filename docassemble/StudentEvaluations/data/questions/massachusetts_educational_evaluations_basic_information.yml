@@ -234,6 +234,9 @@ fields:
   - Email: requestor.email
     datatype: email
     required: False
+validation code: |
+  if not(requestor.phone_number) and not(requestor.email):
+    validation_error("You need to provide at least one contact method.",field="requestor.phone_number")
 ---
 sets:
   - student.name.first
