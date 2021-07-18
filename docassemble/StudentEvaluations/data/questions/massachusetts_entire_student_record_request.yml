@@ -51,8 +51,9 @@ code: |
 ---
 id: entire record request intro screen
 question: |
+  Student record request
+subquestion: |  
   This letter will let you request your child's entire student record.
-  
 continue button field: entire_record_request_intro_screen
 ---
 id: enrollment date screen

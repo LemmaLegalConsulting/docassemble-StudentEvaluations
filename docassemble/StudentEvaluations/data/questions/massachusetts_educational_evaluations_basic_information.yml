@@ -443,3 +443,54 @@ subquestion: |
 buttons:
   - Leave: leave
   - Restart: restart
+---
+id: select independent evaluations
+question : |
+  What evaluations does ${ student.familiar() } need?
+subquestion: |
+  You may have advice from a specialist already that tells you which
+  evaluations you want. You can also [read more](https://www.understood.org/articles/en/the-evaluation-process-what-to-expect) if you do not know
+  what to ask for.
+fields:
+  - no label: selected_evaluations
+    required: False
+    datatype: checkboxes
+    choices:
+      - Educational assessment: Educational Assessment
+      - Speech and language therapy evaluation: Speech and Language Therapy Evaluation
+      - Social pragmatic language: Social Pragmatic Language
+      - Occupational therapy: Occupational Therapy
+      - Functional behavior assessment: Functional Behavior Assessment
+      - Psychological assessment: Psychological Assessment
+      - Physical therapy: Physical Therapy
+      - Augmentative and alternative communication evaluation: Augmentative and Alternative Communication Evaluation
+      - Assistive technology evaluation: Assistive Technology Evaluation
+      - Other: Other
+    none of the above: False
+  - Other Evaluation (put each evaluation on a separate line). You may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
+    datatype: area
+    show if:
+      variable: selected_evaluations['Other']
+      is: True
+comment: |
+  help:
+  label: |
+    How do I choose?
+  content: |
+    Educational Assessment - Explanatory Text
+    
+    Speech and Language Therapy Evaluation - Explanatory Text
+    
+    Social Pragmatic Language - Explanatory Text
+    
+    Occupational Therapy - Explanatory Text
+    
+    Functional Behavior Assessment - Explanatory Text
+    
+    Psychological Assessment - Explanatory Text
+    
+    Physical Therapy - Explanatory Text
+    
+    Augmentative and Alternative Communication Evaluation - Explanatory Text
+    
+    Assistive Technology Evaluation - Explanatory Text

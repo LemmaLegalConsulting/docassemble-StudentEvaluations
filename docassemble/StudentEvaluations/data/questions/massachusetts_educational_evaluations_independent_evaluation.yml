@@ -8,6 +8,7 @@ modules:
 ---
 include:
   - massachusetts_educational_evaluations_basic_information.yml
+  - docassemble.MAPovertyScale:poverty.yml
 ---
 features:
   bootstrap theme: mac-bootstrap.css
@@ -39,15 +40,17 @@ mandatory: True
 scan for variables: False
 id: interview order independent eval request
 code: |
+  before_you_start_screen_seen = True
   letter_created_date
   independent_evaluations_intro_screen
+  is_child_in_school
+  if not evaluators.there_are_any:
+    call_the_hotline
   mac_shared_intro_questions  
   if selected_evaluations.all_false():
     call_the_hotline_select_one
   if selected_evaluations['Other'] == True:
     custom_evaluations
-  if evaluators.there_are_any == False:
-    call_the_hotline
   if comfortable_sharing_income == True:
     if free_or_reduced_lunch:
       pass
@@ -88,57 +91,6 @@ code: |
 ---
 code: |
   custom_evaluations = other_evaluations.split('\n')
----
-id: select independent evaluations
-question : |
-  What independent evaluations does ${ student.familiar() } need?
-subquestion: |
-  You may have advice from a specialist already that tells you which
-  evaluations you want. You can also [read more](https://www.understood.org/articles/en/the-evaluation-process-what-to-expect) if you do not know
-  what to ask for.
-fields:
-  - no label: selected_evaluations
-    required: False
-    datatype: checkboxes
-    choices:
-      - Educational assessment: Educational Assessment
-      - Speech and language therapy evaluation: Speech and Language Therapy Evaluation
-      - Social pragmatic language: Social Pragmatic Language
-      - Occupational therapy: Occupational Therapy
-      - Functional behavior assessment: Functional Behavior Assessment
-      - Psychological assessment: Psychological Assessment
-      - Physical therapy: Physical Therapy
-      - Augmentative and alternative communication evaluation: Augmentative and Alternative Communication Evaluation
-      - Assistive technology evaluation: Assistive Technology Evaluation
-      - Other: Other
-    none of the above: False
-  - Other Evaluation (put each evaluation on a separate line). You may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
-    datatype: area
-    show if:
-      variable: selected_evaluations['Other']
-      is: True
-comment: |
-  help:
-  label: |
-    How do I choose?
-  content: |
-    Educational Assessment - Explanatory Text
-    
-    Speech and Language Therapy Evaluation - Explanatory Text
-    
-    Social Pragmatic Language - Explanatory Text
-    
-    Occupational Therapy - Explanatory Text
-    
-    Functional Behavior Assessment - Explanatory Text
-    
-    Psychological Assessment - Explanatory Text
-    
-    Physical Therapy - Explanatory Text
-    
-    Augmentative and Alternative Communication Evaluation - Explanatory Text
-    
-    Assistive Technology Evaluation - Explanatory Text
 
 ---
 id: independent evaluations intro screen
@@ -154,6 +106,13 @@ subquestion: |
   It is a good idea to talk to your child's pediatrician or 
   specialists about other evaluations they might need if you 
   are unsure.
+  
+  Before you get started:
+  
+  * This letter is for children who are already enrolled in school.
+  * You need to know **who** you want to evaluate your child. If you are not
+    sure, you may want to talk to an advocate or your child's doctor to get
+    a recommendation first.
 continue button field: independent_evaluations_intro_screen
 ---
 id: are there any evaluators screen
@@ -162,11 +121,23 @@ question: |
 yesno: evaluators.there_are_any
 ---
 id: evaluators name screen
+sets:
+  - evaluators[i].name.first
 question: |
+  % if i==0:
+  What is the name of the first person you need to evaluate ${ student.familiar() }?
+  % else:
   What is the name of the ${ ordinal(i) } evaluator?
+  % endif
+subquestion: |
+  % if i==0:
+  You can ask for more than one evaluator in this letter. We will ask for
+  each name, one at a time.
+  % endif
 fields:
-  - First Name: evaluators[i].name.first
-  - Last Name: evaluators[i].name.last
+  - Title: evaluators[i].name.title
+  - code: |
+      evaluators[i].name_fields()
 ---
 id: evaluators info screen
 question: |
@@ -192,13 +163,12 @@ subquestion: |
 ---
 id: is there another evaluator 
 question: |
-  So far, you have put in information for the following evaluators:
-  
+  So far, you have put in information for the following evaluators
+subquestion: |
   % for person in evaluators:
   * ${ person }
   % endfor
 
-subquestion: |
   Are there any other evaluators?
   
 yesno: evaluators.there_is_another
@@ -213,9 +183,18 @@ question: |
   Is ${ student.name.first } eligible for free or reduced lunch?
 yesno: free_or_reduced_lunch
 ---
+code: poverty_multiplier = 4
+---
 id: below four hundred percent screen
 question: |
-  Is your family below 400% of the poverty line?
+  Does your family earn less than 4 times the poverty limit?
+subquestion: |
+  You can look at the table below to find out the limit for your
+  family.
+  
+  ${ poverty_scale_table }
+  
+  Does your family earn less than the limit for your family size?
 yesno: below_400_percent
 ---
 id: independent evaluation signature block

@@ -34,7 +34,7 @@ code: |
   allow_chron = True
   multi_user = True
   count = 0
-  educational_evaluations_intro_screen
+  educational_evaluations_intro
   mac_shared_intro_questions
   if selected_evaluations.all_false():
     call_the_hotline
@@ -89,97 +89,97 @@ code: |
       send_email(to=[requestor.email], subject=str(student.name.full()) + " Evaluation Request", attachments=[initial_request_variable, educational_evaluations_copy_request_variable, educational_evaluations_transition_assessment_variable])
   end_screen
 ---
-if: |
-  student.age < 14
-id: confirm evaluations screen over 14
-question : |
-  What evaluations does ${ student.familiar() } need?
-subquestion: |
-fields:
-  - no label: selected_evaluations
-    datatype: checkboxes
-    choices:
-      - Educational Assessment
-      - Speech and Language Therapy Evaluation
-      - Social Pragmatic Language
-      - Occupational Therapy
-      - Functional Behavior Assessment
-      - Psychological Assessment
-      - Physical Therapy
-      - Augmentative and Alternative Communication Evaluation
-      - Assistive Technology Evaluation
-      - Other
-    none of the above: |
-      I do not know.
-  - Other Evaluation (put each evaluation on a separate line) you may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
-    datatype: area
-    show if:
-      variable: selected_evaluations['Other']
-      is: True
-help:
-  label: |
-    How do I choose?
-  content: |
-    Educational Assessment - Explanatory Text
-    
-    Speech and Language Therapy Evaluation - Explanatory Text
-    
-    Social Pragmatic Language - Explanatory Text
-    
-    Occupational Therapy - Explanatory Text
-    
-    Functional Behavior Assessment - Explanatory Text
-    
-    Psychological Assessment - Explanatory Text
-    
-    Physical Therapy - Explanatory Text
-    
-    Augmentative and Alternative Communication Evaluation - Explanatory Text
-    
-    Assistive Technology Evaluation - Explanatory Text
----
-if: |
-  student.age >= 14
-id: confirm evaluations screen over 14
-question : |
-  Please select the evaluations you want.
-fields:
-  - "Select your evaluations here.": selected_evaluations
-    datatype: checkboxes
-    choices:
-      - Educational Assessment
-      - Speech and Language Therapy Evaluation
-      - Social Pragmatic Language
-      - Occupational Therapy
-      - Functional Behavior Assessment
-      - Psychological Assessment
-      - Physical Therapy
-      - Augmentative and Alternative Communication Evaluation
-      - Assistive Technology Evaluation
-      - Transition Assessment
-      - Other
-    none of the above: |
-      I do not know.
-  - Other Evaluation (put each evaluation on a separate line) you may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
-    datatype: area
-    show if:
-      variable: selected_evaluations['Other']
-      is: True
-help:
-  label: |
-    Need help? Not sure what these are? Click here.
-  content: |
-    Educational Assessment - Explanatory Text
-    Speech and Language Therapy Evaluation - Explanatory Text
-    Social Pragmatic Language - Explanatory Text
-    Occupational Therapy - Explanatory Text
-    Functional Behavior Assessment - Explanatory Text
-    Psychological Assessment - Explanatory Text
-    Physical Therapy - Explanatory Text
-    Augmentative and Alternative Communication Evaluation - Explanatory Text
-    Assistive Technology Evaluation - Explanatory Text
-
-
+# if: |
+#   student.age < 14
+# id: confirm evaluations screen over 14
+# question : |
+#   What evaluations does ${ student.familiar() } need?
+# subquestion: |
+# fields:
+#   - no label: selected_evaluations
+#     datatype: checkboxes
+#     choices:
+#       - Educational Assessment
+#       - Speech and Language Therapy Evaluation
+#       - Social Pragmatic Language
+#       - Occupational Therapy
+#       - Functional Behavior Assessment
+#       - Psychological Assessment
+#       - Physical Therapy
+#       - Augmentative and Alternative Communication Evaluation
+#       - Assistive Technology Evaluation
+#       - Other
+#     none of the above: |
+#       I do not know.
+#   - Other Evaluation (put each evaluation on a separate line) you may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
+#     datatype: area
+#     show if:
+#       variable: selected_evaluations['Other']
+#       is: True
+# help:
+#   label: |
+#     How do I choose?
+#   content: |
+#     Educational Assessment - Explanatory Text
+#     
+#     Speech and Language Therapy Evaluation - Explanatory Text
+#     
+#     Social Pragmatic Language - Explanatory Text
+#     
+#     Occupational Therapy - Explanatory Text
+#     
+#     Functional Behavior Assessment - Explanatory Text
+#     
+#     Psychological Assessment - Explanatory Text
+#     
+#     Physical Therapy - Explanatory Text
+#     
+#     Augmentative and Alternative Communication Evaluation - Explanatory Text
+#     
+#     Assistive Technology Evaluation - Explanatory Text
+# ---
+# if: |
+#   student.age >= 14
+# id: confirm evaluations screen over 14
+# question : |
+#   Please select the evaluations you want.
+# fields:
+#   - "Select your evaluations here.": selected_evaluations
+#     datatype: checkboxes
+#     choices:
+#       - Educational Assessment
+#       - Speech and Language Therapy Evaluation
+#       - Social Pragmatic Language
+#       - Occupational Therapy
+#       - Functional Behavior Assessment
+#       - Psychological Assessment
+#       - Physical Therapy
+#       - Augmentative and Alternative Communication Evaluation
+#       - Assistive Technology Evaluation
+#       - Transition Assessment
+#       - Other
+#     none of the above: |
+#       I do not know.
+#   - Other Evaluation (put each evaluation on a separate line) you may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
+#     datatype: area
+#     show if:
+#       variable: selected_evaluations['Other']
+#       is: True
+# help:
+#   label: |
+#     Need help? Not sure what these are? Click here.
+#   content: |
+#     Educational Assessment - Explanatory Text
+#     Speech and Language Therapy Evaluation - Explanatory Text
+#     Social Pragmatic Language - Explanatory Text
+#     Occupational Therapy - Explanatory Text
+#     Functional Behavior Assessment - Explanatory Text
+#     Psychological Assessment - Explanatory Text
+#     Physical Therapy - Explanatory Text
+#     Augmentative and Alternative Communication Evaluation - Explanatory Text
+#     Assistive Technology Evaluation - Explanatory Text
+# 
+# 
 ---
 id: skip to end screen
 question: |
@@ -199,6 +199,19 @@ fields:
       - Assistive Technology Evaluation
       - Transition Assessment
 ---
+question: |
+  Ask for an evaluation for your child
+subquestion: |
+  This website helps you write a letter to ask for your child to be
+  evaluated.
+  
+  Before you start:
+  
+  * This letter is for a child who is already enrolled in school.
+  * You need to know which evaluations you want to ask for.
+  
+continue button field: educational_evaluations_intro
+---
 id: initial evaluation intro screen
 question: |
   Choosing student evaluations
@@ -212,7 +225,7 @@ subquestion: |
   
   You may not see the evaluation you want listed. You will have a chance to
   edit the final letter to add additional evaluations.
-continue button field: educational_evaluations_intro_screen
+continue button field: educational_evaluations_explanation
 ---
 id: speech and language therapy
 question: |
@@ -485,15 +498,6 @@ question: |
 buttons:
   - Leave: leave
 
-  - Restart: restart
----
-id: call the hotline initial request
-event: call_the_hotline
-question: |
-  Please contact  MAC’s helpline at 617-357-8431 or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/))
-  It may take up to three business days for someone to get back to you.
-buttons:
-  - Leave: leave
   - Restart: restart
 ---
 id: initial request attachment block
