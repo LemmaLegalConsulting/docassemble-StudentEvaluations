@@ -26,7 +26,7 @@ metadata:
 objects: 
   - evaluators: | 
       DAList.using(
-        object_type=Individual, 
+        object_type=ALIndividual, 
         complete_attribute='complete')
 ---
 id: evaluators complete attribute block
@@ -43,7 +43,7 @@ code: |
   independent_evaluations_intro_screen
   mac_shared_intro_questions  
   if selected_evaluations.all_false():
-    call_the_hotline
+    call_the_hotline_select_one
   if selected_evaluations['Other'] == True:
     custom_evaluations
   if evaluators.there_are_any == False:
@@ -93,28 +93,32 @@ id: select independent evaluations
 question : |
   What independent evaluations does ${ student.familiar() } need?
 subquestion: |
+  You may have advice from a specialist already that tells you which
+  evaluations you want. You can also [read more](https://www.understood.org/articles/en/the-evaluation-process-what-to-expect) if you do not know
+  what to ask for.
 fields:
   - no label: selected_evaluations
+    required: False
     datatype: checkboxes
     choices:
-      - Educational Assessment
-      - Speech and Language Therapy Evaluation
-      - Social Pragmatic Language
-      - Occupational Therapy
-      - Functional Behavior Assessment
-      - Psychological Assessment
-      - Physical Therapy
-      - Augmentative and Alternative Communication Evaluation
-      - Assistive Technology Evaluation
-      - Other
-    none of the above: |
-      I do not know.
+      - Educational assessment: Educational Assessment
+      - Speech and language therapy evaluation: Speech and Language Therapy Evaluation
+      - Social pragmatic language: Social Pragmatic Language
+      - Occupational therapy: Occupational Therapy
+      - Functional behavior assessment: Functional Behavior Assessment
+      - Psychological assessment: Psychological Assessment
+      - Physical therapy: Physical Therapy
+      - Augmentative and alternative communication evaluation: Augmentative and Alternative Communication Evaluation
+      - Assistive technology evaluation: Assistive Technology Evaluation
+      - Other: Other
+    none of the above: False
   - Other Evaluation (put each evaluation on a separate line). You may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
     datatype: area
     show if:
       variable: selected_evaluations['Other']
       is: True
-help:
+comment: |
+  help:
   label: |
     How do I choose?
   content: |
@@ -229,7 +233,7 @@ question: |
 subquestion: |
   1. Download and print the letter below.
   1. Keep one copy for your own records.
-  1. Second a copy to the school district.
+  1. Send a second copy to the school district.
     
   * [Download as PDF](${ independent_evaluation_request_variable.pdf.url_for() }).
   * [Download as Microsoft Word file](${ independent_evaluation_request_variable.docx.url_for() } ).
@@ -279,9 +283,28 @@ buttons:
   - Restart: restart
 ---
 id: call the hotline independent evaluation
-event: call_the_hotline
+event: call_the_hotline_school
 question: |
-  Please contact  MAC's helpline at 617-357-8431 or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/))
+  This letter is for a child who is already in school
+subquestion: |
+  You can still get help from Massachusetts Advocates for Children, but not
+  using this website.
+
+  Please contact MAC's helpline at ${tel("617-357-8431") } or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/)).
+  It may take up to three business days for someone to get back to you.
+buttons:
+  - Leave: leave
+  - Restart: restart
+---
+id: call the hotline independent evaluation
+event: call_the_hotline_select_one
+question: |
+  You need to choose the evaluations your child needs
+subquestion: |
+  You can still get help from Massachusetts Advocates for Children, but not
+  using this website.
+
+  Please contact MAC's helpline at ${tel("617-357-8431") } or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/)).
   It may take up to three business days for someone to get back to you.
 buttons:
   - Leave: leave

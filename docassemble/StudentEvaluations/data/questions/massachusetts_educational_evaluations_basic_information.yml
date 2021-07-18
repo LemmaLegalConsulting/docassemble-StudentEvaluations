@@ -15,6 +15,8 @@ include:
   - docassemble.AssemblyLine:al_package_unstyled.yml
   - docassemble.AssemblyLine:al_document.yml  
 ---
+code: AL_DEFAULT_STATE = "MA"
+---
 metadata:
     description: |
         Basic information, objects, and module imports needed for all educational evaluation request letters
@@ -25,7 +27,7 @@ metadata:
     revision_date: 2020-06-17
 ---
 objects:
-    - requestor: Individual
+    - requestor: ALIndividual
     - school: Person
 ---
 features:
@@ -35,10 +37,10 @@ features:
   question help button: True
 ---
 objects:
-    - school.recipient: Individual
-    - school.special_education_director: Individual
-    - school.special_education_coordinator: Individual
-    - student: Individual
+    - school.recipient: ALIndividual
+    - school.special_education_director: ALIndividual
+    - school.special_education_coordinator: ALIndividual
+    - student: ALIndividual
     - evaluations_list: DAList
     - evaluation: DAObject
 ---
@@ -204,28 +206,24 @@ fields:
         - I am ${ student.familiar() }: Student
         - Other: Other
 ---
+sets:
+  - requestor.name.first
 id: requestor name
 question: |
   Who are you?
 fields:
-    - First Name: requestor.name.first
-    - Last Name: requestor.name.last
+  - code: |
+      requestor.name_fields()
 ---
+sets:
+  - requestor.address.address
+  - requestor.address.city
 id: requestor address
 question: |
   What is your address?
 fields:
-  - Street Address: requestor.address.address
-    address autocomplete: True
-  - Unit: requestor.address.unit
-    required: False
-  - City: requestor.address.city
-  - State: requestor.address.state
-    code: |
-      states_list()
-    default: MA
-  - Zip: requestor.address.zip
-    required: False
+  - code: |
+      requestor.address_fields(default_state="MA")
 ---
 id: requestor phone number and email
 question: |
@@ -237,6 +235,8 @@ fields:
     datatype: email
     required: False
 ---
+sets:
+  - student.name.first
 id: student name
 question: |
   Who is this letter for?
@@ -244,14 +244,8 @@ subquestion: |
   Write the name of the student who needs or currently
   receives special education services.
 fields:
-  - First: student.name.first
-  - Middle: student.name.middle
-    required: False
-  - Last: student.name.last
-  - Suffix: student.name.suffix
-    required: False
-    code: |
-      name_suffix()
+  - code: |
+      student.name_fields()
 ---
 id: student information
 question: |
@@ -275,27 +269,34 @@ fields:
         code: |
           is_child_in_school == False
       choices:
-        - Not yet in school
-        - Pre-K
-        - Kindergarten
-        - 1st
-        - 2nd
-        - 3rd
-        - 4th
-        - 5th
-        - 6th
-        - 7th
-        - 8th
-        - 9th
-        - 10th
-        - 11th
-        - 12th
+        - Not yet in school: Not yet in school
+        - Pre-K: Pre-K
+        - Kindergarten: Kindergarten
+        - 1st: 1st
+        - 2nd: 2nd
+        - 3rd: 3rd
+        - 4th: 4th
+        - 5th: 5th
+        - 6th: 6th
+        - 7th: 7th
+        - 8th: 8th
+        - 9th: 9th
+        - 10th: 10th
+        - 11th: 11th
+        - 12th: 12th
     - ${student.name.first}'s language: student.language
       input type: radio
       choices:
-        - English
-        - Spanish
-        - Other
+        - English: English
+        - Spanish: Spanish
+        - Arabic: Arabic
+        - Cantonese: Cantonese
+        - Cape Verdean: Cape Verdean Creole
+        - French: French
+        - Haitian Creole: Haitian Creole        
+        - Mandarin: Mandarin
+        - Portuguese: Portuguese
+        - Other: Other
     - Other Language: student.language
       show if:
         variable: student.language
@@ -435,7 +436,10 @@ buttons:
 id: kick out requestor
 event: kick_out_requestor
 question: |
-  It looks like someone else needs to request these evaluations.
+  It looks like someone else needs to request these evaluations
+subquestion: |
+  This letter can only be filled in by a parent, guardian, or the child
+  who needs services.
 buttons:
   - Leave: leave
   - Restart: restart
