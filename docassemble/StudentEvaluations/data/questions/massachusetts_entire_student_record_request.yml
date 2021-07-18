@@ -38,7 +38,7 @@ code: |
     school.recipient.address = school.special_education_director.address
   else:
     school.recipient.name.first = "Special Education Director"  
-  student.enrollment_date
+  # student.enrollment_date
   educational_evaluations_entire_record_request_concatenated = pdf_concatenate(educational_evaluations_entire_record_request_variable)
   if done['emailed to the person receiving it']:
     school.recipient.email

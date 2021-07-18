@@ -204,6 +204,7 @@ fields:
         - Parent: Parent
         - Legal Guardian: Legal Guardian
         - I am ${ student.familiar() }: Student
+        - I am an attorney or advocate representing ${ student.familiar() } or their legal guardian: Advocate
         - Other: Other
 ---
 sets:
