@@ -449,15 +449,7 @@ subquestion: |
   * [Download as PDF](${ educational_evaluations_transition_assessment_variable.pdf.url_for() }).
   * [Download as Microsoft Word file](${ educational_evaluations_transition_assessment_variable.docx.url_for() } ).
   
-  % endif
-  
-  >This is a request for copies of the evaluations you have requested. Send it after
-  the evaluations are complete:
-
-  * [Download as PDF](${ educational_evaluations_copy_request_variable.pdf.url_for() }).
-  * [Download as Microsoft Word file](${ educational_evaluations_copy_request_variable.docx.url_for() } ).
-
-   
+  % endif   
 under: |
   % if is_child_in_school == False and school.special_education_director.address == None:
   Because your child is not in school, you need to send it to the special education director for your district.
