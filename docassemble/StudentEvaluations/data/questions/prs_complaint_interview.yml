@@ -50,6 +50,7 @@ code: |
   parent.name.first  
   school.district_name
   how_notified_school
+  student.language
   parent.language
   if not (translated_documents.there_are_any or meetings.there_are_any):
     kickout_no_problems
@@ -105,16 +106,38 @@ question: |
   Your language
 fields:
   # TODO: this list is really way too long now
-  - What language do you speak best? Type or select one.: parent.language
-    datatype: combobox
-    code: |
-      [lang.name for lang in pycountry.languages]     
+  - What language do you speak best?: parent.language
+    input type: radio
+    choices:
+      - English: English
+      - Spanish: Spanish
+      - Arabic: Arabic
+      - Cantonese: Cantonese
+      - Cape Verdean: Cape Verdean Creole
+      - French: French
+      - Haitian Creole: Haitian Creole        
+      - Mandarin: Mandarin
+      - Portuguese: Portuguese
+      - Other: Other
+  - Other Language: parent.language
+    show if:
+      variable: parent.language
+      is: Other
   - How did you tell the school about your language needs?: how_notified_school
     datatype: object_checkboxes
     choices: how_notified_school_choices.values()
   - Tell us more about how the school learned that you prefer a language other than English: how_notified_school_details
     required: False
     datatype: area  
+    help: |
+      If there is more to say, add it here. For example, one parent might say
+      "The school knows that I speak Spanish because I notified a school 
+      official by filling out a form. My preferred language is also included 
+      on my child's IEP."
+  - List any accommodations that you need when communicating: parent.accommodations
+    datatype: area
+    required: False
+
 ---
 variable name: how_notified_school_choices
 use objects: True
@@ -137,6 +160,9 @@ data:
   language survey: 
     question: School language survey 
     document: completing the school language survey    
+  iep:
+    question: the student's IEP
+    document: the student's preferred language is included in their IEP
 ---
 sets:
   - student.name.first
@@ -156,6 +182,13 @@ fields:
   - School district name: school.district_name
     help: |
       This is often the name of the city where you live.  
+  - ${ student }'s classroom is: student.classroom_type
+    input type: radio
+    choices:
+      - General education: general education
+      - Special education: special education
+      - 504 plan: 504 plan
+      - Home school: home school
   - code: |
       school.address_fields()        
 ---
@@ -234,6 +267,12 @@ fields:
     code: |
       evaluation_options
   # TODO: make this flexible to let someone list multiple evaluations
+  - The school: translated_documents[i].translation_level
+    input type: radio
+    choices:
+      - Did not translate the document at all: no_translation
+      - Only translated part of the document: partial_translation
+      - Attempted to translate the document, but I could not understand the translation: poor_translation
   - What kind of evaluation was it?: translated_documents[i].evaluation_type
     show if: 
       variable: translated_documents[i].name
@@ -241,6 +280,12 @@ fields:
   - Describe the document and what happened (optional): translated_documents[i].description
     datatype: area
     required: False
+    help: |
+      Use your own words. For example, one parent might say: "I asked the
+      school to send me a copy
+      of my child’s IEP in Spanish at least two days before the team meeting,
+      but they told me that they would not be able to get a copy in Spanish
+      before then."
 ---
 variable name: evaluation_options
 data:
@@ -382,10 +427,24 @@ fields:
   - Your introduction: letter_introduction
     datatype: area
     show if: add_introduction
+    help: |
+      For example, you could say: 
+      I am sending this letter to receive past special education evaluation reports in English and in my home language and to make sure that in the future all communications from the school are in Spanish.
   - How did it affect you that the school did not communicate with you in your own language? Use your own words.: letter_outro
     datatype: area
     rows: 5
     required: False
+    help: |
+      For example, one parent might say: 
+      "I felt powerless because I could not fully participate in making
+      important decisions about my child’s education without having the 
+      IEP in Spanish."
+  - label: |
+      Are any of these concerns currently being addressed in the 
+      Bureau of Special Education Appeals (BSEA), either in a mediation or
+      by a hearing?
+    field: hearing_in_bsea
+    datatype: yesnoradio
 ---
 id: choices
 question: |

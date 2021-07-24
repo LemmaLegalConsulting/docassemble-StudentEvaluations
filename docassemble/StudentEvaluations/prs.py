@@ -42,8 +42,32 @@ class PRSTranslatedDocuments(DAList):
     def init(self, *pargs, **kwargs):
         super(PRSTranslatedDocuments, self).init(*pargs, **kwargs) # Run the parent DAList class constructor before we do our own initialization
         self.object_type = PRSIndividualDocument
+        
+    def includes(self, name):
+      for item in self:
+        if item.name == name:
+          return True
+      return False     
+    
+    def partially_translated(self):
+      for item in self:
+        if item.translation_level in ['partial_translation','poor_translation']:
+          return True
+      return False 
+    
+    def untranslated(self):
+      for item in self:
+        if item.translation_level == "no_translation":
+          return True
+      return False 
 
 class PRSMeetings(DAList):
     def init(self, *pargs, **kwargs):
         super(PRSMeetings, self).init(*pargs, **kwargs)
         self.object_type = PRSIndividualMeeting
+        
+    def includes(self, type):
+      for item in self:
+        if item.type == type:
+          return True
+      return False        
