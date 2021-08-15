@@ -194,7 +194,18 @@ fields:
       choices:
         - English: English
         - Spanish: Spanish
+        - Arabic: Arabic
+        - Cantonese: Cantonese
+        - Cape Verdean: Cape Verdean Creole
+        - French: French
+        - Haitian Creole: Haitian Creole        
+        - Mandarin: Mandarin
+        - Portuguese: Portuguese
         - Other: Other
+    - Other Language: requestor.language
+      show if:
+        variable: requestor.language
+        is: Other
 --- 
 id: requestor right to send
 question: |
@@ -471,6 +482,10 @@ fields:
     required: False
     datatype: checkboxes
     choices:
+      # Always included but usually don't need to be asked for
+      - Home assessment: Home Assessment
+      - Health assessment: Health Assessment
+      # Should make sure to ask for
       - Educational assessment: Educational Assessment
       - Speech and language therapy evaluation: Speech and Language Therapy Evaluation
       - Social pragmatic language: Social Pragmatic Language

@@ -174,6 +174,9 @@ fields:
   - code: |
       student.name_fields()
 ---
+sets:
+  - school.address.address
+  - school.address.city
 id: school info
 question: |
   Where does ${ student } go to school?
@@ -190,7 +193,7 @@ fields:
       - 504 plan: 504 plan
       - Home school: home school
   - code: |
-      school.address_fields()        
+      school.address_fields()
 ---
 sets:
   - parent.name.first
@@ -314,10 +317,19 @@ fields:
       - Telephone call: telephone call
       - Video meeting or Zoom: video meeting or Zoom meeting      
   - What was the meeting about?: meetings[i].name
-  # TODO: let people give an approximate date if they do not know exact
   - When was it?: meetings[i].date
     datatype: date
+    hide if: meetings[i].inexact_date    
+  - When was it?: meetings[i].date
+    hint: Write the best date that you know
+    show if: meetings[i].inexact_date    
+  - I do not know the exact date: meetings[i].inexact_date
+    datatype: yesno
   # TODO: note that someone did not need to ask for an interpreter
+  - note: |
+      The questions below ask about interpretation. You did **not** need
+      to ask for an interpreter at the meeting to have a language access
+      problem. Just do your best to explain what happened at the meeting.
   - Did you ask for an interpreter at the meeting?: meetings[i].requested
     datatype: yesnoradio
   - Was there an interpreter at the meeting?: meetings[i].had_interpreter
