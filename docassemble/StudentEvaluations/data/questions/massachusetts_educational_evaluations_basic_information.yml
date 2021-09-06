@@ -470,60 +470,44 @@ buttons:
   - Leave: leave
   - Restart: restart
 ---
-id: select independent evaluations
-question : |
-  What evaluations does ${ student.familiar() } need?
-subquestion: |
-  You may have advice from a specialist already that tells you which
-  evaluations you want. You can also [read more](https://www.understood.org/articles/en/the-evaluation-process-what-to-expect) if you do not know
-  what to ask for.
-fields:
-  - no label: selected_evaluations
-    required: False
-    datatype: checkboxes
-    choices:
-      # Always included but usually don't need to be asked for
-      - Home assessment: Home Assessment
-      - Health assessment: Health Assessment
-      # Should make sure to ask for
-      - Educational assessment: Educational Assessment
-      - Speech and language therapy evaluation: Speech and Language Therapy Evaluation
-      - Social pragmatic language: Social Pragmatic Language
-      - Occupational therapy: Occupational Therapy
-      - Functional behavior assessment: Functional Behavior Assessment
-      - Psychological assessment: Psychological Assessment
-      - Physical therapy: Physical Therapy
-      - Augmentative and alternative communication evaluation: Augmentative and Alternative Communication Evaluation
-      - Assistive technology evaluation: Assistive Technology Evaluation
-      - Other: Other
-    none of the above: False
-  - Other Evaluation (put each evaluation on a separate line). You may want to [call the hotline](https://massadvocates.org/helpline/): other_evaluations
-    datatype: area
-    show if:
-      variable: selected_evaluations['Other']
-      is: True
-comment: |
-  help:
-  label: |
-    How do I choose?
-  content: |
-    Educational Assessment - Explanatory Text
-    
-    Speech and Language Therapy Evaluation - Explanatory Text
-    
-    Social Pragmatic Language - Explanatory Text
-    
-    Occupational Therapy - Explanatory Text
-    
-    Functional Behavior Assessment - Explanatory Text
-    
-    Psychological Assessment - Explanatory Text
-    
-    Physical Therapy - Explanatory Text
-    
-    Augmentative and Alternative Communication Evaluation - Explanatory Text
-    
-    Assistive Technology Evaluation - Explanatory Text
+---
+template: evaluation_definitions
+subject: |
+  What evaluations can I ask for?
+content: |
+  #### Educational Assessment
+  Educational assessments should include a history of the student’s educational progress. The history should be given by a teacher who knows the student well, in relation to the state’s learning standards. The assessments should also include the student’s attention skills, communication skills, memory, participation behaviors, and social skills with both peers and adults.
+
+  #### Speech and Language Evaluation
+  A speech and language evaluation assess the student’s physical ability to speak, pronunciation of speech sounds, use of language for different purposes, correct use of words in properly formed sentences, and voice quality.
+
+  #### Social Pragmatic Language
+  A social pragmatic language evaluation assesses how the student communicates in social situations. This includes assessing use of body language, eye contact, taking turns listening and speaking, and using the appropriate volume when speaking.
+
+  #### Occupational Therapy
+  An occupational therapy evaluation assesses the student’s fine motor skills, self-help skills, sensory processing, postural stability, visual and motor perception, task completion and organization, and social and play abilities.
+  (Los Angeles Unified School District)
+
+  #### Functional Behavior Assessment
+  A functional behavior assessment (FBA) assesses a student’s behavior that is affecting his/her/their own learning or the learning of others. An FBA should identify the causes of specific problem behaviors and provide interventions to address them. 
+
+  #### Psychological Assessment
+  A psychological assessment determines the child’s learning style and provides information on what learning methods are most effective for the child. The assessment may show the child’s problem-solving abilities, memory skills, processing skills, and how the child best interprets information.
+
+  #### Physical Therapy
+  A physical therapy evaluation assesses the student’s posture, balance, strength, motor control and coordination, endurance, gross motor skills, and any other area that allows the student to physically access the educational environment.
+
+  #### Augmentative and Alternative Communication Evaluation
+  An Augmentative and Alternative Communication (AAC) evaluation assesses what communication tool(s), if any, can assist the student to communicate.  Examples of AAC methods include picture boards, manual signs, gestures, finger spelling, and speech-generating devices.  AAC is a type of assistive technology.
+
+  #### Assistive Technology Evaluation
+  An Assistive technology evaluation determines whether a student requires a technological device or service to support their learning. Low-tech devices include picture books to help non-speaking and students with limited speech communicate, line magnifiers for students to focus on one line of text at a time, and seat cushions for students with physical disabilities to maintain posture. High-tech devices include eye-gaze systems for students with physical disabilities to operate computers and software that allows the student to speak into a computer and have the text appear on the screen.
+
+  #### Home Assessment
+  A home assessment includes information on the student’s family history and home.  They may include a home visit with the parent’s agreement.
+
+  #### Health Assessment
+  A health assessment identifies medical issues that may affect the student’s learning.   
 ---
 code: |
   terms_of_use_field = [ {"label": str(terms_of_use_label), 

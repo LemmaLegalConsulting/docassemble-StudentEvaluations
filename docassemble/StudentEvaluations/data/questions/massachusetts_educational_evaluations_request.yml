@@ -36,8 +36,9 @@ code: |
   count = 0
   educational_evaluations_intro
   mac_shared_intro_questions
-  if selected_evaluations.all_false():
-    call_the_hotline
+  ask_specific_evaluations
+  # if selected_evaluations.all_false():
+  #  call_the_hotline
   #   educational_assessment = True
   #   if speech_and_language_therapy.any_true():
   #     student.evaluations_list.append('Speech and Language Therapy Evaluation')
@@ -70,7 +71,7 @@ code: |
   #     student.evaluations_list.append('Assistive Technology Evaluation')
   #   else:
   #     pass
-  if selected_evaluations['Other'] == True:
+  if ask_specific_evaluations and selected_evaluations['Other'] == True:
     while count < 1:
       custom_evaluations = other_evaluations.split('\n')
       count = count + 1
@@ -88,6 +89,71 @@ code: |
       requestor.email
       send_email(to=[requestor.email], subject=str(student.name.full()) + " Evaluation Request", attachments=[initial_request_variable, educational_evaluations_copy_request_variable, educational_evaluations_transition_assessment_variable])
   end_screen
+---
+id: select initial evaluations
+question : |
+  What evaluations does ${ student.familiar() } need?
+subquestion: |
+  First, explain what you or a specialist have noticed about 
+  ${ student.familiar() } that you would like to be evaluated.  
+  
+  Use your own words. 
+  
+  ${ collapse_template(evaluation_example_template) }
+  
+fields:
+  - Please describe your concern: parent_concern
+    datatype: area
+    rows: 4
+  - Do you want to ask for specific evaluations?: ask_specific_evaluations
+    datatype: yesnoradio
+  - note: |
+      It can help ${ student.familiar() } if you can ask for specific
+      evaluations. Click below to learn more about the kinds of evaluations
+      that you can request.
+      
+      ${ collapse_template(evaluation_definitions) }    
+  - no label: selected_evaluations
+    show if: ask_specific_evaluations
+    required: False
+    datatype: checkboxes
+    choices:
+      # Always included but usually don't need to be asked for
+      - Home assessment: Home Assessment
+      - Health assessment: Health Assessment
+      # Should make sure to ask for
+      - Educational assessment: Educational Assessment
+      - Speech and language therapy evaluation: Speech and Language Therapy Evaluation
+      - Social pragmatic language: Social Pragmatic Language
+      - Occupational therapy: Occupational Therapy
+      - Functional behavior assessment: Functional Behavior Assessment
+      - Psychological assessment: Psychological Assessment
+      - Physical therapy: Physical Therapy
+      - Augmentative and alternative communication evaluation: Augmentative and Alternative Communication Evaluation
+      - Assistive technology evaluation: Assistive Technology Evaluation
+      - Other: Other
+    none of the above: False
+  - Other Evaluation (put each evaluation on a separate line).: other_evaluations
+    datatype: area
+    show if:
+      variable: selected_evaluations['Other']
+      is: True
+---
+template: evaluation_example_template
+subject: What can I say?
+content: |
+  There are no "magic words", but it helps to be specific. 
+  Use facts that describe how ${ student.familiar } may have challenges
+  in school.
+  This information will be used by the school to help select
+  the right kind of evaluation.
+  
+  For example, if you were concerned about speech, you
+  might say: "I have noticed that ${ student.familiar() }
+  has trouble saying certain sounds. I am concerned that others cannot 
+  understand what they say. I would like someone to evaluate 
+  ${ student.familiar() }'s speech."  
+
 ---
 # if: |
 #   student.age < 14
@@ -205,9 +271,7 @@ question: |
 subquestion: |
   This website helps you write a letter to ask for your child to be
   evaluated.
-  
-  Before you start:
-  
+    
   * This letter is for a child who is already enrolled in school.
   * You need to know which evaluations you want to ask for.
   
@@ -441,7 +505,7 @@ subquestion: |
   * [Download as PDF](${ initial_request_variable.pdf.url_for() }).
   * [Download as Microsoft Word file](${ initial_request_variable.docx.url_for() } ).
     
-  % if selected_evaluations.elements.get('Transition Assessment'):     
+  % if ask_specific_evaluations and  selected_evaluations.elements.get('Transition Assessment'):     
   
   
    >This is a request for a Transition Assessment. You should send it at the same time as the evaluation request letter. 
