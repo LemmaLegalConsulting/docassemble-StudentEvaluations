@@ -6,6 +6,7 @@ from distutils.util import convert_path
 
 standard_exclude = ('*.pyc', '*~', '.*', '*.bak', '*.swp*')
 standard_exclude_directories = ('.*', 'CVS', '_darcs', './build', './dist', 'EGG-INFO', '*.egg-info')
+
 def find_package_data(where='.', package='', exclude=standard_exclude, exclude_directories=standard_exclude_directories):
     out = {}
     stack = [(convert_path(where), '', package)]
@@ -53,7 +54,7 @@ setup(name='docassemble.StudentEvaluations',
       url='https://www.massadvocates.org/',
       packages=find_packages(),
       namespace_packages=['docassemble'],
-      install_requires=['docassemble.AssemblyLine>=2.3.3', 'docassemble.MAPovertyScale>=0.1', 'docassemble.MassAccess>=0.0.3.1'],
+      install_requires=['docassemble.AssemblyLine>=2.22.2', 'docassemble.MAPovertyScale>=2022.1.18', 'docassemble.MassAccess>=0.3.0'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/StudentEvaluations/', package='docassemble.StudentEvaluations'),
      )
