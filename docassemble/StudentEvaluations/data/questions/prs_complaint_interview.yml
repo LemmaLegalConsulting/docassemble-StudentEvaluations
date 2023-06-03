@@ -541,99 +541,99 @@ id: prs complaint language access review screen
 event: review_prs_complaint_language_access
 question: |
   Review your answers
-review:
-  - Edit: add_introduction
-    button: |
-      **Add introduction**:
-      ${ add_introduction }
-  - Edit: requested_school_year
-    button: |
-      **Requested school year**:
-      ${ requested_school_year }
-  - Edit: parent.name.first
-    button: |
-      **Parent.name.first**:
-      ${ parent.name.first }
-  - Edit: how_notified_school
-    button: |
-      **How notified school**:
-      ${ how_notified_school }
-  - Edit: parent.signature
-    button: |
-      **parent.signature**:
-      ${ parent.signature }
-  - Edit: parent.language
-    button: |
-      **Parent.language**:
-      ${ parent.language }
-  - Edit: translated_documents_review
-    button: |
-      **Translated documents review**:
-      ${ translated_documents_review }
-  - Edit: parent.accommodations
-    button: |
-      **Parent.accommodations**:
-      ${ parent.accommodations }
-  - Edit: student
-    button: |
-      **Student**:
-      ${ student }
-  - Edit: translated_documents.there_are_any
-    button: |
-      **Translated documents.there are any**:
-      ${ translated_documents.there_are_any }
-  - Edit: meetings.there_are_any
-    button: |
-      **Meetings.there are any**:
-      ${ meetings.there_are_any }
-  - Edit: student.language
-    button: |
-      **Student.language**:
-      ${ student.language }
-  - Edit: school.name.first
-    button: |
-      **School.name.first**:
-      ${ school.name.first }
-  - Edit: school.district_name
-    button: |
-      **School.district name**:
-      ${ school.district_name }
-  - Edit: translated_documents.attached
-    button: |
-      **Translated documents.attached**:
-      ${ translated_documents.attached }
-  - Edit: translated_documents
-    button: |
-      **Translated documents**:
-      ${ translated_documents }
-  - Edit: student.birthdate
-    button: |
-      **Student.birthdate**:
-      ${ student.birthdate }
-  - Edit: school.address.address
-    button: |
-      **School.address.address**:
-      ${ school.address.address.block() }
-  - Edit: meetings_review
-    button: |
-      **Meetings review**:
-      ${ meetings_review }
-  - Edit: letter_outro
-    button: |
-      **Letter outro**:
-      ${ letter_outro }
-  - Edit: how_notified_school_details
-    button: |
-      **How notified school details**:
-      ${ how_notified_school_details }
-  - Edit: student.classroom_type
-    button: |
-      **Student.classroom type**:
-      ${ student.classroom_type }
-  - Edit: parent.phone_number
-    button: |
-      **Parent.phone number**:
-      ${ parent.phone_number }
+#review:
+#  - Edit: add_introduction
+#    button: |
+#      **Add introduction**:
+#      ${ add_introduction }
+#  - Edit: requested_school_year
+#    button: |
+#      **Requested school year**:
+#      ${ requested_school_year }
+#  - Edit: parent.name.first
+#    button: |
+#      **Parent.name.first**:
+#      ${ parent.name.first }
+#  - Edit: how_notified_school
+#    button: |
+#      **How notified school**:
+#      ${ how_notified_school }
+#  - Edit: parent.signature
+#    button: |
+#      **parent.signature**:
+#      ${ parent.signature }
+#  - Edit: parent.language
+#    button: |
+#      **Parent.language**:
+#      ${ parent.language }
+#  - Edit: translated_documents_review
+#    button: |
+#      **Translated documents review**:
+#      ${ translated_documents_review }
+#  - Edit: parent.accommodations
+#    button: |
+#      **Parent.accommodations**:
+#      ${ parent.accommodations }
+#  - Edit: student
+#    button: |
+#      **Student**:
+#      ${ student }
+#  - Edit: translated_documents.there_are_any
+#    button: |
+#      **Translated documents.there are any**:
+#      ${ translated_documents.there_are_any }
+#  - Edit: meetings.there_are_any
+#    button: |
+#      **Meetings.there are any**:
+#      ${ meetings.there_are_any }
+#  - Edit: student.language
+#    button: |
+#      **Student.language**:
+#      ${ student.language }
+#  - Edit: school.name.first
+#    button: |
+#      **School.name.first**:
+#      ${ school.name.first }
+#  - Edit: school.district_name
+#    button: |
+#      **School.district name**:
+#      ${ school.district_name }
+#  - Edit: translated_documents.attached
+#    button: |
+#      **Translated documents.attached**:
+#      ${ translated_documents.attached }
+#  - Edit: translated_documents
+#    button: |
+#      **Translated documents**:
+#      ${ translated_documents }
+#  - Edit: student.birthdate
+#    button: |
+#      **Student.birthdate**:
+#      ${ student.birthdate }
+#  - Edit: school.address.address
+#    button: |
+#      **School.address.address**:
+#      ${ school.address.address.block() }
+#  - Edit: meetings_review
+#    button: |
+#      **Meetings review**:
+#      ${ meetings_review }
+#  - Edit: letter_outro
+#    button: |
+#      **Letter outro**:
+#      ${ letter_outro }
+#  - Edit: how_notified_school_details
+#    button: |
+#      **How notified school details**:
+#      ${ how_notified_school_details }
+#  - Edit: student.classroom_type
+#    button: |
+#      **Student.classroom type**:
+#      ${ student.classroom_type }
+#  - Edit: parent.phone_number
+#    button: |
+#      **Parent.phone number**:
+#      ${ parent.phone_number }
 ---
 id: download prs_complaint_language_access
 event: prs_complaint_language_access_download

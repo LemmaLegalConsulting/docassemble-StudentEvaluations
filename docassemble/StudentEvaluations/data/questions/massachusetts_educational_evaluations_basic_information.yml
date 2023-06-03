@@ -14,7 +14,8 @@ modules:
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.AssemblyLine:al_package_unstyled.yml
-  - docassemble.AssemblyLine:al_document.yml  
+  - docassemble.AssemblyLine:al_document.yml
+  - docassemble.ALToolbox:phone-number-validation.yml
 ---
 code: AL_DEFAULT_STATE = "MA"
 ---
@@ -28,8 +29,8 @@ metadata:
     revision_date: 2020-06-17
 ---
 objects:
-    - requestor: ALIndividual
-    - school: Person
+  - requestor: ALIndividual
+  - school: Person
 ---
 features:
   bootstrap theme: mac-bootstrap.css
@@ -40,12 +41,12 @@ features:
     - docassemble.ALToolbox:collapse_template.css
 ---
 objects:
-    - school.recipient: ALIndividual
-    - school.special_education_director: ALIndividual
-    - school.special_education_coordinator: ALIndividual
-    - student: ALIndividual
-    - evaluations_list: DAList
-    - evaluation: DAObject
+  - school.recipient: ALIndividual
+  - school.special_education_director: ALIndividual
+  - school.special_education_coordinator: ALIndividual
+  - student: ALIndividual
+  - evaluations_list: DAList
+  - evaluation: DAObject
 ---
 default screen parts:
   post: |
@@ -190,23 +191,22 @@ id: primary language
 question: |
   What language do you speak best?
 fields:
-    - Language: requestor.language
-      input type: radio
-      choices:
-        - English: English
-        - Spanish: Spanish
-        - Arabic: Arabic
-        - Cantonese: Cantonese
-        - Cape Verdean: Cape Verdean Creole
-        - French: French
-        - Haitian Creole: Haitian Creole        
-        - Mandarin: Mandarin
-        - Portuguese: Portuguese
-        - Other: Other
-    - Other Language: requestor.language
-      show if:
-        variable: requestor.language
-        is: Other
+  - Language: requestor.language
+    choices:
+      - English: English
+      - Spanish: Spanish
+      - Arabic: Arabic
+      - Cantonese: Cantonese
+      - Cape Verdean: Cape Verdean Creole
+      - French: French
+      - Haitian Creole: Haitian Creole        
+      - Mandarin: Mandarin
+      - Portuguese: Portuguese
+      - Other: Other
+  - Other Language: requestor.language
+    show if:
+      variable: requestor.language
+      is: Other
 --- 
 id: requestor right to send
 question: |
@@ -254,6 +254,7 @@ question: |
   What is your preferred phone number and email?
 fields:
   - Phone Number: requestor.phone_number
+    datatype: al_international_phone
     required: False
   - Email: requestor.email
     datatype: email
