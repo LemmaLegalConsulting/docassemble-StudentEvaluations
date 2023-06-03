@@ -7,6 +7,7 @@ modules:
     - .educational_evaluations
 ---
 include:
+  - docassemble.AssemblyLine:assembly_line.yml
   - massachusetts_educational_evaluations_basic_information.yml
 ---
 features:
@@ -14,14 +15,44 @@ features:
   progress bar: True
 ---
 metadata:
-    title: | 
-        MAC Request for Initial Special Education Evaluation
-    description: |
-        An interview to request an independent evaluation from a school.
-    authors:
-        - name: Matt Brooks
-          organization: Lemma Legal
-    revision_date: 2020-06-16
+  title: |
+    MAC Request for Initial Special Education Evaluation
+  short title: |
+    Initial Evaluation
+  authors:
+    - Quinten Steenhuis
+    - Matt Brooks
+---
+## did not generate with weaver, c&p and edited from prs which was 
+## generated with weaver
+mandatory: True
+comment: |
+  Global interview metadata
+variable name: interview_metadata["initial_request"]
+data:
+  al_weaver_version: "1.10.0a2"
+  generated on: "2023-06-03"
+  title: >-
+    MAC Request for Initial Special Education Evaluation
+  short title: >-
+    Initial Evaluation
+  description: |-
+    An interview to request an independent evaluation from a school.
+  allowed courts: []
+  categories: []
+  typical role: "na"
+  generate download screen: True
+---
+code: |
+  interview_metadata['main_interview_key'] =  'initial_request'
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "MA"
 ---
 id: process action initial request
 initial: True
@@ -31,6 +62,9 @@ code: |
 id: interview order initial request
 mandatory: True
 code: |
+  user_role = "na"
+  user_ask_role = "na"
+
   allow_chron = True
   multi_user = True
   count = 0
@@ -77,18 +111,25 @@ code: |
       count = count + 1
   else:
     custom_evaluations = list()
-  initial_request_concatenated = pdf_concatenate(initial_request_variable)
   if wants_reminders:
     requestor.email
     letter_created_date = today()
-  
-  if done['emailed to the person receiving it']:
-    school.recipient.email
-    send_email(to=[school.recipient.email], subject=str(student.name.full()) + " Evaluation Request", attachments=[pdf_concatenate(initial_request_variable), pdf_concatenate(educational_evaluations_copy_request_variable), pdf_concatenate(educational_evaluations_transition_assessment_variable)])
-    if done['emailed to me']:
-      requestor.email
-      send_email(to=[requestor.email], subject=str(student.name.full()) + " Evaluation Request", attachments=[initial_request_variable, educational_evaluations_copy_request_variable, educational_evaluations_transition_assessment_variable])
-  end_screen
+    
+  initial_request_preview_question
+  basic_questions_signature_flow    
+  requestor.signature
+  initial_request_download
+---
+###TODO add back email option 
+###initial_request_concatenated = pdf_concatenate(initial_request_variable)
+###
+##if done['emailed to the person receiving it']:
+##  school.recipient.email
+##  send_email(to=[school.recipient.email], subject=str(student.name.full()) + " Evaluation Request", attachments=[pdf_concatenate(initial_request_variable), pdf_concatenate(educational_evaluations_copy_request_variable), pdf_concatenate(educational_evaluations_transition_assessment_variable)])
+##  if done['emailed to me']:
+##    requestor.email
+##    send_email(to=[requestor.email], subject=str(student.name.full()) + " Evaluation Request", attachments=[initial_request_variable, educational_evaluations_copy_request_variable, educational_evaluations_transition_assessment_variable])
+##end_screen
 ---
 id: select initial evaluations
 question : |
@@ -105,14 +146,14 @@ fields:
   - Please describe your concern: parent_concern
     datatype: area
     rows: 4
-  - Do you want to ask for specific evaluations?: ask_specific_evaluations
-    datatype: yesnoradio
   - note: |
       It can help ${ student.familiar() } if you can ask for specific
       evaluations. Click below to learn more about the kinds of evaluations
       that you can request.
       
       ${ collapse_template(evaluation_definitions) }    
+  - Do you want to ask for specific evaluations?: ask_specific_evaluations
+    datatype: yesnoradio
   - no label: selected_evaluations
     show if: ask_specific_evaluations
     required: False
@@ -143,7 +184,7 @@ template: evaluation_example_template
 subject: What can I say?
 content: |
   There are no "magic words", but it helps to be specific. 
-  Use facts that describe how ${ student.familiar } may have challenges
+  Use facts that describe how ${ student.familiar() } may have challenges
   in school.
   This information will be used by the school to help select
   the right kind of evaluation.
@@ -276,10 +317,6 @@ subquestion: |
   * You need to know which evaluations you want to ask for.
   
 continue button field: educational_evaluations_intro
-fields:
-  - code: |
-      terms_of_use_field
-
 ---
 id: initial evaluation intro screen
 question: |
@@ -486,62 +523,62 @@ fields:
       I don't know.
 
 ---
-id: signature block
-question: |
-  ${ requestor.name.firstlast() }, please sign here
-signature: requestor.signature
-under: |
-  Sign your name here by using your mouse or touching your phone's screen.
-  Press clear if you want to start over.
----
-id: letter screen
-question: |
-  Here are your letters
-subquestion: |
-  1. Download and print the letter below.
-  1. Keep one copy for your own records.
-  1. Second a copy to the school district.
-    
-  * [Download as PDF](${ initial_request_variable.pdf.url_for() }).
-  * [Download as Microsoft Word file](${ initial_request_variable.docx.url_for() } ).
-    
-  % if ask_specific_evaluations and  selected_evaluations.elements.get('Transition Assessment'):     
-  
-  
-   >This is a request for a Transition Assessment. You should send it at the same time as the evaluation request letter. 
-   
-  * [Download as PDF](${ educational_evaluations_transition_assessment_variable.pdf.url_for() }).
-  * [Download as Microsoft Word file](${ educational_evaluations_transition_assessment_variable.docx.url_for() } ).
-  
-  % endif   
-under: |
-  % if is_child_in_school == False and school.special_education_director.address == None:
-  Because your child is not in school, you need to send it to the special education director for your district.
-  Please contact  MAC’s helpline at 617-357-8431 or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/))
-  for help locating this address. It may take up to three business days for someone to get back to you.
-
-  You may also be able to find the name of your district's special education director  by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
-
-  % endif
-fields:
-  - "I want a copy of my letter...": done
-    datatype: checkboxes
-    choices: 
-      - emailed to me
-      - emailed to the person receiving it
----
-id: recipient email screen
-question: |
-  What is ${school.recipient.name.full()}'s email?
-fields:
-  - ${school.recipient.name.full()} email: school.recipient.email
----
-id: requestor email screen
-question: |
-  What is your email?
-fields:
-  - your email: requestor.email
----
+#id: signature block
+#question: |
+#  ${ requestor.name.firstlast() }, please sign here
+#signature: requestor.signature
+#under: |
+#  Sign your name here by using your mouse or touching your phone's screen.
+#  Press clear if you want to start over.
+#---
+#id: letter screen
+#question: |
+#  Here are your letters
+#subquestion: |
+#  1. Download and print the letter below.
+#  1. Keep one copy for your own records.
+#  1. Second a copy to the school district.
+#    
+#  * [Download as PDF](${ initial_request_variable.pdf.url_for() }).
+#  * [Download as Microsoft Word file](${ initial_request_variable.docx.url_for() } ).
+#    
+#  % if ask_specific_evaluations and  selected_evaluations.elements.get('Transition Assessment'):     
+#  
+#  
+#   >This is a request for a Transition Assessment. You should send it at the same time as the evaluation request letter. 
+#   
+#  * [Download as PDF](${ educational_evaluations_transition_assessment_variable.pdf.url_for() }).
+#  * [Download as Microsoft Word file](${ educational_evaluations_transition_assessment_variable.docx.url_for() } ).
+#  
+#  % endif   
+#under: |
+#  % if is_child_in_school == False and school.special_education_director.address == None:
+#  Because your child is not in school, you need to send it to the special education director for your district.
+#  Please contact  MAC’s helpline at 617-357-8431 or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/))
+#  for help locating this address. It may take up to three business days for someone to get back to you.
+#
+#  You may also be able to find the name of your district's special education director  by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
+#
+#  % endif
+#fields:
+#  - "I want a copy of my letter...": done
+#    datatype: checkboxes
+#    choices: 
+#      - emailed to me
+#      - emailed to the person receiving it
+#---
+#id: recipient email screen
+#question: |
+#  What is ${school.recipient.name.full()}'s email?
+#fields:
+#  - ${school.recipient.name.full()} email: school.recipient.email
+#---
+#id: requestor email screen
+#question: |
+#  What is your email?
+#fields:
+#  - your email: requestor.email
+#---
 id: wants reminders screen
 question: |
   Getting a reminder
@@ -552,35 +589,14 @@ subquestion: |
   Would you like a reminder to follow up with the school?
 yesno: wants_reminders
 ---
-id: end screen initial request
-event: end_screen
-question: |
-  You are all done!
-buttons:
-  - Leave: leave
-
-  - Restart: restart
----
-id: initial request attachment block
-attachment:
-  - name: initial_request_name
-    variable name: initial_request_variable
-    filename: initial_request
-    docx template file: initial_request_template.docx
----
-id: copy request attachment block
-attachment:
-  - name: educational_evaluations_copy_request_name
-    variable name: educational_evaluations_copy_request_variable
-    filename: educational_evaluations_copy_request
-    docx template file: educational_evaluations_copy_request_template.docx
----
-id: transition assessment attachment block
-attachment:
-  - name: educational_evaluations_transition_assessment_request_name
-    variable name: educational_evaluations_transition_assessment_variable
-    filename: educational_evaluations_transition_assessment_request
-    docx template file: educational_evaluations_transition_assessment_request_template.docx
+#id: end screen initial request
+#event: end_screen
+#question: |
+#  You are all done!
+#buttons:
+#  - Leave: leave
+#
+#  - Restart: restart
 ---
 id: reminder email template
 template: reminder_email_initial_request
@@ -601,4 +617,85 @@ event: cron_monthly
 code: |
   if last_access_days() > 365:
     command('exit')
+---
+id: preview initial_request
+question: |
+  Preview your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page.   
+  
+  ${ al_recipient_bundle.as_pdf(key='preview') }
 
+  Click the image to open it in a new tab. Click the "Edit answers" button
+  to edit your answers.
+
+  ${ action_button_html(url_action('review_initial_request'), label='Edit answers', color='info') }
+  
+  Remember to come back to this window to continue and sign your form.
+continue button field: initial_request_preview_question    
+---
+code: |
+  signature_fields = ['requestor.signature']
+---
+## TODO update review screens
+## Add AL tables for objects
+## Use AL dashboard to generate review screens
+id: initial_request review screen
+event: review_initial_request
+question: |
+  Review your answers
+---
+id: download initial_request
+event: initial_request_download
+question: |
+  All done
+subquestion: |
+  Thank you. Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_initial_request'), label='Edit answers', color='info') }
+  
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+
+progress: 100
+---
+# ALDocument objects specify the metadata for each template
+objects:
+  - initial_request_attachment: ALDocument.using(title="Initial Request", filename="initial_request", enabled=True, has_addendum=False)
+  - educational_evaluations_copy_request_attachment: ALDocument.using(title="Evaluation Copy Request", filename="educational_evaluations_copy_request", enabled=True, has_addendum=False)
+  - educational_evaluations_transition_assessment_request_attachment: ALDocument.using(title="Transition Assessment Request", filename="educational_evaluations_transition_assessment_request", enabled=True, has_addendum=False)
+---
+# Bundles group the ALDocuments into separate downloads, such as for court and for the user
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_copy_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_copy_request_attachment, educational_evaluations_transition_assessment_request_attachment],  filename="educational_evaluations_entire_record_request", title="All forms to file", enabled=True)
+---
+# Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
+# used for "preview" and "final" keys, and logic in the template checks the value of 
+# `i` to show or hide the user's signature
+attachment:
+  name: Initial Request
+  filename: initial_request
+  variable name: initial_request_attachment[i]
+  skip undefined: True
+  docx template file: initial_request.docx
+---
+attachment:
+  name: Evaluation Copy Request
+  filename: educational_evaluations_copy_request
+  variable name: educational_evaluations_copy_request_attachment[i]
+  skip undefined: True
+  docx template file: educational_evaluations_copy_request.docx
+---
+attachment:
+  name: Transition Assessment Request
+  filename: educational_evaluations_transition_assessment_request
+  variable name: educational_evaluations_transition_assessment_request_attachment[i]
+  skip undefined: True
+  docx template file: educational_evaluations_transition_assessment_request.docx
+---
