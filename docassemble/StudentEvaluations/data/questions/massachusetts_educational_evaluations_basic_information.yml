@@ -20,13 +20,13 @@ include:
 code: AL_DEFAULT_STATE = "MA"
 ---
 metadata:
-    description: |
-        Basic information, objects, and module imports needed for all educational evaluation request letters
-    authors:
-        - name: Matt Brooks
-          organization: Lemma Legal
-
-    revision_date: 2020-06-17
+  title: |
+    MAC Basic Questions
+  short title: |
+    MAC Basic Questions
+  authors:
+    - Quinten Steenhuis
+    - Matt Brooks
 ---
 objects:
   - requestor: ALIndividual
@@ -368,7 +368,7 @@ fields:
       show if: school.special_education_director.requestor_knows_address
       required: False
 under: |
-  Because ${student.name.first} is not yet in school, you need to send this letter to the special education director
+  Because ${ student.name.first } is not yet in school, you need to send this letter to the special education director
   for where you live. You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
 ---
 id: special education coordinator information
@@ -423,10 +423,10 @@ fields:
   - Special Education Director Last Name: school.special_education_director.name.last
     show if: knows_special_education_director_name
 subquestion: |
-  Because ${student.name.first} is not yet in school, you need to send this letter to the special education director
+  Because ${ student.name.first } is not yet in school, you need to send this letter to the special education director
   for where you live. You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
 comment : |
-  using ${student.pronoun_possessive("school district")} in the first field resulted in a parser error. Is this a bug?
+  using ${ student.pronoun_possessive("school district") } in the first field resulted in a parser error. Is this a bug?
 ---
 id: kick out language
 event: kick_out_language
@@ -466,7 +466,6 @@ buttons:
   - Leave: leave
   - Restart: restart
 ---
----
 template: evaluation_definitions
 subject: |
   What evaluations can I ask for?
@@ -504,26 +503,3 @@ content: |
 
   #### Health Assessment
   A health assessment identifies medical issues that may affect the student’s learning.   
----
-code: |
-  terms_of_use_field = [ {"label": str(terms_of_use_label), 
-    "field": "acknowledged_information_use",
-    "datatype": "checkboxes",
-    "minlength": 1,
-    "choices": [str(terms_of_use_I_accept_label)],
-    "validation messages": {
-      "minlength": str(terms_of_use_validation_message_label),
-    },
-    }]
----
-template: terms_of_use_label
-content: |
-  To continue, you must accept the [terms of use](https://www.gbls.org/self-help/eviction/terms-of-use)
----
-template: terms_of_use_I_accept_label
-content: |
-  I accept the terms of use.
----
-template: terms_of_use_validation_message_label
-content: |
-  You cannot continue unless you agree to the terms of use.
