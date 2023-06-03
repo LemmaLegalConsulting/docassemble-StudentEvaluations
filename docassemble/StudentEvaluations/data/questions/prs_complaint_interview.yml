@@ -219,7 +219,7 @@ fields:
       - 504 plan: 504 plan
       - Home school: home school
   - code: |
-      school.address_fields()
+      school.address_fields(default_state="MA")
 ---
 sets:
   - parent.name.first

@@ -73,10 +73,13 @@ code: |
   allow_cron = True
   multi_user = True
   # welcome_screen_seen
+  
   before_you_start_screen_seen  
+  
   student.name.first
   if not is_child_in_school:
     call_the_hotline
+    
   requestor.language
   #if requestor.language == 'Other':
   #  kick_out_language    
@@ -90,6 +93,7 @@ code: |
   requestor.name.first
   requestor.address.address
   requestor.phone_number
+  
   if is_child_in_school == False:
     student.grade = "Not yet in school"
   if requestor.right_to_send == 'Student':
@@ -98,6 +102,7 @@ code: |
     student.language = requestor.language
   else:
     student.name.first
+    
   if student.grade == "Not yet in school":
     student.grade = 'soon-to-be'
   else:
@@ -373,11 +378,11 @@ under: |
 ---
 id: special education coordinator information
 question: |
-  Special Education Coordinator
+  Special Education **Coordinator**
 fields:
   - "Do you know the name of the {special education coordinator} for ${ student.familiar() }?": knows_special_education_director_name
     datatype: yesnoradio
-  - Recipient Title: school.recipient.title
+  - Coordinator Title: school.special_education_coordinator.title
     required: False
     show if: knows_special_education_director_name
     choices:
@@ -386,9 +391,9 @@ fields:
       - Miss
       - Ms.
       - Mr.
-  - Recipient First Name: school.special_education_coordinator.name.first
+  - Coordinator First Name: school.special_education_coordinator.name.first
     show if: knows_special_education_director_name
-  - Recipient Last Name: school.special_education_coordinator.name.last
+  - Coordinator Last Name: school.special_education_coordinator.name.last
     show if: knows_special_education_director_name
 subquestion: |
    The name of the special education coordinator should be listed on your child’s IEP.  If you do not know the name of the special education coordinator, 
@@ -405,11 +410,11 @@ terms:
 ---
 id: special education director information
 question: |
-  Name of Special Education Director
+  Name of Special Education **Director**
 fields:
   - "Do you know the name of the Special Education Director for the school district?": knows_special_education_director_name 
     datatype: yesnoradio
-  - Special Education Director Title: school.special_education_director.title
+  - Director Title: school.special_education_director.title
     required: False
     show if: knows_special_education_director_name
     choices: 
@@ -418,9 +423,9 @@ fields:
       - Miss
       - Ms.
       - Mr.
-  - Special Education Director First Name: school.special_education_director.name.first
+  - Director First Name: school.special_education_director.name.first
     show if: knows_special_education_director_name
-  - Special Education Director Last Name: school.special_education_director.name.last
+  - Director Last Name: school.special_education_director.name.last
     show if: knows_special_education_director_name
 subquestion: |
   Because ${ student.name.first } is not yet in school, you need to send this letter to the special education director
