@@ -12,6 +12,7 @@ modules:
   - docassemble.AssemblyLine.al_courts
 ---
 include:
+  - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.AssemblyLine:al_package_unstyled.yml
   - docassemble.AssemblyLine:al_document.yml  
 ---
@@ -281,16 +282,11 @@ question: |
   Information about ${student.name.first}
   % endif
 fields:
-    - ${student.name.first}'s Birthdate: student.birthdate
+    - Birthdate: student.birthdate
       datatype: BirthDate
-    - ${student.name.first}'s Gender: student.gender
-      input type: radio
-      choices:
-        - Male: male
-        - Female: female
-        - Non-binary: other
-        - Other gender: other
-    - ${student.name.first}'s Grade: student.grade
+    - code: |
+        student.gender_fields()
+    - Grade: student.grade
       hide if:
         code: |
           is_child_in_school == False
@@ -310,8 +306,7 @@ fields:
         - 10th: 10th
         - 11th: 11th
         - 12th: 12th
-    - ${student.name.first}'s language: student.language
-      input type: radio
+    - Language: student.language
       choices:
         - English: English
         - Spanish: Spanish
