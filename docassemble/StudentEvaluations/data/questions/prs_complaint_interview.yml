@@ -3,12 +3,48 @@ modules:
   - docassemble.income.income
   - .prs
   - docassemble.ALToolbox.misc
-  - docassemble.AssemblyLine.al_general
-  - docassemble.AssemblyLine.al_document
-  - docassemble.AssemblyLine.al_courts
 ---
 include:
+  - docassemble.AssemblyLine:assembly_line.yml
   - massachusetts_educational_evaluations_basic_information.yml
+---
+metadata:
+  title: |
+    MAC PRS Complaint (Language Access)
+  short title: |
+    MAC PRS Complaint
+  authors:
+    - Quinten Steenhuis
+    - Matt Brooks
+---
+mandatory: True
+comment: |
+  Global interview metadata
+variable name: interview_metadata["prs_complaint_language_access"]
+data:
+  al_weaver_version: "1.10.0a2"
+  generated on: "2023-06-03"
+  title: >-
+    MAC PRS Complaint (Language Access)
+  short title: >-
+    MAC PRS Complaint
+  description: |-
+    An interview to fill in MAC Parent PRS Complaint Form Language Access.
+  allowed courts: []
+  categories: []
+  typical role: "na"
+  generate download screen: True
+---
+code: |
+  interview_metadata['main_interview_key'] =  'prs_complaint_language_access'
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "MA"
 ---
 default screen parts:
   post: |
@@ -25,16 +61,6 @@ default screen parts:
 imports:
   - pycountry
 ---
-metadata:
-    title: | 
-       MAC PRS Complaint (Language Access)
-    description: |
-        An interview to fill in MAC's Parent PRS Complaint Form: Language Access.
-    authors:
-        - name: Matt Brooks and Quinten Steenhuis
-          organization: LemmaLegal
-    revision_date: 2021-05-09
----
 objects:
   - translated_documents: PRSTranslatedDocuments.using(complete_attribute="complete")
   - meetings: PRSMeetings.using(complete_attribute="complete")
@@ -45,6 +71,9 @@ objects:
 mandatory: True
 id: mac prs language access complaint interview order block
 code: |
+  user_role = "na"
+  user_ask_role = "na"
+
   prs_intro
   student.name.first
   parent.name.first  
@@ -73,8 +102,11 @@ code: |
   # of the school. Or mail it to "The office of the superintendent"
   
   add_introduction
+  
+  prs_complaint_language_access_preview_question
+  basic_questions_signature_flow    
   parent.signature
-  download_prs
+  prs_complaint_language_access_download
 ---
 code: |
   translated_documents[i].name
@@ -90,24 +122,19 @@ question: |
   Tell the State about a problem with translations in your child's school
 subquestion: |
   This website will help you tell the State Department of Elementary
-  and Secondary Education about a problem with translations in your child's
+  and Secondary Education (DESE) about a problem with translations in your child's
   school.
   
   You can use this website if:
   
   1. You are the parent of a child in a Massachusetts public school, and
   1. you speak a language other than English as your first language.
-fields:
-  - code: |
-      terms_of_use_field
 ---
 id: background info about language needs
 question: |
   Your language
 fields:
-  # TODO: this list is really way too long now
   - What language do you speak best?: parent.language
-    input type: radio
     choices:
       - English: English
       - Spanish: Spanish
@@ -137,7 +164,6 @@ fields:
   - List any accommodations that you need when communicating: parent.accommodations
     datatype: area
     required: False
-
 ---
 variable name: how_notified_school_choices
 use objects: True
@@ -161,7 +187,7 @@ data:
     question: School language survey 
     document: completing the school language survey    
   iep:
-    question: the student's IEP
+    question: The student's IEP
     document: the student's preferred language is included in their IEP
 ---
 sets:
@@ -193,7 +219,7 @@ fields:
       - 504 plan: 504 plan
       - Home school: home school
   - code: |
-      school.address_fields()
+      school.address_fields(default_state="MA")
 ---
 sets:
   - parent.name.first
@@ -252,7 +278,6 @@ subquestion: |
   reasons for the complaint.
   
   ${ action_button_html(url_action('translated_documents.there_are_any'), label="Edit your answer") }
-
 field: kickout_no_problems
 buttons:
   - Continue: continue
@@ -262,20 +287,21 @@ id: prs gather names of translated documents
 question: |
   Information about the ${ ordinal(i) } document
 fields:
-  # TODO: make this an open text field for date
   - Date document was sent: translated_documents[i].date
-    datatype: date
+  # TODO: figure out how to get evaluation_options not to load 
+  # alphabetically (put "Other" option last)
   - Kind of document: translated_documents[i].name
     input type: radio
     code: |
       evaluation_options
   # TODO: make this flexible to let someone list multiple evaluations
   - The school: translated_documents[i].translation_level
-    input type: radio
+    datatype: checkboxes
     choices:
       - Did not translate the document at all: no_translation
       - Only translated part of the document: partial_translation
       - Attempted to translate the document, but I could not understand the translation: poor_translation
+    none of the above: false
   - What kind of evaluation was it?: translated_documents[i].evaluation_type
     show if: 
       variable: translated_documents[i].name
@@ -308,10 +334,9 @@ yesno: translated_documents.there_is_another
 ---
 id: prs gather names of meetings
 question: |
-  What kind of meeting is the ${ ordinal(i) } meeting?
+  Tell us about the ${ ordinal(i) } meeting?
 fields:
   - What kind of meeting was this?: meetings[i].type
-    datatype: radio
     choices:
       - In-person meeting: in-person meeting
       - Telephone call: telephone call
@@ -325,7 +350,6 @@ fields:
     show if: meetings[i].inexact_date    
   - I do not know the exact date: meetings[i].inexact_date
     datatype: yesno
-  # TODO: note that someone did not need to ask for an interpreter
   - note: |
       The questions below ask about interpretation. You did **not** need
       to ask for an interpreter at the meeting to have a language access
@@ -343,7 +367,7 @@ fields:
 ---
 id: prs is there another meeting
 question: |
-  Is there another meeting with an interpretation problem?
+  Was there another meeting with an interpretation problem?
 yesno: meetings.there_is_another
 ---
 id: review translated documents
@@ -367,7 +391,6 @@ fields:
       
       On ${ document.date }, ${ school } sent a ${ noun_singular(evaluation_options[document.name]).lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) if document.description else '' }
       % endfor
-    
 ---
 id: review conversations
 question: |
@@ -383,6 +406,7 @@ subquestion: |
   Hit the enter key to add a new line any time you want a new paragraph in your
   letter.
 fields:
+  ## TODO change onscreen in text pre-populated date format to MM-DD-YYY
   - Draft: meetings_review
     datatype: area
     rows: 5
@@ -404,7 +428,7 @@ fields:
 id: intro paragraph
 question: |
   What would you like to tell the Department of Elementary and Secondary
-  Education?
+  Education (DESE)?
 subquestion: |
   Your letter can include:
   
@@ -451,6 +475,7 @@ fields:
       "I felt powerless because I could not fully participate in making
       important decisions about my child’s education without having the 
       IEP in Spanish."
+    ## Consider adding "I don't know" option or info on how parent would know
   - label: |
       Are any of these concerns currently being addressed in the 
       Bureau of Special Education Appeals (BSEA), either in a mediation or
@@ -491,32 +516,159 @@ code: |
   # TODO: when we have robust upload facility
   translated_documents.attached = False
 ---
-objects:
-  - prs_complaint: ALDocument.using(title="Language Access Complaint", filename="language_access_complaint", enabled=True)
----
-objects:
-  - dese_bundle: ALDocumentBundle.using(elements=[prs_complaint], filename="prs_complaint")
-  - user_bundle: ALDocumentBundle.using(elements=[prs_complaint], filename="prs_complaint")
----
-id: prs complaint form attachment block
-attachment:
-  - name: prs_complaint_name
-    variable name: prs_complaint[i]
-    filename: prs_complaint
-    docx template file: prs_complaint_template_language_access.docx
----
-id: download
-event: download_prs
+id: preview prs_complaint_language_access
 question: |
-  Your letter is ready
+  Preview your form before you sign it
 subquestion: |
-  ${ user_bundle.download_list_html(format='docx') }
+  Here is a preview of the form you will sign on the next page.   
   
-  ${ user_bundle.send_button_html() }
+  ${ al_recipient_bundle.as_pdf(key='preview') }
+
+  Click the image to open it in a new tab. Click the "Edit answers" button
+  to edit your answers.
+
+  ${ action_button_html(url_action('review_prs_complaint_language_access'), label='Edit answers', color='info') }
+  
+  Remember to come back to this window to continue and sign your form.
+continue button field: prs_complaint_language_access_preview_question    
 ---
-generic object: ALDocumentBundle
-template: x.send_email_template
-subject: |
-  Your "Language Access Complaint" document from Mass Advocates for Children is ready
-content: |
-  Please find the document for ${ parent } attached.
+code: |
+  signature_fields = ['parent.signature']
+---
+## TODO update review screens, change any True/False to Yes/No. 
+## Add AL tables for objects
+id: prs complaint language access review screen
+event: review_prs_complaint_language_access
+question: |
+  Review your answers
+review:
+  - Edit: add_introduction
+    button: |
+      **Add introduction**:
+      ${ add_introduction }
+  - Edit: requested_school_year
+    button: |
+      **Requested school year**:
+      ${ requested_school_year }
+  - Edit: parent.name.first
+    button: |
+      **Parent.name.first**:
+      ${ parent.name.first }
+  - Edit: how_notified_school
+    button: |
+      **How notified school**:
+      ${ how_notified_school }
+  - Edit: parent.signature
+    button: |
+      **parent.signature**:
+      ${ parent.signature }
+  - Edit: parent.language
+    button: |
+      **Parent.language**:
+      ${ parent.language }
+  - Edit: translated_documents_review
+    button: |
+      **Translated documents review**:
+      ${ translated_documents_review }
+  - Edit: parent.accommodations
+    button: |
+      **Parent.accommodations**:
+      ${ parent.accommodations }
+  - Edit: student
+    button: |
+      **Student**:
+      ${ student }
+  - Edit: translated_documents.there_are_any
+    button: |
+      **Translated documents.there are any**:
+      ${ translated_documents.there_are_any }
+  - Edit: meetings.there_are_any
+    button: |
+      **Meetings.there are any**:
+      ${ meetings.there_are_any }
+  - Edit: student.language
+    button: |
+      **Student.language**:
+      ${ student.language }
+  - Edit: school.name.first
+    button: |
+      **School.name.first**:
+      ${ school.name.first }
+  - Edit: school.district_name
+    button: |
+      **School.district name**:
+      ${ school.district_name }
+  - Edit: translated_documents.attached
+    button: |
+      **Translated documents.attached**:
+      ${ translated_documents.attached }
+  - Edit: translated_documents
+    button: |
+      **Translated documents**:
+      ${ translated_documents }
+  - Edit: student.birthdate
+    button: |
+      **Student.birthdate**:
+      ${ student.birthdate }
+  - Edit: school.address.address
+    button: |
+      **School.address.address**:
+      ${ school.address.address.block() }
+  - Edit: meetings_review
+    button: |
+      **Meetings review**:
+      ${ meetings_review }
+  - Edit: letter_outro
+    button: |
+      **Letter outro**:
+      ${ letter_outro }
+  - Edit: how_notified_school_details
+    button: |
+      **How notified school details**:
+      ${ how_notified_school_details }
+  - Edit: student.classroom_type
+    button: |
+      **Student.classroom type**:
+      ${ student.classroom_type }
+  - Edit: parent.phone_number
+    button: |
+      **Parent.phone number**:
+      ${ parent.phone_number }
+---
+id: download prs_complaint_language_access
+event: prs_complaint_language_access_download
+question: |
+  All done
+subquestion: |
+  Thank you. Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_prs_complaint_language_access'), label='Edit answers', color='info') }
+  
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+
+progress: 100
+---
+# ALDocument objects specify the metadata for each template
+objects:
+  - prs_complaint_language_access_attachment: ALDocument.using(title="PRS Complaint (Language Access)", filename="prs_complaint_language_access", enabled=True, has_addendum=False)
+---
+# Bundles group the ALDocuments into separate downloads, such as for court and for the user
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment], filename="prs_complaint_language_access", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment],  filename="prs_complaint_language_access", title="All forms to file", enabled=True)
+---
+# Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
+# used for "preview" and "final" keys, and logic in the template checks the value of 
+# `i` to show or hide the user's signature
+attachment:
+  name: PRS Complaint (Language Access)
+  filename: prs_complaint_language_access
+  variable name: prs_complaint_language_access_attachment[i]
+  skip undefined: True
+  docx template file: prs_complaint_language_access.docx

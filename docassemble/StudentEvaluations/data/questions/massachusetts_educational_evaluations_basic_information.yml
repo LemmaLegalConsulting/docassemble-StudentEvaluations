@@ -12,23 +12,25 @@ modules:
   - docassemble.AssemblyLine.al_courts
 ---
 include:
+  - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.AssemblyLine:al_package_unstyled.yml
-  - docassemble.AssemblyLine:al_document.yml  
+  - docassemble.AssemblyLine:al_document.yml
+  - docassemble.ALToolbox:phone-number-validation.yml
 ---
 code: AL_DEFAULT_STATE = "MA"
 ---
 metadata:
-    description: |
-        Basic information, objects, and module imports needed for all educational evaluation request letters
-    authors:
-        - name: Matt Brooks
-          organization: Lemma Legal
-
-    revision_date: 2020-06-17
+  title: |
+    MAC Basic Questions
+  short title: |
+    MAC Basic Questions
+  authors:
+    - Quinten Steenhuis
+    - Matt Brooks
 ---
 objects:
-    - requestor: ALIndividual
-    - school: Person
+  - requestor: ALIndividual
+  - school: Person
 ---
 features:
   bootstrap theme: mac-bootstrap.css
@@ -39,12 +41,12 @@ features:
     - docassemble.ALToolbox:collapse_template.css
 ---
 objects:
-    - school.recipient: ALIndividual
-    - school.special_education_director: ALIndividual
-    - school.special_education_coordinator: ALIndividual
-    - student: ALIndividual
-    - evaluations_list: DAList
-    - evaluation: DAObject
+  - school.recipient: ALIndividual
+  - school.special_education_director: ALIndividual
+  - school.special_education_coordinator: ALIndividual
+  - student: ALIndividual
+  - evaluations_list: DAList
+  - evaluation: DAObject
 ---
 default screen parts:
   post: |
@@ -71,10 +73,13 @@ code: |
   allow_cron = True
   multi_user = True
   # welcome_screen_seen
+  
   before_you_start_screen_seen  
+  
   student.name.first
   if not is_child_in_school:
     call_the_hotline
+    
   requestor.language
   #if requestor.language == 'Other':
   #  kick_out_language    
@@ -88,6 +93,7 @@ code: |
   requestor.name.first
   requestor.address.address
   requestor.phone_number
+  
   if is_child_in_school == False:
     student.grade = "Not yet in school"
   if requestor.right_to_send == 'Student':
@@ -96,6 +102,7 @@ code: |
     student.language = requestor.language
   else:
     student.name.first
+    
   if student.grade == "Not yet in school":
     student.grade = 'soon-to-be'
   else:
@@ -189,23 +196,22 @@ id: primary language
 question: |
   What language do you speak best?
 fields:
-    - Language: requestor.language
-      input type: radio
-      choices:
-        - English: English
-        - Spanish: Spanish
-        - Arabic: Arabic
-        - Cantonese: Cantonese
-        - Cape Verdean: Cape Verdean Creole
-        - French: French
-        - Haitian Creole: Haitian Creole        
-        - Mandarin: Mandarin
-        - Portuguese: Portuguese
-        - Other: Other
-    - Other Language: requestor.language
-      show if:
-        variable: requestor.language
-        is: Other
+  - Language: requestor.language
+    choices:
+      - English: English
+      - Spanish: Spanish
+      - Arabic: Arabic
+      - Cantonese: Cantonese
+      - Cape Verdean: Cape Verdean Creole
+      - French: French
+      - Haitian Creole: Haitian Creole        
+      - Mandarin: Mandarin
+      - Portuguese: Portuguese
+      - Other: Other
+  - Other Language: requestor.language
+    show if:
+      variable: requestor.language
+      is: Other
 --- 
 id: requestor right to send
 question: |
@@ -253,6 +259,7 @@ question: |
   What is your preferred phone number and email?
 fields:
   - Phone Number: requestor.phone_number
+    datatype: al_international_phone
     required: False
   - Email: requestor.email
     datatype: email
@@ -281,16 +288,11 @@ question: |
   Information about ${student.name.first}
   % endif
 fields:
-    - ${student.name.first}'s Birthdate: student.birthdate
+    - Birthdate: student.birthdate
       datatype: BirthDate
-    - ${student.name.first}'s Gender: student.gender
-      input type: radio
-      choices:
-        - Male: male
-        - Female: female
-        - Non-binary: other
-        - Other gender: other
-    - ${student.name.first}'s Grade: student.grade
+    - code: |
+        student.gender_fields()
+    - Grade: student.grade
       hide if:
         code: |
           is_child_in_school == False
@@ -310,8 +312,7 @@ fields:
         - 10th: 10th
         - 11th: 11th
         - 12th: 12th
-    - ${student.name.first}'s language: student.language
-      input type: radio
+    - Language: student.language
       choices:
         - English: English
         - Spanish: Spanish
@@ -372,16 +373,16 @@ fields:
       show if: school.special_education_director.requestor_knows_address
       required: False
 under: |
-  Because ${student.name.first} is not yet in school, you need to send this letter to the special education director
+  Because ${ student.name.first } is not yet in school, you need to send this letter to the special education director
   for where you live. You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
 ---
 id: special education coordinator information
 question: |
-  Special Education Coordinator
+  Special Education **Coordinator**
 fields:
   - "Do you know the name of the {special education coordinator} for ${ student.familiar() }?": knows_special_education_director_name
     datatype: yesnoradio
-  - Recipient Title: school.recipient.title
+  - Coordinator Title: school.special_education_coordinator.title
     required: False
     show if: knows_special_education_director_name
     choices:
@@ -390,9 +391,9 @@ fields:
       - Miss
       - Ms.
       - Mr.
-  - Recipient First Name: school.special_education_coordinator.name.first
+  - Coordinator First Name: school.special_education_coordinator.name.first
     show if: knows_special_education_director_name
-  - Recipient Last Name: school.special_education_coordinator.name.last
+  - Coordinator Last Name: school.special_education_coordinator.name.last
     show if: knows_special_education_director_name
 subquestion: |
    The name of the special education coordinator should be listed on your child’s IEP.  If you do not know the name of the special education coordinator, 
@@ -409,11 +410,11 @@ terms:
 ---
 id: special education director information
 question: |
-  Name of Special Education Director
+  Name of Special Education **Director**
 fields:
   - "Do you know the name of the Special Education Director for the school district?": knows_special_education_director_name 
     datatype: yesnoradio
-  - Special Education Director Title: school.special_education_director.title
+  - Director Title: school.special_education_director.title
     required: False
     show if: knows_special_education_director_name
     choices: 
@@ -422,15 +423,15 @@ fields:
       - Miss
       - Ms.
       - Mr.
-  - Special Education Director First Name: school.special_education_director.name.first
+  - Director First Name: school.special_education_director.name.first
     show if: knows_special_education_director_name
-  - Special Education Director Last Name: school.special_education_director.name.last
+  - Director Last Name: school.special_education_director.name.last
     show if: knows_special_education_director_name
 subquestion: |
-  Because ${student.name.first} is not yet in school, you need to send this letter to the special education director
+  Because ${ student.name.first } is not yet in school, you need to send this letter to the special education director
   for where you live. You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
 comment : |
-  using ${student.pronoun_possessive("school district")} in the first field resulted in a parser error. Is this a bug?
+  using ${ student.pronoun_possessive("school district") } in the first field resulted in a parser error. Is this a bug?
 ---
 id: kick out language
 event: kick_out_language
@@ -470,7 +471,6 @@ buttons:
   - Leave: leave
   - Restart: restart
 ---
----
 template: evaluation_definitions
 subject: |
   What evaluations can I ask for?
@@ -508,26 +508,3 @@ content: |
 
   #### Health Assessment
   A health assessment identifies medical issues that may affect the student’s learning.   
----
-code: |
-  terms_of_use_field = [ {"label": str(terms_of_use_label), 
-    "field": "acknowledged_information_use",
-    "datatype": "checkboxes",
-    "minlength": 1,
-    "choices": [str(terms_of_use_I_accept_label)],
-    "validation messages": {
-      "minlength": str(terms_of_use_validation_message_label),
-    },
-    }]
----
-template: terms_of_use_label
-content: |
-  To continue, you must accept the [terms of use](https://www.gbls.org/self-help/eviction/terms-of-use)
----
-template: terms_of_use_I_accept_label
-content: |
-  I accept the terms of use.
----
-template: terms_of_use_validation_message_label
-content: |
-  You cannot continue unless you agree to the terms of use.

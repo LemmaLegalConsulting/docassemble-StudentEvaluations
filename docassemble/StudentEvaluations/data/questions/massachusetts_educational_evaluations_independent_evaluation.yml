@@ -7,39 +7,71 @@ modules:
     - .educational_evaluations
 ---
 include:
+  - docassemble.AssemblyLine:assembly_line.yml
   - massachusetts_educational_evaluations_basic_information.yml
   - docassemble.MAPovertyScale:poverty.yml
+---
+metadata:
+  title: |
+    MAC Request for Independent Special Education Evaluation
+  short title: |
+    Independent Eval
+  authors:
+    - Quinten Steenhuis
+    - Matt Brooks
 ---
 features:
   bootstrap theme: mac-bootstrap.css
   progress bar: True
 ---
-metadata:
-    title: | 
-        MAC Request for Independent Special Education Evaluation
-    description: |
-        An interview to request an independent evaluation from a school.
-    authors:
-        - name: Matt Brooks
-          organization: Lemma Legal
-    revision_date: 2020-03-12
+## did not generate with weaver, c&p and edited from prs which was 
+## generated with weaver
+mandatory: True
+comment: |
+  Global interview metadata
+variable name: interview_metadata["educational_evaluations_entire_record_request"]
+data:
+  al_weaver_version: "1.10.0a2"
+  generated on: "2023-06-03"
+  title: >-
+    MAC Request for Independent Special Education Evaluation
+  short title: >-
+    Independent Eval
+  description: |-
+    An interview to request an independent evaluation from a school.
+  allowed courts: []
+  categories: []
+  typical role: "na"
+  generate download screen: True
+---
+code: |
+  interview_metadata['main_interview_key'] =  'educational_evaluations_entire_record_request'
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "MA"
 ---
 objects: 
-  - evaluators: | 
-      DAList.using(
-        object_type=ALIndividual, 
-        complete_attribute='complete')
+  - evaluators: ALPeopleList.using(complete_attribute='complete')
 ---
 id: evaluators complete attribute block
 code: |
+  evaluators[i].name.first
+  evaluators[i].address
   evaluators[i].hourly_rate
   evaluators[i].complete = True
-  
 ---
 mandatory: True
 scan for variables: False
 id: interview order independent eval request
 code: |
+  user_role = "na"
+  user_ask_role = "na"
+  
   before_you_start_screen_seen = True
   letter_created_date
   independent_evaluations_intro_screen
@@ -49,49 +81,50 @@ code: |
   mac_shared_intro_questions  
   if selected_evaluations.all_false():
     call_the_hotline_select_one
-  if selected_evaluations['Other'] == True:
+  if selected_evaluations['Other']:
     custom_evaluations
-  if comfortable_sharing_income == True:
-    if free_or_reduced_lunch:
-      pass
-    elif below_400_percent:
-      pass
-    else:
-      pass
-  else:
-    free_or_reduced_lunch = False
-    below_400_percent = False
-  independent_evaluation_request_concatenated
-  if done['emailed to the person receiving it']:
-    school.recipient.email
-    sent_school_email
-    end_screen
-  if done["emailed to me"]:
-    requestor.email
-    sent_requestor_email
-    end_screen
-  end_screen    
+  if comfortable_sharing_income:
+    free_or_reduced_lunch
+    below_400_percent
+    
+  evaluators.gather()
+  
+  independent_evaluation_request_preview_question
+  basic_questions_signature_flow    
+  requestor.signature
+  independent_evaluation_request_download
 ---
-code: |
-  if task_not_yet_performed('sent school email'):
-    send_email(to=[school.recipient.email], 
-      subject=str(student.name.full()) + " Independent Evaluation Request", 
-      attachments=[pdf_concatenate(independent_evaluation_request_variable)], task="sent school email")
-  sent_school_email = True
----
-code: |
-  if task_not_yet_performed("sent requestor email"):
-    send_email(to=[requestor.email], 
-      subject=str(student.name.full()) + " Independent Evaluation Request", 
-      attachments=[independent_evaluation_request_variable], task="sent requestor email")
-  sent_requestor_email = True
----
-code: |
-  independent_evaluation_request_concatenated = pdf_concatenate(independent_evaluation_request_variable)
+## TODO add back in email feature to send directy to school
+#  independent_evaluation_request_concatenated
+#  if done['emailed to the person receiving it']:
+#    school.recipient.email
+#    sent_school_email
+#    end_screen
+#  if done["emailed to me"]:
+#    requestor.email
+#    sent_requestor_email
+#    end_screen
+#  end_screen    
+#---
+#code: |
+#  if task_not_yet_performed('sent school email'):
+#    send_email(to=[school.recipient.email], 
+#      subject=str(student.name.full()) + " Independent Evaluation Request", 
+#      attachments=[pdf_concatenate(independent_evaluation_request_variable)], task="sent school email")
+#  sent_school_email = True
+#---
+#code: |
+#  if task_not_yet_performed("sent requestor email"):
+#    send_email(to=[requestor.email], 
+#      subject=str(student.name.full()) + " Independent Evaluation Request", 
+#      attachments=[independent_evaluation_request_variable], task="sent requestor email")
+#  sent_requestor_email = True
+#---
+#code: |
+#  independent_evaluation_request_concatenated = pdf_concatenate(independent_evaluation_request_variable)
 ---
 code: |
   custom_evaluations = other_evaluations.split('\n')
-
 ---
 id: independent evaluations intro screen
 question: |
@@ -114,13 +147,10 @@ subquestion: |
     sure, you may want to talk to an advocate or your child's doctor to get
     a recommendation first.
 continue button field: independent_evaluations_intro_screen
-fields:
-  - code: |
-      terms_of_use_field
 ---
 id: are there any evaluators screen
 question: |
-  Do you know the names of the independent evaluators you want for ${student.name.first}?
+  Do you know the names of the independent evaluators you want for ${ student.name.first }?
 yesno: evaluators.there_are_any
 ---
 id: select independent evaluations
@@ -173,7 +203,6 @@ comment: |
     Augmentative and Alternative Communication Evaluation - Explanatory Text
     
     Assistive Technology Evaluation - Explanatory Text
-
 ---
 id: evaluators name screen
 sets:
@@ -195,8 +224,13 @@ fields:
       evaluators[i].name_fields()
 ---
 id: evaluators info screen
+sets:
+  - evaluators[i].address.address
+  - evaluators[i].address.city
 question: |
-  Fill in information about ${ evaluators[i] }.
+  More information about ${ evaluators[i] }
+subquestion: |
+  You are only required to include the evaluator's name. Anything else you want to add is helpful, but not necessary.
 fields: 
   - Address: evaluators[i].address.address
     required: False
@@ -207,25 +241,21 @@ fields:
     required: False
   - Zip: evaluators[i].address.zip
     required: False
-  - License Number: evaluators[i].license_number
+  - License number: evaluators[i].license_number
     required: False
-  - Hourly Rate: evaluators[i].hourly_rate
+  - Hourly rate: evaluators[i].hourly_rate
     required: False
-    datatype: currency
-   
-subquestion: |
-  You only NEED to put in the evaluator's name. Anything else you want to put is   helpful, but not necessary.  
+    datatype: currency   
 ---
 id: is there another evaluator 
 question: |
-  So far, you have put in information for the following evaluators
+  Are there any other evaluators?
 subquestion: |
+  So far, you have told us about the following evaluators:
+  
   % for person in evaluators:
   * ${ person }
   % endfor
-
-  Are there any other evaluators?
-  
 yesno: evaluators.there_is_another
 ---
 id: comfortable sharing income screen
@@ -252,53 +282,44 @@ subquestion: |
   Does your family earn less than the limit for your family size?
 yesno: below_400_percent
 ---
-id: independent evaluation signature block
-question: |
-  ${ requestor.name.firstlast() }, please sign below
-signature: requestor.signature
-under: |
-  Sign your name here by using your mouse or touching your phone's screen.
-  Press clear if you want to start over.
-progress: 99
----
-id: independent evaluation letter screen
-question: |
-  Here are your letters
-subquestion: |
-  1. Download and print the letter below.
-  1. Keep one copy for your own records.
-  1. Send a second copy to the school district.
-    
-  * [Download as PDF](${ independent_evaluation_request_variable.pdf.url_for() }).
-  * [Download as Microsoft Word file](${ independent_evaluation_request_variable.docx.url_for() } ).
-  
-  % if is_child_in_school == False and school.special_education_director.address is None:
-  Because your child is not in school, you need to send it to the special education director for your district.
-  
-  Please contact  MAC's helpline at 617-357-8431 or [online](https://massadvocates.org/helpline/)
-  for help locating this address. It may take up to three business days for someone to get back to you.
-
-  You may also be able to find the name of your district's special education director  by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
-
-  % endif
-fields:
-  - "I want a copy of my letter...": done
-    datatype: checkboxes
-    choices: 
-      - emailed to me
-      - emailed to the person receiving it
----
-id: independent evaluation recipient email screen
-question: |
-  What is ${school.recipient.name.full()}'s email?
-fields:
-  - ${school.recipient.name.full()} email: school.recipient.email
----
-id: independent evaluation requestor email screen
-question: |
-  What is your email?
-fields:
-  - your email: requestor.email
+#id: independent evaluation letter screen
+#question: |
+#  Here are your letters
+#subquestion: |
+#  1. Download and print the letter below.
+#  1. Keep one copy for your own records.
+#  1. Send a second copy to the school district.
+#    
+#  * [Download as PDF](${ independent_evaluation_request_variable.pdf.url_for() }).
+#  * [Download as Microsoft Word file](${ independent_evaluation_request_variable.docx.url_for() } ).
+#  
+#  % if is_child_in_school == False and school.special_education_director.address is None:
+#  Because your child is not in school, you need to send it to the special education director for your district.
+#  
+#  Please contact  MAC's helpline at 617-357-8431 or [online](https://massadvocates.org/helpline/)
+#  for help locating this address. It may take up to three business days for someone to get back to you.
+#
+#  You may also be able to find the name of your district's special education director  by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
+#
+#  % endif
+#fields:
+#  - "I want a copy of my letter...": done
+#    datatype: checkboxes
+#    choices: 
+#      - emailed to me
+#      - emailed to the person receiving it
+#---
+#id: independent evaluation recipient email screen
+#question: |
+#  What is ${school.recipient.name.full()}'s email?
+#fields:
+#  - ${school.recipient.name.full()} email: school.recipient.email
+#---
+#id: independent evaluation requestor email screen
+#question: |
+#  What is your email?
+#fields:
+#  - your email: requestor.email
 ---
 id: independent evaluation wants reminders screen
 question: |
@@ -307,14 +328,14 @@ yesno: wants_reminders
 subquestion: |
   Would you like a reminder to follow up with the school?
 ---
-id: end screen independent evaluation
-event: end_screen
-question: |
-  You are all done!
-buttons:
-  - Leave: leave
-
-  - Restart: restart
+#id: end screen independent evaluation
+#event: end_screen
+#question: |
+#  You are all done!
+#buttons:
+#  - Leave: leave
+#
+#  - Restart: restart
 ---
 id: call the hotline independent evaluation
 event: call_the_hotline_school
@@ -344,24 +365,17 @@ buttons:
   - Leave: leave
   - Restart: restart
 ---
-id: independent evaluation attachment block
-attachment:
-  - name: independent_evaluation_request_name
-    variable name: independent_evaluation_request_variable
-    filename: independent_evaluation_request
-    docx template file: independent_evaluation_request_template.docx
----
-id: independent evaluators table block
-table: evaluators_table
-rows: evaluators
-columns:
-  - Name: row_item.name
-  - Street Address: row_item.address.address
-  - City: row_item.address.city
-  - State: row_item.address.state
-  - Zip: row_item.address.zip
-  - License Number: row_item.license_number
-  - Hourly Rate: row_item.hourly_rate
+#id: independent evaluators table block
+#table: evaluators_table
+#rows: evaluators
+#columns:
+#  - Name: row_item.name
+#  - Street Address: row_item.address.address
+#  - City: row_item.address.city
+#  - State: row_item.address.state
+#  - Zip: row_item.address.zip
+#  - License Number: row_item.license_number
+#  - Hourly Rate: row_item.hourly_rate
 ---
 id: reminder email template
 template: reminder_email_initial_request
@@ -385,4 +399,68 @@ event: cron_monthly
 code: |
   if last_access_days() > 365:
     command('exit')
+---
+id: preview independent_evaluation_request
+question: |
+  Preview your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page.   
+  
+  ${ al_recipient_bundle.as_pdf(key='preview') }
 
+  Click the image to open it in a new tab. Click the "Edit answers" button
+  to edit your answers.
+
+  ${ action_button_html(url_action('review_independent_evaluation_request'), label='Edit answers', color='info') }
+  
+  Remember to come back to this window to continue and sign your form.
+continue button field: independent_evaluation_request_preview_question    
+---
+code: |
+  signature_fields = ['requestor.signature']
+---
+## TODO update review screens
+## Add AL tables for objects
+## Use AL dashboard to generate review screens
+id: independent_evaluation_request review screen
+event: independent_evaluation_request
+question: |
+  Review your answers
+---
+id: download independent_evaluation_request
+event: independent_evaluation_request_download
+question: |
+  All done
+subquestion: |
+  Thank you. Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_independent_evaluation_request'), label='Edit answers', color='info') }
+  
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+
+progress: 100
+---
+# ALDocument objects specify the metadata for each template
+objects:
+  - independent_evaluation_request_attachment: ALDocument.using(title="Independent Evaluation", filename="independent_evaluation_request", enabled=True, has_addendum=False)
+---
+# Bundles group the ALDocuments into separate downloads, such as for court and for the user
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[independent_evaluation_request_attachment], filename="independent_evaluation_request", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[independent_evaluation_request_attachment],  filename="independent_evaluation_request", title="All forms to file", enabled=True)
+---
+# Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
+# used for "preview" and "final" keys, and logic in the template checks the value of 
+# `i` to show or hide the user's signature
+attachment:
+  name: Independent Evaluation
+  filename: independent_evaluation_request
+  variable name: independent_evaluation_request_attachment[i]
+  skip undefined: True
+  docx template file: independent_evaluation_request.docx
