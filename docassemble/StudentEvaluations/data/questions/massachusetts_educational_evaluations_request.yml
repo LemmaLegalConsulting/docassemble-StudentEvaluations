@@ -145,9 +145,13 @@ fields:
     datatype: area
     rows: 4
   - note: |
-      It can help ${ student.familiar() } if you can ask for specific
-      evaluations. Click below to learn more about the kinds of evaluations
-      that you can request.
+      When a parent requests a special education evaluation for a student, the school is required to do an educational assessment.  If your child is age 14 or older the school is also required to do a transition assessment.
+      The school must also do assessments in areas that may be related to a disability.  For example, if it is hard for your child to communicate, then the school is required to conduct a speech and language evaluation and maybe an Augmentative and Alternative Communication (AAC) evaluation.  If your child has more trouble climbing the stairs at school than other students their age, the school may be required to do a physical therapy evaluation.  It is different for every student.
+      You can request specific additional evaluations if you think the school needs to evaluate your child in areas the school has not suggested.
+      It is also ok if you do not have any specific evaluation you want to request for you child.   Someone from your child’s school should contact you when they receive your request letter to discuss your concerns.  Then you can give them information that will help the school decide which evaluations your child needs.
+      
+ 
+
       
       ${ collapse_template(evaluation_definitions) }    
   - Do you want to ask for specific evaluations?: ask_specific_evaluations
@@ -158,18 +162,18 @@ fields:
     datatype: checkboxes
     choices:
       # Always included but usually don't need to be asked for
-      - Home assessment: Home Assessment
-      - Health assessment: Health Assessment
+      - Home assessment: A home assessment includes information on the student’s family history and home.  They may include a home visit with the parent’s agreement.
+      - Health assessment: A health assessment identifies medical issues that may affect the student’s learning.
       # Should make sure to ask for
-      - Educational assessment: Educational Assessment
-      - Speech and language therapy evaluation: Speech and Language Therapy Evaluation
+      - Educational assessment (required for initial evaluations and 3 year re-evaluations): Educational assessments should include a history of the student’s educational progress. The history should be given by a teacher who knows the student well, in relation to the state’s learning standards. The assessments should also include the student’s attention skills, communication skills, memory, participation behaviors, and social skills with both peers and adults.
+      - Speech and language therapy evaluation (including social pragmatic language): Evaluates the child’s ability to understand and use spoken and written language, including grammar and vocabulary; evaluates the physical ability to pronounce spoken words clearly; evaluates and diagnoses stuttering; and assesses how the student communicates in social situations. This includes assessing use of body language, eye contact, taking turns listening and speaking, and using the appropriate volume when speaking.
       - Social pragmatic language: Social Pragmatic Language
-      - Occupational therapy: Occupational Therapy
+      - Occupational therapy(including sensory integration): An occupational therapy evaluation assesses the student’s fine motor skills, self-help skills, sensory processing, postural stability, visual and motor perception, task completion and organization, and social and play abilities.
       - Functional behavior assessment: Functional Behavior Assessment
       - Psychological assessment: Psychological Assessment
-      - Physical therapy: Physical Therapy
-      - Augmentative and alternative communication evaluation: Augmentative and Alternative Communication Evaluation
-      - Assistive technology evaluation: Assistive Technology Evaluation
+      - Physical therapy: A physical therapy evaluation assesses the student’s posture, balance, strength, motor control and coordination, endurance, gross motor skills, and any other area that allows the student to physically access the educational environment.
+      - Augmentative and alternative communication evaluation: An Augmentative and Alternative Communication (AAC) evaluation assesses what communication tool(s), if any, can assist the student to communicate. Examples of AAC methods include picture boards, manual signs, gestures, finger spelling, and speech-generating devices. AAC is a type of assistive technology.
+      - Assistive technology evaluation: An assistive technology  evaluation identifies any item(s) or equipment that can be used to maintain or improve the functional capabilities of a child with a disability. Examples include; iPad App to augment a nonverbal student’s communication skills, a keyboard for writing, or a graphic organizer.
       - Other: Other
     none of the above: False
   - Other Evaluation (put each evaluation on a separate line).: other_evaluations
