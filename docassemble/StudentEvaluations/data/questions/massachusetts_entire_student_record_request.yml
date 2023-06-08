@@ -94,6 +94,8 @@ question: |
   Entire student record request
 subquestion: |  
   This letter will help you request your child's entire student record.
+  Here is a link to our
+  [privacy policy](https://www.gbls.org/self-help/eviction/terms-of-use).
 continue button field: entire_record_request_intro_screen
 ---
 #id: enrollment date screen
