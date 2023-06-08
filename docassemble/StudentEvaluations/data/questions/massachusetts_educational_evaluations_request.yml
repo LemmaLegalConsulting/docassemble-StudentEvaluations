@@ -32,12 +32,10 @@ variable name: interview_metadata["initial_request"]
 data:
   al_weaver_version: "1.10.0a2"
   generated on: "2023-06-03"
-  title: >-
-    MAC Request for Initial Special Education Evaluation
-  short title: >-
-    Initial Evaluation
-  description: |-
-    An interview to request an independent evaluation from a school.
+  title: MAC Request for Initial Special Education Evaluation
+short title: Initial Evaluation
+description: |-
+  An interview to request an independent evaluation from a school. 
   allowed courts: []
   categories: []
   typical role: "na"
@@ -315,6 +313,10 @@ subquestion: |
     
   * This letter is for a child who is already enrolled in school.
   * You need to know which evaluations you want to ask for.
+  
+  For more information on requesting an evaluation, please watch this short video
+Video: | 
+ [YOUTUBE yGDtWXyRiXA&list=PLLZkb-U9J6d0lfPrwFBR68TF9BTyH95b2]
   
 continue button field: educational_evaluations_intro
 ---
