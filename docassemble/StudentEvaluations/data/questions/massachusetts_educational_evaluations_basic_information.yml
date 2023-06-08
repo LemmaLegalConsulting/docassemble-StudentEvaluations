@@ -297,7 +297,6 @@ fields:
         code: |
           is_child_in_school == False
       choices:
-        - Not yet in school: Not yet in school
         - Pre-K: Pre-K
         - Kindergarten: Kindergarten
         - 1st: 1st
