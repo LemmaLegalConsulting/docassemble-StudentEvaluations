@@ -124,7 +124,7 @@ field: welcome_screen_seen
 question: |
   Welcome to MAC's Request for Initial Special Education Evaluation Interview.
 subquestion: |
-  Getting Started
+  An evaluation is testing that a specialist does to see how your child is learning and developing. The specialist may also recommend services and supports for your child as part of their educational programming. An evaluation is sometimes called an assessment.
   
   The following questions will help you write a letter to request a school special education evaluation for your child or a child that you know.  
   You might want to request a school {evaluation} if you think your child or a child that you know needs services to learn.
@@ -139,9 +139,6 @@ subquestion: |
 
   **IMPORTANT!** If you bring it to the school be sure print a copy for yourself. 
   If you can’t print a copy for yourself, when you bring the letter to the school, ask them to make a copy for you to keep for your records.
-terms:
-  evaluation: |
-    An evaluation is testing that a specialist does to see how your child is learning and developing. The specialist may also recommend services and supports for your child as part of their educational programming. An evaluation is sometimes called an assessment.
 ---
 id: is child in school screen
 question: |
