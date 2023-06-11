@@ -253,7 +253,7 @@ fields:
 ---
 id: requestor phone number and email
 question: |
-  What is your preferred phone number and email?
+  How can the school reach you? You need to tell us at least one way to get in contact with you.
 fields:
   - Phone Number: requestor.phone_number
     datatype: al_international_phone
