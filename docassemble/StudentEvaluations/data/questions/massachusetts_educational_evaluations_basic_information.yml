@@ -147,8 +147,9 @@ yesno: is_child_in_school
 ---
 id: before you start screen child not in school
 field: before_you_start_screen_seen
-subquestion: |
+question: | 
   Before you start, you will need:
+subquestion: |
   
   1. The name and address of the special education coordinator or director for 
      your child's school.
@@ -253,7 +254,9 @@ fields:
 ---
 id: requestor phone number and email
 question: |
-  How can the school reach you? You need to tell us at least one way to get in contact with you.
+  How can the school reach you? 
+subquestion: | 
+  You need to tell us at least one way to get in contact with you.
 fields:
   - Phone Number: requestor.phone_number
     datatype: al_international_phone
