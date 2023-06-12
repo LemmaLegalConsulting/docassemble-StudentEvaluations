@@ -60,6 +60,31 @@ default screen parts:
     `id: ${ user_info().question_id }`
     % endif
 ---
+template: about_this_interview_version_info
+content: |
+
+  &copy; 2023 Massachusetts Advocates for Children, Quinten Steenhuis, Matt Brooks,
+  and open source contributors under an [MIT license](https://opensource.org/licenses/MIT).  
+
+  % if all_variables(special='metadata').get('authors'):
+  Additional authors of work incorporated within UpToCode include: ${
+  comma_and_list(all_variables(special='metadata').get('authors')) }.
+  % endif
+  
+  "${all_variables(special='metadata').get('title','').rstrip()}" includes code
+  from the [Document Assembly Line
+  project](https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/).
+
+  "${all_variables(special='metadata').get('title','').rstrip()}" version 
+  `${ package_version_number }`; AssemblyLine version `${ al_version }`.
+  
+  % if package_updated_on:
+  Last updated on ${ package_updated_on }. [:fab-fa-github: View code on
+  GitHub](${ github_url }).
+  % endif
+  
+  Our [Privacy Policy](https://gbls.org/MADE).
+---
 code: |
   student.age = student.age_in_years()
 ---
@@ -506,4 +531,4 @@ content: |
   A home assessment includes information on the student’s family history and home.  They may include a home visit with the parent’s agreement.
 
   #### Health Assessment
-  A health assessment identifies medical issues that may affect the student’s learning.   
+  A health assessment identifies medical issues that may affect the student’s learning.  
