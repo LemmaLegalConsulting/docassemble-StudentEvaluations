@@ -103,6 +103,7 @@ code: |
   
   add_introduction
   
+  al_user_bundle.elements
   prs_complaint_language_access_preview_question
   basic_questions_signature_flow    
   parent.signature
@@ -315,6 +316,19 @@ fields:
       of my child’s IEP in Spanish at least two days before the team meeting,
       but they told me that they would not be able to get a copy in Spanish
       before then."
+  - Do you want to upload this document now?: translated_documents[i].upload_now
+    datatype: yesnoradio
+  - Upload : translated_documents[i].upload.file
+    datatype: file
+    show if: translated_documents[i].upload_now
+---
+depends on: 
+  - translated_documents.there_are_any
+code: | 
+  translated_documents[i].upload.enabled = translated_documents[i].upload_now
+---
+objects: 
+  - translated_documents[i].upload: ALDocumentUpload.using(title="Document",filename="document")
 ---
 variable name: evaluation_options
 data:
@@ -660,9 +674,12 @@ objects:
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment], filename="prs_complaint_language_access", title="All forms to download for your records", enabled=True)
-  - al_recipient_bundle: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment],  filename="prs_complaint_language_access", title="All forms to file", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(filename="prs_complaint_language_access", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using( filename="prs_complaint_language_access", title="All forms to file", enabled=True)
 ---
+code: |
+  al_user_bundle.elements = al_recipient_bundle.elements = [prs_complaint_language_access_attachment] + [doc.upload for doc in translated_documents if doc.upload_now]
+---  
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 
 # `i` to show or hide the user's signature
