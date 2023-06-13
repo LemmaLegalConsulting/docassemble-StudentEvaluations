@@ -366,16 +366,25 @@ question: |
   Where does ${ student.name.first } go to school?
   % endif
 fields:
-    - School Name: school.name.text
-    - Street Address: school.address.address
-      address autocomplete: True
-    - City: school.address.city
-    - State: school.address.state
-      default: MA
-      code: |
-        states_list()
-    - Zip: school.address.zip
-      required: False
+  - School Name: school.address.name
+    address autocomplete:
+      types:
+        - school
+        - primary_school
+        - secondary_school
+      fields:
+        - address_components
+  - Street Address: school.address.address
+  - City: school.address.city
+  - State: school.address.state
+    default: MA
+    code: |
+      states_list()
+  - Zip: school.address.zip
+    required: False
+validation code: |
+  school.name.text = school.address.name
+
 ---
 id: special education director address in school
 question: |
