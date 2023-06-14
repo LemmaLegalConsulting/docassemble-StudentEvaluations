@@ -301,8 +301,7 @@ id: student name
 question: |
   Who is this letter for?
 subquestion: |
-  Write the name of the student who needs or currently
-  receives special education services.
+  Write the name of the student whose records you are requesting.
 fields:
   - code: |
       student.name_fields()
