@@ -118,8 +118,9 @@ continue button field: entire_record_request_intro_screen
 #  - "I want a copy of my letter...": done
 #    datatype: checkboxes
 #    choices: 
-#      - emailed to me
-#      - emailed to the person receiving it
+#      - Emailed to me
+#      - Emailed directly to the school principal and me
+#      - Download as a Word document so that I can make edits and print it
 #---
 #id: entire student record recquest recipient email screen
 #question: |

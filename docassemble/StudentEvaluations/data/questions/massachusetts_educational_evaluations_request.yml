@@ -32,12 +32,10 @@ variable name: interview_metadata["initial_request"]
 data:
   al_weaver_version: "1.10.0a2"
   generated on: "2023-06-03"
-  title: >-
-    MAC Request for Initial Special Education Evaluation
-  short title: >-
-    Initial Evaluation
-  description: |-
-    An interview to request an independent evaluation from a school.
+  title: MAC Request for Initial Special Education Evaluation
+short title: Initial Evaluation
+description: |-
+  An interview to request an independent evaluation from a school. 
   allowed courts: []
   categories: []
   typical role: "na"
@@ -131,6 +129,37 @@ code: |
 ##    send_email(to=[requestor.email], subject=str(student.name.full()) + " Evaluation Request", attachments=[initial_request_variable, educational_evaluations_copy_request_variable, educational_evaluations_transition_assessment_variable])
 ##end_screen
 ---
+id: before you start screen child not in school
+field: before_you_start_screen_seen
+question: | 
+  Getting started
+subquestion: |
+  This letter will help you ask your child’s school to {evaluate} your child.
+  Before you start, you will need:
+  
+  1. The name and address of the special education coordinator or director for your child’s school district.
+  2. Your child's full name and date of birth.
+  3. If your child ALREADY HAS an {IEP}: the name and email of the special education coordinator or director for your child’s school; OR 
+  4. If your child does NOT have an {IEP}: the name and email for your child’s school principal or teacher.
+
+  If your child has an {IEP}, the name of your child’s special education coordinator should be listed on your child’s IEP. 
+ 
+  If your child does NOT have an IEP, your child will not have a special education coordinator assigned so you can send the letter to your child’s school principal or teacher.
+ 
+  If you need help, please contact MAC’s helpline at 617-357-8431 or send a message [here](https://www.massadvocates.org/helpline).
+terms: 
+  evaluate: | 
+    An evaluation is testing that a specialist does to see how your child is learning and developing. Often the specialist will also recommend services and supports for your child.
+  IEP: | 
+    An IEP is an Individualized Education Program. It tells the school that your child has a disability and needs certain services and supports to learn. The IEP describes the services and supports the school must give your child.
+help:
+  label: |
+    How can I get medical or legal advice?
+  content: |
+    Contact a lawyer if you need legal advice. Contact your child’s pediatrician if you have questions about what evaluations your child 
+    may need after completing this questionnaire. This is not intended to diagnose any condition, but rather to suggest areas in which your child may need support to 
+    learn based on your observations and concerns of your child.
+---
 id: select initial evaluations
 question : |
   What evaluations does ${ student.familiar() } need?
@@ -147,11 +176,7 @@ fields:
     datatype: area
     rows: 4
   - note: |
-      It can help ${ student.familiar() } if you can ask for specific
-      evaluations. Click below to learn more about the kinds of evaluations
-      that you can request.
-      
-      ${ collapse_template(evaluation_definitions) }    
+      ${ collapse_template(more_info) }    
   - Do you want to ask for specific evaluations?: ask_specific_evaluations
     datatype: yesnoradio
   - no label: selected_evaluations
@@ -159,19 +184,33 @@ fields:
     required: False
     datatype: checkboxes
     choices:
-      # Always included but usually don't need to be asked for
-      - Home assessment: Home Assessment
+      - Home assessment: Home assessment
+        help: | 
+          A home assessment includes information on the student’s family history and home.  They may include a home visit with the parent’s agreement.
       - Health assessment: Health Assessment
-      # Should make sure to ask for
-      - Educational assessment: Educational Assessment
-      - Speech and language therapy evaluation: Speech and Language Therapy Evaluation
-      - Social pragmatic language: Social Pragmatic Language
-      - Occupational therapy: Occupational Therapy
-      - Functional behavior assessment: Functional Behavior Assessment
-      - Psychological assessment: Psychological Assessment
-      - Physical therapy: Physical Therapy
-      - Augmentative and alternative communication evaluation: Augmentative and Alternative Communication Evaluation
-      - Assistive technology evaluation: Assistive Technology Evaluation
+        help: |
+          A health assessment identifies medical issues that may affect the student’s learning.
+      - Educational assessment (required for initial evaluations and 3 year re-evaluations): Educational assessment
+        help: |
+          Educational assessments should include a history of the student’s educational progress. The history should be given by a teacher who knows the student well, in relation to the state’s learning standards. The assessments should also include the student’s attention skills, communication skills, memory, participation behaviors, and social skills with both peers and adults.
+      - Speech and language therapy evaluation (including social pragmatic language): Speech and language therapy evaluation
+        help: |
+          Evaluates the child’s ability to understand and use spoken and written language, including grammar and vocabulary; evaluates the physical ability to pronounce spoken words clearly; evaluates and diagnoses stuttering; and assesses how the student communicates in social situations. This includes assessing use of body language, eye contact, taking turns listening and speaking, and using the appropriate volume when speaking.
+      - Social pragmatic language: Social prgamatic language
+      - Occupational therapy (including sensory integration): Occupational thrapy
+        help: |
+          An occupational therapy evaluation assesses the student’s fine motor skills, self-help skills, sensory processing, postural stability, visual and motor perception, task completion and organization, and social and play abilities.
+      - Functional behavior assessment: Functional assessment
+      - Psychological assessment: Psychological assessment
+      - Physical therapy: Physical therapy
+        help: |
+          A physical therapy evaluation assesses the student’s posture, balance, strength, motor control and coordination, endurance, gross motor skills, and any other area that allows the student to physically access the educational environment.
+      - Assistive technology evaluation: Assistive technology evaluation
+        help: |
+          An assistive technology  evaluation identifies any item(s) or equipment that can be used to maintain or improve the functional capabilities of a child with a disability. Examples include; iPad App to augment a nonverbal student’s communication skills, a keyboard for writing, or a graphic organizer.
+      - Augmentative and alternative communication evaluation: Augmentative and alternative communication evaluation
+        help: |
+          An Augmentative and Alternative Communication (AAC) evaluation assesses what communication tool(s), if any, can assist the student to communicate. Examples of AAC methods include picture boards, manual signs, gestures, finger spelling, and speech-generating devices. AAC is a type of assistive technology.
       - Other: Other
     none of the above: False
   - Other Evaluation (put each evaluation on a separate line).: other_evaluations
@@ -183,18 +222,13 @@ fields:
 template: evaluation_example_template
 subject: What can I say?
 content: |
-  There are no "magic words", but it helps to be specific. 
-  Use facts that describe how ${ student.familiar() } may have challenges
-  in school.
-  This information will be used by the school to help select
-  the right kind of evaluation.
-  
-  For example, if you were concerned about speech, you
-  might say: "I have noticed that ${ student.familiar() }
-  has trouble saying certain sounds. I am concerned that others cannot 
-  understand what they say. I would like someone to evaluate 
-  ${ student.familiar() }'s speech."  
-
+  There are no “magic words”, but it helps to be specific. Use facts that describe how ${ student.familiar() } may have challenges in school. This information will be used by the school to choose the right kind of evaluations.
+ 
+  Examples
+  “I have noticed that ${ student.familiar() } has trouble saying certain sounds. I am concerned that others cannot understand what they say.”
+  “${ student.familiar() } can’t focus in school and is getting frustrated a lot. I think he needs more support for him to learn.”
+  “${ student.familiar() } doesn’t have any friends in school and does not have basic social skills.”
+  “${ student.familiar() }’s pediatrician said that I should request a school evaluation because of concerns about his development.”  
 ---
 # if: |
 #   student.age < 14
@@ -315,6 +349,10 @@ subquestion: |
     
   * This letter is for a child who is already enrolled in school.
   * You need to know which evaluations you want to ask for.
+  
+  For more information on requesting an evaluation, watch this short video
+Video: | 
+ [YOUTUBE yGDtWXyRiXA&list=PLLZkb-U9J6d0lfPrwFBR68TF9BTyH95b2]
   
 continue button field: educational_evaluations_intro
 ---

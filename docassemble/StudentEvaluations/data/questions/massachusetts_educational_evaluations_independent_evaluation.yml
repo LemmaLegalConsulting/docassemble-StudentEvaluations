@@ -464,3 +464,18 @@ attachment:
   variable name: independent_evaluation_request_attachment[i]
   skip undefined: True
   docx template file: independent_evaluation_request.docx
+---
+id: special education director information
+question: |
+  Name of Special Education **Director or Coordinator**
+fields:
+  - "Do you know the name of your child's Special Education Director or Special Education Coordinator?": knows_special_education_director_name 
+    datatype: yesnoradio
+  - First Name: school.special_education_director.name.first
+    show if: knows_special_education_director_name
+  - Last Name: school.special_education_director.name.last
+    show if: knows_special_education_director_name
+subquestion: |
+  You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
+comment : |
+  using ${ student.pronoun_possessive("school district") } in the first field resulted in a parser error. Is this a bug?
