@@ -129,6 +129,38 @@ code: |
 ##    send_email(to=[requestor.email], subject=str(student.name.full()) + " Evaluation Request", attachments=[initial_request_variable, educational_evaluations_copy_request_variable, educational_evaluations_transition_assessment_variable])
 ##end_screen
 ---
+id: before you start screen child not in school
+field: before_you_start_screen_seen
+question: | 
+  Getting started
+subquestion: |
+  This letter will help you ask your child’s school to {evaluate} your child.
+  Before you start, you will need:
+  
+  1. The name and address of the special education coordinator or director for 
+     your child's school.
+  2. Your child's full name and date of birth.
+  3. If your child ALREADY HAS an {IEP}: the name and email of the special education coordinator or director for your child’s school; OR 
+  4. If your child does NOT have an {IEP}: the name and email for your child’s school principal or teacher.
+
+  If your child has an {IEP}, the name of your child’s special education coordinator should be listed on your child’s IEP. 
+ 
+  If your child does NOT have an IEP, your child will not have a special education coordinator assigned so you can send the letter to your child’s school principal or teacher.
+ 
+  If you need help, please contact MAC’s helpline at 617-357-8431 or send a message [here](https://www.massadvocates.org/helpline).
+terms: 
+  evaluate: | 
+    An evaluation is testing that a specialist does to see how your child is learning and developing. Often the specialist will also recommend services and supports for your child.
+  IEP: | 
+    An IEP is an Individualized Education Program. It tells the school that your child has a disability and needs certain services and supports to learn. The IEP describes the services and supports the school must give your child.
+help:
+  label: |
+    How can I get medical or legal advice?
+  content: |
+    Contact a lawyer if you need legal advice. Contact your child’s pediatrician if you have questions about what evaluations your child 
+    may need after completing this questionnaire. This is not intended to diagnose any condition, but rather to suggest areas in which your child may need support to 
+    learn based on your observations and concerns of your child.
+---
 id: select initial evaluations
 question : |
   What evaluations does ${ student.familiar() } need?
