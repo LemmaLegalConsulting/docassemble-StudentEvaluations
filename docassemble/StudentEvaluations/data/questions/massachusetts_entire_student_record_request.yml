@@ -65,7 +65,6 @@ code: |
   user_role = "na"
   user_ask_role = "na"
   
-  entire_record_request_intro_screen
   mac_shared_intro_questions
   if knows_special_education_director_name:
     school.recipient.name = school.special_education_director.name
