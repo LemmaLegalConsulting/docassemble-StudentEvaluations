@@ -130,22 +130,19 @@ id: independent evaluations intro screen
 question: |
   Requesting an Independent Evaluation
 subquestion: |
-  This website will help you request independent evaluations for 
-  your child.
-  
-  When you see your letter at the end, you can add or remove evaluations from 
-  the letter.  
-  
-  It is a good idea to talk to your child's pediatrician or 
-  specialists about other evaluations they might need if you 
-  are unsure.
+ This website will help you request that your child’s school pay for an independent evaluation for your child. An independent evaluation is like a second opinion to an evaluation the school already did.  You can ask for an independent evaluation if you disagree with a school evaluation.
+
+ When you see your letter at the end, you can make changes.
+ 
+ It is a good idea to talk to your child’s pediatrician or specialists about other evaluations they might need if you are unsure.
+
   
   Before you get started:
   
   * This letter is for children who are already enrolled in school.
-  * You need to know **who** you want to evaluate your child. If you are not
-    sure, you may want to talk to an advocate or your child's doctor to get
-    a recommendation first.
+  * You need to know **who** you want to evaluate your child. If you are not sure, you may want to talk to an advocate or your child’s doctor to get a recommendation first.
+video: |
+  [YOUTUBE 0C2g6nzdG_0&list=PLLZkb-U9J6d0lfPrwFBR68TF9BTyH95b2&index=6]
 continue button field: independent_evaluations_intro_screen
 ---
 id: are there any evaluators screen
