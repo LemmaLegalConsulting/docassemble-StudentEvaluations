@@ -147,7 +147,7 @@ continue button field: independent_evaluations_intro_screen
 ---
 id: are there any evaluators screen
 question: |
-  Do you know the names of the independent evaluators you want for ${ student.name.first }?
+  Do you know the name of the independent evaluator you want for ${ student.name.first }?
 yesno: evaluators.there_are_any
 ---
 id: select independent evaluations
@@ -466,13 +466,15 @@ id: special education director information
 question: |
   Name of Special Education **Director or Coordinator**
 fields:
-  - "Do you know the name of your child's Special Education Director or Special Education Coordinator?": knows_special_education_director_name 
+  - "Do you know the name of your child's Special Education Director or Coordinator?": knows_special_education_director_name 
     datatype: yesnoradio
   - First Name: school.special_education_director.name.first
     show if: knows_special_education_director_name
   - Last Name: school.special_education_director.name.last
     show if: knows_special_education_director_name
 subquestion: |
-  You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
+  The name of your child’s special education coordinator should be on your child’s IEP. If it is easier, you can also send this letter to the special education director for your child’s school district. You can usually find their name and email address on the school district website.
+  
+  If you need assistance, please call MAC’s helpline at 617-357-8431 or submit a request for assistance [here](https://www.massadvocates.org/helpline)
 comment : |
   using ${ student.pronoun_possessive("school district") } in the first field resulted in a parser error. Is this a bug?
