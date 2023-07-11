@@ -437,8 +437,7 @@ terms:
     The evaluations the school does might show that ${ student.name.first } needs an IEP. If ${ student.name.first } already has an IEP, 
     the evaluations might show that ${ student.name.first } needs more services.
   special education coordinator: |
-    The name of the special education coordinator should be listed on your child’s IEP.  If you do not know the name of the special education coordinator, 
-    you can try looking at the school webpage or doing an internet search using your child’s school district.
+    Your child will only have special education records if they have been evaluated by the school district and/or have an IEP.
 ---
 id: special education director information
 question: |
