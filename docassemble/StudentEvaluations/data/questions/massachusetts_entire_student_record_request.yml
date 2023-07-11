@@ -54,6 +54,32 @@ code: |
   # This controls the default state in address field questions
   AL_DEFAULT_STATE = "MA"
 ---
+id: before you start screen child not in school
+field: before_you_start_screen_seen
+question: | 
+  Getting Started
+subquestion: |
+  Before you start, you will need:
+  
+  
+  1. Your child’s full name and date of birth.
+  
+  2. Name and email of your child’s school principal or special education contact (if your child has an IEP) 
+  OR -Name and mailing address of your child’s school principal or special education school contact (if your child has an IEP) 
+  
+  You can find this information on the webpage for your child’s school or by calling your child’s school. If you need help finding any of this information, contact MAC’s helpline at 617-357-8431 or send a message [here.](https://www.massadvocates.org/helpline)
+  
+  The name of the special education coordinator is listed on your child's
+  IEP.
+help:
+  label: |
+    How can I get medical or legal advice?
+  content: |
+    Contact a lawyer if you need legal advice. Contact your child’s pediatrician if you have questions about what evaluations your child 
+    may need after completing this questionnaire. This is not intended to diagnose any condition, but rather to suggest areas in which your child may need support to 
+    learn based on your observations and concerns of your child.
+
+---
 id: child is in school if you need a school record
 initial: True
 code: |
@@ -206,4 +232,4 @@ attachment:
   variable name: educational_evaluations_entire_record_request_attachment[i]
   skip undefined: True
   docx template file: educational_evaluations_entire_record_request.docx
- 
+---

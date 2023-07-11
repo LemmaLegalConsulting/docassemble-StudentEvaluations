@@ -478,3 +478,44 @@ subquestion: |
   If you need assistance, please call MAC’s helpline at 617-357-8431 or submit a request for assistance [here](https://www.massadvocates.org/helpline)
 comment : |
   using ${ student.pronoun_possessive("school district") } in the first field resulted in a parser error. Is this a bug?
+---
+code: |
+  knows_special_education_director_name = False 
+# For IEE interview, disabling question, only need SPEC question.
+---
+sets:
+  - student.name.first
+id: student name
+question: |
+  Who is this letter for?
+subquestion: |
+  Write the name of the student who this letter is about.
+fields:
+  - code: |
+      student.name_fields()
+---
+id: before you start screen child not in school
+field: before_you_start_screen_seen
+question: | 
+  Getting started
+subquestion: |
+  Before you start, you will need:
+  
+  1. The name and address of the special education coordinator or director for your child's school.
+  2. Your child's full name and date of birth.
+  3. Name and email of your child's school principal.
+  
+  If you need help finding any of this information, contact MAC’s helpline at 
+  617-357-8431 or send a message [here.](https://www.massadvocates.org/helpline)
+  
+  The name of the special education coordinator is listed on your child's
+  IEP.
+help:
+  label: |
+    How can I get medical or legal advice?
+  content: |
+    Contact a lawyer if you need legal advice. Contact your child’s pediatrician if you have questions about what evaluations your child 
+    may need after completing this questionnaire. This is not intended to diagnose any condition, but rather to suggest areas in which your child may need support to 
+    learn based on your observations and concerns of your child.
+
+---
