@@ -406,7 +406,7 @@ fields:
       required: False
 under: |
   Because ${ student.name.first } is not yet in school, you need to send this letter to the special education director
-  for where you live. You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
+  for where you live. 
 ---
 id: special education coordinator information
 question: |
