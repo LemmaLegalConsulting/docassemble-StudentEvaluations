@@ -75,7 +75,8 @@ code: |
   before_you_start_screen_seen = True
   letter_created_date
   independent_evaluations_intro_screen
-  is_child_in_school
+  if not is_child_in_school:
+    call_the_hotline
   if not evaluators.there_are_any:
     call_the_hotline
   mac_shared_intro_questions  

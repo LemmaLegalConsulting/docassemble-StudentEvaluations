@@ -43,6 +43,7 @@ features:
 objects:
   - school.recipient: ALIndividual
   - school.special_education_director: ALIndividual
+  - school.special_education_director_or_coordinator: ALIndividual
   - school.special_education_coordinator: ALIndividual
   - student: ALIndividual
   - evaluations_list: DAList
@@ -131,9 +132,9 @@ code: |
   if student.grade == "Not yet in school":
     student.grade = 'soon-to-be'
   else:
-    school.recipient.name = school.special_education_coordinator.name
-    school.recipient.address = school.special_education_coordinator.address
-    if not knows_special_education_director_name:
+    school.recipient.name = school.special_education_director_or_coordinator.name.first
+    school.recipient.address = school.special_education_director_or_coordinator.address
+    if not knows_special_education_director_or_coordinator_name:
       school.special_education_coordinator.name = "Special Education Coordinator"
   school.recipient.name
   if not student.grade == "soon-to-be": 
@@ -408,47 +409,47 @@ under: |
   Because ${ student.name.first } is not yet in school, you need to send this letter to the special education director
   for where you live. 
 ---
-id: special education coordinator information
-question: |
-  Special Education **Coordinator**
-fields:
-  - "Do you know the name of the {special education coordinator} for ${ student.familiar() }?": knows_special_education_director_name
-    datatype: yesnoradio
-  - Coordinator Title: school.special_education_coordinator.title
-    required: False
-    show if: knows_special_education_director_name
-    choices:
-      - Dr.
-      - Mrs.
-      - Miss
-      - Ms.
-      - Mr.
-  - Coordinator First Name: school.special_education_coordinator.name.first
-    show if: knows_special_education_director_name
-  - Coordinator Last Name: school.special_education_coordinator.name.last
-    show if: knows_special_education_director_name
-subquestion: |
-   The name of the special education coordinator should be listed on your child’s IEP.  If you do not know the name of the special education coordinator, 
-   you can try looking at the school webpage or doing an internet search using your child’s school district.
-terms:
-  IEP: |
-    What is an IEP? An IEP is an Individualized Education Program.  It tells the school ${ student.name.first } has a disability and needs 
-    certain services and supports to learn. The IEP describes the services and supports the school must give to ${ student.name.first }. 
-    The evaluations the school does might show that ${ student.name.first } needs an IEP. If ${ student.name.first } already has an IEP, 
-    the evaluations might show that ${ student.name.first } needs more services.
-  special education coordinator: |
-    Your child will only have special education records if they have been evaluated by the school district and/or have an IEP.
----
+#id: special education coordinator information
+#question: |
+#  Special Education **Coordinator**
+#fields:
+#  - "Do you know the name of the {special education coordinator} for ${ student.familiar() }?": knows_special_education_director_name
+#    datatype: yesnoradio
+#  - Coordinator Title: school.special_education_coordinator.title
+#    required: False
+#    show if: knows_special_education_director_name
+#    choices:
+#      - Dr.
+#      - Mrs.
+#      - Miss
+#      - Ms.
+#      - Mr.
+#  - Coordinator First Name: school.special_education_coordinator.name.first
+#    show if: knows_special_education_director_name
+#  - Coordinator Last Name: school.special_education_coordinator.name.last
+#    show if: knows_special_education_director_name
+#subquestion: |
+#   The name of the special education coordinator should be listed on your child’s IEP.  If you do not know the name of the special education coordinator, 
+#   you can try looking at the school webpage or doing an internet search using your child’s school district.
+#terms:
+#  IEP: |
+#    What is an IEP? An IEP is an Individualized Education Program.  It tells the school ${ student.name.first } has a disability and needs 
+#    certain services and supports to learn. The IEP describes the services and supports the school must give to ${ student.name.first }. 
+#    The evaluations the school does might show that ${ student.name.first } needs an IEP. If ${ student.name.first } already has an IEP, 
+#    the evaluations might show that ${ student.name.first } needs more services.
+#  special education coordinator: |
+#    Your child will only have special education records if they have been evaluated by the school district and/or have an IEP.
+#---
 id: special education director information
 question: |
   Name of Special Education **Director or Coordinator**
 fields:
-  - "Do you know the name of your child's Special Education Director or Special Education Coordinator?": knows_special_education_director_name 
+  - "Do you know the name of your child's Special Education Director or Special Education Coordinator?": knows_special_education_director_or_coordinator_name 
     datatype: yesnoradio
-  - First Name: school.special_education_director.name.first
-    show if: knows_special_education_director_name
-  - Last Name: school.special_education_director.name.last
-    show if: knows_special_education_director_name
+  - First Name: school.special_education_director_or_coordinator.name.first
+    show if: knows_special_education_director_or_coordinator_name
+  - Last Name: school.special_education_director_or_coordinator.name.last
+    show if: knows_special_education_director_or_coordinator_name
 
 comment : |
   using ${ student.pronoun_possessive("school district") } in the first field resulted in a parser error. Is this a bug?
