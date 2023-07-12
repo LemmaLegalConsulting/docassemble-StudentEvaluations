@@ -81,7 +81,7 @@ id: special education director information
 question: |
   What is the name of your child’s school principal?
 fields:
-  - "Do you know the name of your child's Special Education Director or Special Education Coordinator?": knows_special_education_director_name 
+  - "Do you know the name of your child's school principal?": knows_special_education_director_name 
     datatype: yesnoradio
   - First Name: school.special_education_director.name.first
     show if: knows_special_education_director_name
