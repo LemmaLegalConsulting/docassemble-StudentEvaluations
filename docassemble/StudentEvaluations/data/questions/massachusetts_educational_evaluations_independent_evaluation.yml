@@ -260,6 +260,17 @@ question: |
   Are you comfortable sharing your income information with ${ school.recipient.name }?
 yesno: comfortable_sharing_income
 ---
+sets:
+  - student.name.first
+id: student name
+question: |
+  Who is this letter for?
+subquestion: |
+  Write the name of the student who this letter is about.
+fields:
+  - code: |
+      student.name_fields()
+---
 id: free or reduced lunch screen
 question: |
   Is ${ student.name.first } eligible for free or reduced lunch?
