@@ -152,11 +152,9 @@ yesno: evaluators.there_are_any
 ---
 id: select independent evaluations
 question : |
-  What evaluations does ${ student.familiar() } need?
+  What type of independent evaluation do you want your child’s school to fund?
 subquestion: |
-  You may have advice from a specialist already that tells you which
-  evaluations you want. You can also [read more](https://www.understood.org/articles/en/the-evaluation-process-what-to-expect) if you do not know
-  what to ask for.
+  You can request that the school district fund an independent evaluation of any type that the school has already evaluated your child. It is like a second opinion. 
 fields:
   - no label: selected_evaluations
     required: False
