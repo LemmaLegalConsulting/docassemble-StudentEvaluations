@@ -132,7 +132,7 @@ code: |
   if student.grade == "Not yet in school":
     student.grade = 'soon-to-be'
   else:
-    school.recipient.name = school.special_education_director_or_coordinator.name.first
+    school.recipient.name = school.special_education_director_or_coordinator.name
     school.recipient.address = school.special_education_director_or_coordinator.address
     if not knows_special_education_director_or_coordinator_name:
       school.special_education_coordinator.name = "Special Education Coordinator"
