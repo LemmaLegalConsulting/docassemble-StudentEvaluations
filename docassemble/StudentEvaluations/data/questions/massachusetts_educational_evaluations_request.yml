@@ -156,9 +156,7 @@ help:
   label: |
     How can I get medical or legal advice?
   content: |
-    Contact a lawyer if you need legal advice. Contact your child’s pediatrician if you have questions about what evaluations your child 
-    may need after completing this questionnaire. This is not intended to diagnose any condition, but rather to suggest areas in which your child may need support to 
-    learn based on your observations and concerns of your child.
+   Contact a lawyer if you need legal advice. Contact your child’s pediatrician if you have concerns about your child’s learning or development.
 ---
 id: select initial evaluations
 question : |
@@ -347,8 +345,10 @@ subquestion: |
   This website helps you write a letter to ask for your child to be
   evaluated.
     
-  * This letter is for a child who is already enrolled in school.
-  * You need to know which evaluations you want to ask for.
+  An evaluation is testing that a specialist does to see how your child is learning and developing.  Often the specialist will also recommend services and supports for your child.
+ 
+  You may want to ask for an evaluation if your child is having a hard time in school socially, academically, or behaviorally. 
+
   
   For more information on requesting an evaluation, watch this short video
 Video: | 

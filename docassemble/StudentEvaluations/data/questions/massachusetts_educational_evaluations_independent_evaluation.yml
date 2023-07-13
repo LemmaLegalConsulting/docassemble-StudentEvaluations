@@ -75,7 +75,8 @@ code: |
   before_you_start_screen_seen = True
   letter_created_date
   independent_evaluations_intro_screen
-  is_child_in_school
+  if not is_child_in_school:
+    call_the_hotline
   if not evaluators.there_are_any:
     call_the_hotline
   mac_shared_intro_questions  
@@ -130,36 +131,31 @@ id: independent evaluations intro screen
 question: |
   Requesting an Independent Evaluation
 subquestion: |
-  This website will help you request independent evaluations for 
-  your child.
-  
-  When you see your letter at the end, you can add or remove evaluations from 
-  the letter.  
-  
-  It is a good idea to talk to your child's pediatrician or 
-  specialists about other evaluations they might need if you 
-  are unsure.
+ This website will help you request that your child’s school pay for an independent evaluation for your child. An independent evaluation is like a second opinion to an evaluation the school already did.  You can ask for an independent evaluation if you disagree with a school evaluation.
+
+ When you see your letter at the end, you can make changes.
+ 
+ It is a good idea to talk to your child’s pediatrician or specialists about other evaluations they might need if you are unsure.
+
   
   Before you get started:
   
   * This letter is for children who are already enrolled in school.
-  * You need to know **who** you want to evaluate your child. If you are not
-    sure, you may want to talk to an advocate or your child's doctor to get
-    a recommendation first.
+  * You need to know **who** you want to evaluate your child. If you are not sure, you may want to talk to an advocate or your child’s doctor to get a recommendation first.
+video: |
+  [YOUTUBE 0C2g6nzdG_0&list=PLLZkb-U9J6d0lfPrwFBR68TF9BTyH95b2&index=6]
 continue button field: independent_evaluations_intro_screen
 ---
 id: are there any evaluators screen
 question: |
-  Do you know the names of the independent evaluators you want for ${ student.name.first }?
+  Do you know the name of the independent evaluator you want for ${ student.name.first }?
 yesno: evaluators.there_are_any
 ---
 id: select independent evaluations
 question : |
-  What evaluations does ${ student.familiar() } need?
+  What type of independent evaluation do you want your child’s school to fund?
 subquestion: |
-  You may have advice from a specialist already that tells you which
-  evaluations you want. You can also [read more](https://www.understood.org/articles/en/the-evaluation-process-what-to-expect) if you do not know
-  what to ask for.
+  You can request that the school district fund an independent evaluation of any type that the school has already evaluated your child. It is like a second opinion. 
 fields:
   - no label: selected_evaluations
     required: False
@@ -262,6 +258,17 @@ id: comfortable sharing income screen
 question: |
   Are you comfortable sharing your income information with ${ school.recipient.name }?
 yesno: comfortable_sharing_income
+---
+sets:
+  - student.name.first
+id: student name
+question: |
+  Who is this letter for?
+subquestion: |
+  Write the name of the student who this letter is about.
+fields:
+  - code: |
+      student.name_fields()
 ---
 id: free or reduced lunch screen
 question: |
@@ -469,13 +476,54 @@ id: special education director information
 question: |
   Name of Special Education **Director or Coordinator**
 fields:
-  - "Do you know the name of your child's Special Education Director or Special Education Coordinator?": knows_special_education_director_name 
+  - "Do you know the name of your child's Special Education Director or Coordinator?": knows_special_education_director_name 
     datatype: yesnoradio
   - First Name: school.special_education_director.name.first
     show if: knows_special_education_director_name
   - Last Name: school.special_education_director.name.last
     show if: knows_special_education_director_name
 subquestion: |
-  You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
+  The name of your child’s special education coordinator should be on your child’s IEP. If it is easier, you can also send this letter to the special education director for your child’s school district. You can usually find their name and email address on the school district website.
+  
+  If you need assistance, please call MAC’s helpline at 617-357-8431 or submit a request for assistance [here](https://www.massadvocates.org/helpline)
 comment : |
   using ${ student.pronoun_possessive("school district") } in the first field resulted in a parser error. Is this a bug?
+---
+code: |
+  knows_special_education_director_name = False 
+# For IEE interview, disabling question, only need SPEC question.
+---
+sets:
+  - student.name.first
+id: student name
+question: |
+  Who is this letter for?
+subquestion: |
+  Write the name of the student who this letter is about.
+fields:
+  - code: |
+      student.name_fields()
+---
+id: before you start screen child not in school
+field: before_you_start_screen_seen
+question: | 
+  Getting started
+subquestion: |
+  Before you start, you will need:
+  
+  1. The name and address of the special education coordinator or director for your child's school.
+  2. Your child's full name and date of birth.
+  3. Name and email of your child's school principal.
+  
+  If you need help finding any of this information, contact MAC’s helpline at 
+  617-357-8431 or send a message [here.](https://www.massadvocates.org/helpline)
+  
+  The name of the special education coordinator is listed on your child's
+  IEP.
+help:
+  label: |
+    How can I get medical or legal advice?
+  content: |
+    Contact a lawyer if you need legal advice. Contact your child’s pediatrician if you have concerns about your child’s learning or development.
+
+---
