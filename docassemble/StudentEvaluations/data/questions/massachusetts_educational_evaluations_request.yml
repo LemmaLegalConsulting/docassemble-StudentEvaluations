@@ -162,7 +162,7 @@ help:
 ---
 id: select initial evaluations
 question : |
-  What evaluations does ${ student.familiar() } need?
+  What evaluations does ${ student.familiar() } need? 
 subquestion: |
   First, explain what you or a specialist have noticed about 
   ${ student.familiar() } that you would like to be evaluated.  
@@ -697,8 +697,15 @@ subquestion: |
   ${ action_button_html(url_action('review_initial_request'), label='Edit answers', color='info') }
   
   
-  ${ al_user_bundle.download_list_html() }
+  % if student.age_in_years() >= 13:
   
+    ${ al_user_bundle.download_list_html() }
+  
+  % else:
+    
+    ${ al_user_bundle_u13.download_list_html() }
+    
+  % endif
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
 
@@ -712,8 +719,21 @@ objects:
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
+##  code: |
+##    if student.age_in_years() >= 13:
+    
   - al_user_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", title="All forms to download for your records", enabled=True)
-  - al_recipient_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_copy_request_attachment, educational_evaluations_transition_assessment_request_attachment],  filename="educational_evaluations_entire_record_request", title="All forms to file", enabled=True)
+  
+  - al_user_bundle_u13: ALDocumentBundle.using(elements=[initial_request_attachment], filename="educational_evaluations_entire_record_request", title="All forms to download for your records", enabled=True)
+      
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_copy_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", title="All forms to file", enabled=True)
+  
+      
+##    else:
+  - al_user_bundle: ALDocumentBundle.using(elements=[initial_request_attachment], filename="educational_evaluations_entire_record_request", title="All forms to download for your records", enabled=True)
+    
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_copy_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", title="All forms to file", enabled=True)
+    
 ---
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 
