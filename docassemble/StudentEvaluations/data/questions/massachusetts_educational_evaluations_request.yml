@@ -116,6 +116,7 @@ code: |
   basic_questions_signature_flow    
   requestor.signature
   initial_request_download
+  
 ---
 ###TODO add back email option 
 ###initial_request_concatenated = pdf_concatenate(initial_request_variable)
@@ -445,6 +446,35 @@ fields:
     none of the above: |
       I don't know.
 ---
+id: special education director information
+question: |
+  Name of Special Education **Director or Coordinator**
+fields:
+  - "Do you know the name of your child's Special Education Director or Special Education Coordinator?": knows_special_education_director_or_coordinator_name 
+    datatype: yesnoradio
+  - First Name: school.special_education_director_or_coordinator.name.first
+    show if: knows_special_education_director_or_coordinator_name
+  - Last Name: school.special_education_director_or_coordinator.name.last
+    show if: knows_special_education_director_or_coordinator_name
+  - Email: school.special_education_director_or_coordinator.email
+    show if: knows_special_education_director_or_coordinator_name
+---
+id: requestor phone number and email
+question: |
+  How can the school reach you? 
+subquestion: | 
+  You need to tell us at least one way to get in contact with you.
+fields:
+  - Phone Number: requestor.phone_number
+    datatype: al_international_phone
+    required: False
+  - Email: requestor.email
+    datatype: email
+    required: True
+validation code: |
+  if not(requestor.phone_number) and not(requestor.email):
+    validation_error("You need to provide at least one contact method.",field="requestor.phone_number")
+---
 id: functional behavior assessment
 question: |
   % if requestor.right_to_send == 'Student':
@@ -685,12 +715,34 @@ event: review_initial_request
 question: |
   Review your answers
 ---
+mandatory: True
+code: |  
+  email_sent_ok = al_user_bundle.send_email(editable=True, to=school.special_education_director_or_coordinator.email, template=notification)
+  email_sent_ok_1 = al_user_bundle.send_email(editable=True, to=requestor.email, template=notification)
+
+---
+template: notification
+subject: |
+  Greetings, ${school.special_education_director_or_coordinator.name.first } ${school.special_education_director_or_coordinator.name.last}
+content: |
+  This is an e-mail sent from Massachusetts Advocates for Children.
+
+  Have a nice day!
+
+---
 id: download initial_request
 event: initial_request_download
 question: |
   All done
-subquestion: |
-  Thank you. Your form is ready to download and deliver.
+# not sure if an if statement is needed for the email to send 
+subquestion: | 
+  % if email_sent_ok and email_sent_ok_1:
+    Thank you. Your form is ready to download and deliver. A copy of the documents have been sent to you and the special education coordinator at the school. 
+    
+  % else: 
+    Thank you. Your form is ready to download and deliver. A copy of the documents was not sent to you and the special education coordinator. 
+  % endif
+  
   
   View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
 
@@ -709,7 +761,7 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
 
-progress: 100
+progress: 100 
 ---
 # ALDocument objects specify the metadata for each template
 objects:
