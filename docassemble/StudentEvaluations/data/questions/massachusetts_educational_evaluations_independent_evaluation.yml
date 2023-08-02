@@ -417,8 +417,6 @@ subquestion: |
 
   Click the image to open it in a new tab. Click the "Edit answers" button
   to edit your answers.
-
-  ${ action_button_html(url_action('review_independent_evaluation_request'), label='Edit answers', color='info') }
   
   Remember to come back to this window to continue and sign your form.
 continue button field: independent_evaluation_request_preview_question    
@@ -442,9 +440,6 @@ subquestion: |
   Thank you. Your form is ready to download and deliver.
   
   View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
-
-  ${ action_button_html(url_action('review_independent_evaluation_request'), label='Edit answers', color='info') }
-  
   
   ${ al_user_bundle.download_list_html() }
   
