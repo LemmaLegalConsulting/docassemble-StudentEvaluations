@@ -699,25 +699,28 @@ subquestion: |
    
 progress: 100 
 ---
-code: |
-  if student.age_in_years() >= 13:
-    educational_evaluations_transition_assessment_request_attachment.enabled = True 
-  
-  else:
-    educational_evaluations_transition_assessment_request_attachment.enabled = False 
----
 # ALDocument objects specify the metadata for each template
 objects:
   - initial_request_attachment: ALDocument.using(title="Initial Request", filename="initial_request", enabled=True, has_addendum=False)
   - educational_evaluations_copy_request_attachment: ALDocument.using(title="Evaluation Copy Request", filename="educational_evaluations_copy_request", enabled=True, has_addendum=False)
-  - educational_evaluations_transition_assessment_request_attachment: ALDocument.using(title="Transition Assessment Request", filename="educational_evaluations_transition_assessment_request", enabled=True, has_addendum=False)
+  - educational_evaluations_transition_assessment_request_attachment: ALDocument.using(title="Transition Assessment Request", filename="educational_evaluations_transition_assessment_request", has_addendum=False)
 ---
+code: |
+  if student.age_in_years() >= 13:
+    educational_evaluations_transition_assessment_request_attachment.enabled = True
+  else: 
+    educational_evaluations_transition_assessment_request_attachment.enabled = False 
+---
+code: |
+  educational_evaluations_transition_assessment_request_attachment.initialize()
+---
+
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
     
-  - al_user_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", enabled=True, title="All forms to download for your records", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", enabled=True, title="All forms to download for your records")
       
-  - al_recipient_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_copy_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", title="All forms to file", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_copy_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", enabled=True, title="All forms to file", )
     
 ---
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
