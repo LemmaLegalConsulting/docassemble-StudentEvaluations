@@ -719,7 +719,7 @@ objects:
     
   - al_user_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", enabled=True, title="All forms to download for your records")
       
-  - al_recipient_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_copy_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", enabled=True, title="All forms to file", )
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", enabled=True, title="All forms to file", )
     
 ---
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
