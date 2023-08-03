@@ -1,4 +1,3 @@
----
 modules:
     - docassemble.base.util
     - docassemble.base.legal
@@ -117,6 +116,7 @@ code: |
   basic_questions_signature_flow    
   requestor.signature
   initial_request_download
+  
 ---
 ###TODO add back email option 
 ###initial_request_concatenated = pdf_concatenate(initial_request_variable)
@@ -138,8 +138,11 @@ subquestion: |
   Before you start, you will need:
   
   1. The name and address of the special education coordinator or director for your child’s school district.
+  
   2. Your child's full name and date of birth.
+  
   3. If your child ALREADY HAS an {IEP}: the name and email of the special education coordinator or director for your child’s school; OR 
+  
   4. If your child does NOT have an {IEP}: the name and email for your child’s school principal or teacher.
 
   If your child has an {IEP}, the name of your child’s special education coordinator should be listed on your child’s IEP. 
@@ -160,7 +163,7 @@ help:
 ---
 id: select initial evaluations
 question : |
-  What evaluations does ${ student.familiar() } need?
+  What evaluations does ${ student.familiar() } need? 
 subquestion: |
   First, explain what you or a specialist have noticed about 
   ${ student.familiar() } that you would like to be evaluated.  
@@ -664,10 +667,7 @@ subquestion: |
   
   ${ al_recipient_bundle.as_pdf(key='preview') }
 
-  Click the image to open it in a new tab. Click the "Edit answers" button
-  to edit your answers.
-
-  ${ action_button_html(url_action('review_initial_request'), label='Edit answers', color='info') }
+  Click the image to open it in a new tab. 
   
   Remember to come back to this window to continue and sign your form.
 continue button field: initial_request_preview_question    
@@ -687,31 +687,40 @@ id: download initial_request
 event: initial_request_download
 question: |
   All done
-subquestion: |
-  Thank you. Your form is ready to download and deliver.
-  
-  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
-
-  ${ action_button_html(url_action('review_initial_request'), label='Edit answers', color='info') }
-  
+subquestion: | 
+  Thank you. Your form is ready to download and deliver. 
+    
+  View, download and send your form below. 
   
   ${ al_user_bundle.download_list_html() }
   
-
   ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
-
-progress: 100
+   
+progress: 100 
 ---
 # ALDocument objects specify the metadata for each template
 objects:
   - initial_request_attachment: ALDocument.using(title="Initial Request", filename="initial_request", enabled=True, has_addendum=False)
   - educational_evaluations_copy_request_attachment: ALDocument.using(title="Evaluation Copy Request", filename="educational_evaluations_copy_request", enabled=True, has_addendum=False)
-  - educational_evaluations_transition_assessment_request_attachment: ALDocument.using(title="Transition Assessment Request", filename="educational_evaluations_transition_assessment_request", enabled=True, has_addendum=False)
+  - educational_evaluations_transition_assessment_request_attachment: ALDocument.using(title="Transition Assessment Request", filename="educational_evaluations_transition_assessment_request", has_addendum=False)
 ---
+code: |
+  if student.age_in_years() >= 13:
+    educational_evaluations_transition_assessment_request_attachment.enabled = True
+  else: 
+    educational_evaluations_transition_assessment_request_attachment.enabled = False 
+---
+code: |
+  educational_evaluations_transition_assessment_request_attachment.initialize()
+---
+
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_copy_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", title="All forms to download for your records", enabled=True)
-  - al_recipient_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_copy_request_attachment, educational_evaluations_transition_assessment_request_attachment],  filename="educational_evaluations_entire_record_request", title="All forms to file", enabled=True)
+    
+  - al_user_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", enabled=True, title="All forms to download for your records")
+      
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[initial_request_attachment, educational_evaluations_transition_assessment_request_attachment], filename="educational_evaluations_entire_record_request", enabled=True, title="All forms to file", )
+    
 ---
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 

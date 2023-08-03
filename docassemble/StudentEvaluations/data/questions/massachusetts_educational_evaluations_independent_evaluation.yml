@@ -415,10 +415,7 @@ subquestion: |
   
   ${ al_recipient_bundle.as_pdf(key='preview') }
 
-  Click the image to open it in a new tab. Click the "Edit answers" button
-  to edit your answers.
-
-  ${ action_button_html(url_action('review_independent_evaluation_request'), label='Edit answers', color='info') }
+  Click the image to open it in a new tab.
   
   Remember to come back to this window to continue and sign your form.
 continue button field: independent_evaluation_request_preview_question    
@@ -441,10 +438,7 @@ question: |
 subquestion: |
   Thank you. Your form is ready to download and deliver.
   
-  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
-
-  ${ action_button_html(url_action('review_independent_evaluation_request'), label='Edit answers', color='info') }
-  
+  View, download and send your form below. 
   
   ${ al_user_bundle.download_list_html() }
   
@@ -512,7 +506,9 @@ subquestion: |
   Before you start, you will need:
   
   1. The name and address of the special education coordinator or director for your child's school.
+  
   2. Your child's full name and date of birth.
+  
   3. Name and email of your child's school principal.
   
   If you need help finding any of this information, contact MAC’s helpline at 

@@ -61,7 +61,6 @@ question: |
 subquestion: |
   Before you start, you will need:
   
-  
   1. Your child’s full name and date of birth.
   
   2. Name and email of your child’s school principal or special education contact (if your child has an IEP) 
@@ -114,6 +113,7 @@ code: |
   basic_questions_signature_flow    
   requestor.signature
   educational_evaluations_entire_record_request_download
+  
 ---
 ## TODO add back in email feature to send directy to school
 #  educational_evaluations_entire_record_request_concatenated = pdf_concatenate(educational_evaluations_entire_record_request_variable)
@@ -139,6 +139,7 @@ continue button field: entire_record_request_intro_screen
 #  - ${student.name.first}'s starting date: student.enrollment_date
 #    datatype: date
 #---
+#mandatory: True
 #id: entire record request letter screen
 #question: |
 #  Here is your letter
@@ -186,11 +187,6 @@ subquestion: |
   Here is a preview of the form you will sign on the next page.   
   
   ${ al_recipient_bundle.as_pdf(key='preview') }
-
-  Click the image to open it in a new tab. Click the "Edit answers" button
-  to edit your answers.
-
-  ${ action_button_html(url_action('review_educational_evaluations_entire_record_request'), label='Edit answers', color='info') }
   
   Remember to come back to this window to continue and sign your form.
 continue button field: educational_evaluations_entire_record_request_preview_question    
@@ -213,10 +209,7 @@ question: |
 subquestion: |
   Thank you. Your form is ready to download and deliver.
   
-  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
-
-  ${ action_button_html(url_action('review_educational_evaluations_entire_record_request'), label='Edit answers', color='info') }
-  
+  View, download and send your form below.  
   
   ${ al_user_bundle.download_list_html() }
   
