@@ -454,6 +454,7 @@ question: |
 fields:
   - "Do you know the name of your child's Special Education Director or Special Education Coordinator?": knows_special_education_director_or_coordinator_name 
     datatype: yesnoradio
+    required: True
   - First Name: school.special_education_director_or_coordinator.name.first
     show if: knows_special_education_director_or_coordinator_name
   - Last Name: school.special_education_director_or_coordinator.name.last
