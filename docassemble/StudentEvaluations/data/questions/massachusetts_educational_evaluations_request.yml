@@ -653,6 +653,16 @@ code: |
   if task_not_yet_performed('10 day reminder text') and date_difference(starting=letter_created_date).days > 10 and wants_reminders:
     send_sms(to=requestor, body='Have you heard from the school yet?', task='10 day reminder text')
   response()
+#event: cron_daily(10,20)
+#code: |
+#  # Mock data for testing (replace with actual values if needed)
+#  wants_reminders = True
+#  letter_created_date = format_date("7/1/2023")
+#
+#  if wants_reminders and task_not_yet_performed('10 day reminder email') and date_difference(starting=letter_created_date).days > 10:
+#    send_email(to='recipient@example.com', template='reminder_email_initial_request', task='10 day reminder email')
+#    send_sms(to='recipient', body='Have you heard from the school yet?', task='10 day reminder text')
+#  response()
 ---
 event: cron_monthly
 code: |

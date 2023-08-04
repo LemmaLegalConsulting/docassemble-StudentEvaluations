@@ -24,6 +24,9 @@ features:
   bootstrap theme: mac-bootstrap.css
   progress bar: True
 ---
+objects:
+  - al_logo: DAStaticFile.using(filename="MAClogo.jpg")
+---
 ## did not generate with weaver, c&p and edited from prs which was 
 ## generated with weaver
 mandatory: True

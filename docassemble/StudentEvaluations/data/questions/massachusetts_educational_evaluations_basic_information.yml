@@ -140,9 +140,12 @@ code: |
   else:
     school.recipient.name = school.special_education_director_or_coordinator.name
     school.recipient.address = school.special_education_director_or_coordinator.address
-    if not knows_special_education_director_or_coordinator_name:
-      school.special_education_coordinator.name = "Special Education Coordinator"
-  school.recipient.name
+  if knows_special_education_director_or_coordinator_name:  
+    school.special_education_director_or_coordinator.name.first
+    school.special_education_director_or_coordinator.name.last
+  else:
+    school.special_education_director_or_coordinator.name.first = "Special Education"
+    school.special_education_director_or_coordinator.name.last = "Coordinator"
   if not student.grade == "soon-to-be": 
     school.address.address
   else:
@@ -456,11 +459,9 @@ fields:
     datatype: yesnoradio
   - First Name: school.special_education_director_or_coordinator.name.first
     show if: knows_special_education_director_or_coordinator_name
+
   - Last Name: school.special_education_director_or_coordinator.name.last
     show if: knows_special_education_director_or_coordinator_name
-
-comment : |
-  using ${ student.pronoun_possessive("school district") } in the first field resulted in a parser error. Is this a bug?
 ---
 id: kick out language
 event: kick_out_language
