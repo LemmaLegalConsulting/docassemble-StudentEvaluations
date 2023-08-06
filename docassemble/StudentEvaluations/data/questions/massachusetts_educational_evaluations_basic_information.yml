@@ -383,8 +383,7 @@ fields:
         - school
         - primary_school
         - secondary_school
-      fields:
-        - address_components
+
   - Street Address: school.address.address
   - City: school.address.city
   - State: school.address.state
@@ -396,6 +395,13 @@ fields:
 validation code: |
   school.name.text = school.address.name
 
+
+#        datatype: location
+#        parameters:
+#          types: ['school']  # Only suggest school-related places
+#          componentRestrictions:
+#            country: 'us'
+#            administrative_area: 'MA'  # Limit to Massachusetts
 ---
 id: special education director address in school
 question: |
