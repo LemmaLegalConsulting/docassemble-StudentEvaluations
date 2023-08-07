@@ -326,8 +326,6 @@ question: |
 fields:
     - Birthdate: student.birthdate
       datatype: BirthDate
-    - code: |
-        student.gender_fields()
     - Grade: student.grade
       hide if:
         code: |
