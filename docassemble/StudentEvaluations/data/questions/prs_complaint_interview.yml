@@ -128,7 +128,7 @@ subquestion: |
   You can use this website if:
   
   1. You are the parent of a child in a Massachusetts public school, and
-  1. you speak a language other than English as your first language.
+  2. You speak a language other than English as your first language.
 ---
 id: background info about language needs
 question: |
@@ -197,8 +197,10 @@ id: students name
 question: |
   What is the name of your child?
 fields:
-  - code: |
-      student.name_fields()
+  - First name: student.name.first
+  - Middle name: student.name.middle
+    required: False
+  - Last Name: student.name.last
 ---
 sets:
   - school.address.address
@@ -230,8 +232,10 @@ question: |
 subquestion: |
   This should be the name of the parent or legal guardian of ${ student }.
 fields:
-  - code: |
-      parent.name_fields()
+  - First name: parent.name.first
+  - Middle name: parent.name.middle
+    required: False
+  - Last Name: parent.name.last
 ---
 id: translation problems
 question: |
