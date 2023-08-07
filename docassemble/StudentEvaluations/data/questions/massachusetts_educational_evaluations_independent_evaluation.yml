@@ -204,8 +204,6 @@ comment: |
     Assistive Technology Evaluation - Explanatory Text
 ---
 id: evaluators name screen
-sets:
-  - evaluators[i].name.first
 question: |
   % if i==0:
   What is the name of the first person you need to evaluate ${ student.familiar() }?
@@ -219,8 +217,10 @@ subquestion: |
   % endif
 fields:
   - Title: evaluators[i].name.title
-  - code: |
-      evaluators[i].name_fields()
+  - First name: evaluators[i].name.first
+  - Middle name: evaluators[i].name.middle
+    required: False
+  - Last name: evaluators[i].name.last
 ---
 id: evaluators info screen
 sets:
@@ -261,17 +261,6 @@ id: comfortable sharing income screen
 question: |
   Are you comfortable sharing your income information with ${ school.recipient.name }?
 yesno: comfortable_sharing_income
----
-sets:
-  - student.name.first
-id: student name
-question: |
-  Who is this letter for?
-subquestion: |
-  Write the name of the student who this letter is about.
-fields:
-  - code: |
-      student.name_fields()
 ---
 id: free or reduced lunch screen
 question: |
@@ -489,17 +478,6 @@ comment : |
 code: |
   knows_special_education_director_name = False 
 # For IEE interview, disabling question, only need SPEC question.
----
-sets:
-  - student.name.first
-id: student name
-question: |
-  Who is this letter for?
-subquestion: |
-  Write the name of the student who this letter is about.
-fields:
-  - code: |
-      student.name_fields()
 ---
 id: before you start screen child not in school
 field: before_you_start_screen_seen

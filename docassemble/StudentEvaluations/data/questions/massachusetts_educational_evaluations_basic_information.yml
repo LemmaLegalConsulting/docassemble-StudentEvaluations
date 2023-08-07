@@ -270,14 +270,14 @@ content: |
   be **from**. If you are requesting the documents to be sent directly to
   you, you will need a release of information.
 ---
-sets:
-  - requestor.name.first
 id: requestor name
 question: |
   Who are you?
 fields:
-  - code: |
-      requestor.name_fields()
+  - First name: requestor.name.first
+  - Middle name: requestor.name.middle
+    required: False
+  - Last Name: requestor.name.last
 ---
 sets:
   - requestor.address.address
@@ -305,16 +305,16 @@ validation code: |
   if not(requestor.phone_number) and not(requestor.email):
     validation_error("You need to provide at least one contact method.",field="requestor.phone_number")
 ---
-sets:
-  - student.name.first
 id: student name
 question: |
   Who is this letter for?
 subquestion: |
   Write the name of the student whose records you are requesting.
 fields:
-  - code: |
-      student.name_fields()
+  - First name: student.name.first
+  - Middle name: student.name.middle
+    required: False
+  - Last Name: student.name.last
 ---
 id: student information
 question: |
