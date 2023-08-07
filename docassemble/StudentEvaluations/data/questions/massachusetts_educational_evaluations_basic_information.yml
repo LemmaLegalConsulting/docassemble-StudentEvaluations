@@ -141,8 +141,7 @@ code: |
     school.recipient.name = school.special_education_director_or_coordinator.name
     school.recipient.address = school.special_education_director_or_coordinator.address
   if knows_special_education_director_or_coordinator_name:  
-    school.special_education_director_or_coordinator.name.first
-    school.special_education_director_or_coordinator.name.last
+    school.special_education_director_or_coordinator.name
   else:
     school.special_education_director_or_coordinator.name = "Special Education Coordinator or Director"
   if not student.grade == "soon-to-be": 
