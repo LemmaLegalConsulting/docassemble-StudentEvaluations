@@ -9,10 +9,6 @@ include:
   - docassemble.AssemblyLine:assembly_line.yml
   - massachusetts_educational_evaluations_basic_information.yml
 ---
-features:
-  bootstrap theme: mac-bootstrap.css
-  progress bar: True
----
 metadata:
   title: |
     MAC Request for Initial Special Education Evaluation

@@ -20,10 +20,6 @@ metadata:
     - Quinten Steenhuis
     - Matt Brooks
 ---
-features:
-  bootstrap theme: mac-bootstrap.css
-  progress bar: True
----
 ## did not generate with weaver, c&p and edited from prs which was 
 ## generated with weaver
 mandatory: True
@@ -217,7 +213,7 @@ subquestion: |
 fields:
   - Title: evaluators[i].name.title
   - code: |
-      evaluators[i].name_fields()
+      evaluators[i].name_fields(show_suffix=False)
 ---
 id: evaluators info screen
 sets:
@@ -258,17 +254,6 @@ id: comfortable sharing income screen
 question: |
   Are you comfortable sharing your income information with ${ school.recipient.name }?
 yesno: comfortable_sharing_income
----
-sets:
-  - student.name.first
-id: student name
-question: |
-  Who is this letter for?
-subquestion: |
-  Write the name of the student who this letter is about.
-fields:
-  - code: |
-      student.name_fields()
 ---
 id: free or reduced lunch screen
 question: |
@@ -486,17 +471,6 @@ comment : |
 code: |
   knows_special_education_director_name = False 
 # For IEE interview, disabling question, only need SPEC question.
----
-sets:
-  - student.name.first
-id: student name
-question: |
-  Who is this letter for?
-subquestion: |
-  Write the name of the student who this letter is about.
-fields:
-  - code: |
-      student.name_fields()
 ---
 id: before you start screen child not in school
 field: before_you_start_screen_seen

@@ -140,9 +140,10 @@ code: |
   else:
     school.recipient.name = school.special_education_director_or_coordinator.name
     school.recipient.address = school.special_education_director_or_coordinator.address
-    if not knows_special_education_director_or_coordinator_name:
-      school.special_education_coordinator.name = "Special Education Coordinator"
-  school.recipient.name
+  if knows_special_education_director_or_coordinator_name:  
+    school.special_education_director_or_coordinator.name
+  else:
+    school.special_education_director_or_coordinator.name = "Special Education Coordinator or Director"
   if not student.grade == "soon-to-be": 
     school.address.address
   else:
@@ -274,7 +275,7 @@ question: |
   Who are you?
 fields:
   - code: |
-      requestor.name_fields()
+      requestor.name_fields(show_suffix=False)
 ---
 sets:
   - requestor.address.address
@@ -311,7 +312,7 @@ subquestion: |
   Write the name of the student whose records you are requesting.
 fields:
   - code: |
-      student.name_fields()
+      student.name_fields(show_suffix=False)
 ---
 id: student information
 question: |
@@ -323,8 +324,6 @@ question: |
 fields:
     - Birthdate: student.birthdate
       datatype: BirthDate
-    - code: |
-        student.gender_fields()
     - Grade: student.grade
       hide if:
         code: |
@@ -380,8 +379,7 @@ fields:
         - school
         - primary_school
         - secondary_school
-      fields:
-        - address_components
+
   - Street Address: school.address.address
   - City: school.address.city
   - State: school.address.state
@@ -392,7 +390,6 @@ fields:
     required: False
 validation code: |
   school.name.text = school.address.name
-
 ---
 id: special education director address in school
 question: |
@@ -456,11 +453,9 @@ fields:
     datatype: yesnoradio
   - First Name: school.special_education_director_or_coordinator.name.first
     show if: knows_special_education_director_or_coordinator_name
+
   - Last Name: school.special_education_director_or_coordinator.name.last
     show if: knows_special_education_director_or_coordinator_name
-
-comment : |
-  using ${ student.pronoun_possessive("school district") } in the first field resulted in a parser error. Is this a bug?
 ---
 id: kick out language
 event: kick_out_language
