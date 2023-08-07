@@ -144,8 +144,7 @@ code: |
     school.special_education_director_or_coordinator.name.first
     school.special_education_director_or_coordinator.name.last
   else:
-    school.special_education_director_or_coordinator.name.first = "Special Education"
-    school.special_education_director_or_coordinator.name.last = "Coordinator"
+    school.special_education_director_or_coordinator.name = "Special Education Coordinator or Director"
   if not student.grade == "soon-to-be": 
     school.address.address
   else:
@@ -270,14 +269,14 @@ content: |
   be **from**. If you are requesting the documents to be sent directly to
   you, you will need a release of information.
 ---
+sets:
+  - requestor.name.first
 id: requestor name
 question: |
   Who are you?
 fields:
-  - First name: requestor.name.first
-  - Middle name: requestor.name.middle
-    required: False
-  - Last Name: requestor.name.last
+  - code: |
+      requestor.name_fields(show_suffix=False)
 ---
 sets:
   - requestor.address.address
@@ -305,16 +304,16 @@ validation code: |
   if not(requestor.phone_number) and not(requestor.email):
     validation_error("You need to provide at least one contact method.",field="requestor.phone_number")
 ---
+sets:
+  - student.name.first
 id: student name
 question: |
   Who is this letter for?
 subquestion: |
   Write the name of the student whose records you are requesting.
 fields:
-  - First name: student.name.first
-  - Middle name: student.name.middle
-    required: False
-  - Last Name: student.name.last
+  - code: |
+      student.name_fields(show_suffix=False)
 ---
 id: student information
 question: |
@@ -392,14 +391,6 @@ fields:
     required: False
 validation code: |
   school.name.text = school.address.name
-
-
-#        datatype: location
-#        parameters:
-#          types: ['school']  # Only suggest school-related places
-#          componentRestrictions:
-#            country: 'us'
-#            administrative_area: 'MA'  # Limit to Massachusetts
 ---
 id: special education director address in school
 question: |
@@ -522,35 +513,35 @@ subject: |
   What evaluations can I ask for?
 content: |
   #### Educational Assessment
-  * Educational assessments should include a history of the student’s educational progress. The history should be given by a teacher who knows the student well, in relation to the state’s learning standards. The assessments should also include the student’s attention skills, communication skills, memory, participation behaviors, and social skills with both peers and adults.
+  Educational assessments should include a history of the student’s educational progress. The history should be given by a teacher who knows the student well, in relation to the state’s learning standards. The assessments should also include the student’s attention skills, communication skills, memory, participation behaviors, and social skills with both peers and adults.
 
   #### Speech and Language Evaluation
-  * A speech and language evaluation assess the student’s physical ability to speak, pronunciation of speech sounds, use of language for different purposes, correct use of words in properly formed sentences, and voice quality.
+  A speech and language evaluation assess the student’s physical ability to speak, pronunciation of speech sounds, use of language for different purposes, correct use of words in properly formed sentences, and voice quality.
 
   #### Social Pragmatic Language
-  * A social pragmatic language evaluation assesses how the student communicates in social situations. This includes assessing use of body language, eye contact, taking turns listening and speaking, and using the appropriate volume when speaking.
+  A social pragmatic language evaluation assesses how the student communicates in social situations. This includes assessing use of body language, eye contact, taking turns listening and speaking, and using the appropriate volume when speaking.
 
   #### Occupational Therapy
-  * An occupational therapy evaluation assesses the student’s fine motor skills, self-help skills, sensory processing, postural stability, visual and motor perception, task completion and organization, and social and play abilities.
+  An occupational therapy evaluation assesses the student’s fine motor skills, self-help skills, sensory processing, postural stability, visual and motor perception, task completion and organization, and social and play abilities.
   (Los Angeles Unified School District)
 
   #### Functional Behavior Assessment
-  * A functional behavior assessment (FBA) assesses a student’s behavior that is affecting his/her/their own learning or the learning of others. An FBA should identify the causes of specific problem behaviors and provide interventions to address them. 
+  A functional behavior assessment (FBA) assesses a student’s behavior that is affecting his/her/their own learning or the learning of others. An FBA should identify the causes of specific problem behaviors and provide interventions to address them. 
 
   #### Psychological Assessment
-  * A psychological assessment determines the child’s learning style and provides information on what learning methods are most effective for the child. The assessment may show the child’s problem-solving abilities, memory skills, processing skills, and how the child best interprets information.
+  A psychological assessment determines the child’s learning style and provides information on what learning methods are most effective for the child. The assessment may show the child’s problem-solving abilities, memory skills, processing skills, and how the child best interprets information.
 
   #### Physical Therapy
-  * A physical therapy evaluation assesses the student’s posture, balance, strength, motor control and coordination, endurance, gross motor skills, and any other area that allows the student to physically access the educational environment.
+  A physical therapy evaluation assesses the student’s posture, balance, strength, motor control and coordination, endurance, gross motor skills, and any other area that allows the student to physically access the educational environment.
 
   #### Augmentative and Alternative Communication Evaluation
-  * An Augmentative and Alternative Communication (AAC) evaluation assesses what communication tool(s), if any, can assist the student to communicate.  Examples of AAC methods include picture boards, manual signs, gestures, finger spelling, and speech-generating devices.  AAC is a type of assistive technology.
+  An Augmentative and Alternative Communication (AAC) evaluation assesses what communication tool(s), if any, can assist the student to communicate.  Examples of AAC methods include picture boards, manual signs, gestures, finger spelling, and speech-generating devices.  AAC is a type of assistive technology.
 
   #### Assistive Technology Evaluation
-  * An Assistive technology evaluation determines whether a student requires a technological device or service to support their learning. Low-tech devices include picture books to help non-speaking and students with limited speech communicate, line magnifiers for students to focus on one line of text at a time, and seat cushions for students with physical disabilities to maintain posture. High-tech devices include eye-gaze systems for students with physical disabilities to operate computers and software that allows the student to speak into a computer and have the text appear on the screen.
+  An Assistive technology evaluation determines whether a student requires a technological device or service to support their learning. Low-tech devices include picture books to help non-speaking and students with limited speech communicate, line magnifiers for students to focus on one line of text at a time, and seat cushions for students with physical disabilities to maintain posture. High-tech devices include eye-gaze systems for students with physical disabilities to operate computers and software that allows the student to speak into a computer and have the text appear on the screen.
 
   #### Home Assessment
-  * A home assessment includes information on the student’s family history and home.  They may include a home visit with the parent’s agreement.
+  A home assessment includes information on the student’s family history and home.  They may include a home visit with the parent’s agreement.
 
   #### Health Assessment
-  * A health assessment identifies medical issues that may affect the student’s learning.  
+  A health assessment identifies medical issues that may affect the student’s learning.  

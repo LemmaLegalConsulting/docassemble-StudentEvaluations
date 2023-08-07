@@ -20,13 +20,6 @@ metadata:
     - Quinten Steenhuis
     - Matt Brooks
 ---
-features:
-  bootstrap theme: mac-bootstrap.css
-  progress bar: True
----
-objects:
-  - al_logo: DAStaticFile.using(filename="MAClogo.jpg")
----
 ## did not generate with weaver, c&p and edited from prs which was 
 ## generated with weaver
 mandatory: True
@@ -204,6 +197,8 @@ comment: |
     Assistive Technology Evaluation - Explanatory Text
 ---
 id: evaluators name screen
+sets:
+  - evaluators[i].name.first
 question: |
   % if i==0:
   What is the name of the first person you need to evaluate ${ student.familiar() }?
@@ -217,10 +212,8 @@ subquestion: |
   % endif
 fields:
   - Title: evaluators[i].name.title
-  - First name: evaluators[i].name.first
-  - Middle name: evaluators[i].name.middle
-    required: False
-  - Last name: evaluators[i].name.last
+  - code: |
+      evaluators[i].name_fields(show_suffix=False)
 ---
 id: evaluators info screen
 sets:
