@@ -308,7 +308,6 @@ fields:
     input type: radio
     code: |
       evaluation_options
-  # TODO: make this flexible to let someone list multiple evaluations
   - The school: translated_documents[i].translation_level
     datatype: checkboxes
     choices:
@@ -682,11 +681,8 @@ objects:
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
-  - al_user_bundle: ALDocumentBundle.using(filename="prs_complaint_language_access", title="All forms to download for your records", enabled=True)
-  - al_recipient_bundle: ALDocumentBundle.using( filename="prs_complaint_language_access", title="All forms to file", enabled=True)
----
-code: |
-  al_user_bundle.elements = al_recipient_bundle.elements = [prs_complaint_language_access_attachment] + [doc.upload for doc in translated_documents]
+  - al_user_bundle: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment] + [doc.upload for doc in translated_documents], filename="prs_complaint_language_access", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment]+ [doc.upload for doc in translated_documents],  filename="prs_complaint_language_access", title="All forms to file", enabled=True)
 ---  
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 

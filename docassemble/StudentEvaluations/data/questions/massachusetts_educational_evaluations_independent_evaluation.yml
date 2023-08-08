@@ -73,8 +73,6 @@ code: |
   independent_evaluations_intro_screen
   if not is_child_in_school:
     call_the_hotline
-  if not evaluators.there_are_any:
-    call_the_hotline
   mac_shared_intro_questions  
   if selected_evaluations.all_false():
     call_the_hotline_select_one
@@ -83,7 +81,8 @@ code: |
   if comfortable_sharing_income:
     free_or_reduced_lunch
     below_400_percent
-    
+  if not evaluators.there_are_any:
+    call_the_hotline
   evaluators.gather()
   
   independent_evaluation_request_preview_question
