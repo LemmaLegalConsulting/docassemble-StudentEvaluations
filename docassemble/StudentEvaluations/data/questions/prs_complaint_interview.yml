@@ -74,11 +74,6 @@ objects:
           filename="prs_complaint_language_access",
         )
 ---
-depends on:
-  - translated_documents
-code: |
-  prs_complaint_language_access_attachment.enabled=translated_documents
----
 mandatory: True
 id: mac prs language access complaint interview order block
 code: |
@@ -92,11 +87,11 @@ code: |
   how_notified_school
   student.language
   parent.language
+  #if has_translated_documents:
+    #prs_complaint_language_access_attachment.file
   if not (translated_documents.there_are_any or meetings.there_are_any):
     kickout_no_problems
   explain_one_at_a_time
-  if translated_documents:
-    prs_complaint_language_access_attachment.file
   translated_documents.gather()
   if len(translated_documents):
     translated_documents_review
@@ -121,9 +116,6 @@ code: |
   basic_questions_signature_flow    
   parent.signature
   prs_complaint_language_access_download
----
-objects:
-  - al_user_bundle_2: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment], filename="user_bundle_2.pdf", title="All forms to download for your records")
 ---
 code: |
   translated_documents[i].name
@@ -304,11 +296,11 @@ id: prs gather names of translated documents
 question: |
   Information about the ${ ordinal(i) } document
 fields:
-  - Do you want to upload this document now?: translated_documents
+  - Do you want to upload this document now?: translated_documents[i].upload_now
     datatype: yesnoradio
-  - Upload it now: prs_complaint_language_access_attachment.file
+  - Upload : translated_documents[i].upload.file
     datatype: file
-    show if: translated_documents
+    show if: translated_documents[i].upload_now
   - Date document was sent: translated_documents[i].date
   # TODO: figure out how to get evaluation_options not to load 
   # alphabetically (put "Other" option last)
@@ -337,11 +329,6 @@ fields:
       of my child’s IEP in Spanish at least two days before the team meeting,
       but they told me that they would not be able to get a copy in Spanish
       before then."
-  - Do you want to upload this document now?: translated_documents[i].upload_now
-    datatype: yesnoradio
-  - Upload : translated_documents[i].upload.file
-    datatype: file
-    show if: translated_documents[i].upload_now
 ---
 depends on: 
   - translated_documents.there_are_any
@@ -699,7 +686,7 @@ objects:
   - al_recipient_bundle: ALDocumentBundle.using( filename="prs_complaint_language_access", title="All forms to file", enabled=True)
 ---
 code: |
-  al_user_bundle.elements = al_recipient_bundle.elements = [prs_complaint_language_access_attachment] + [doc.upload for doc in translated_documents if doc.upload_now]
+  al_user_bundle.elements = al_recipient_bundle.elements = [prs_complaint_language_access_attachment] + [doc.upload for doc in translated_documents]
 ---  
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 
