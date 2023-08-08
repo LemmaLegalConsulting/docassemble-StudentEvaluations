@@ -158,7 +158,7 @@ continue button field: entire_record_request_intro_screen
 #      - Emailed to me
 #      - Emailed directly to the school principal and me
 #      - Download as a Word document so that I can make edits and print it
-#---
+##---
 #id: entire student record recquest recipient email screen
 #question: |
 #  What is ${school.recipient.name.full()}'s email?
@@ -212,9 +212,9 @@ subquestion: |
   View, download and send your form below.  
   
   ${ al_user_bundle.download_list_html() }
-  
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+  
 
 progress: 100
 ---

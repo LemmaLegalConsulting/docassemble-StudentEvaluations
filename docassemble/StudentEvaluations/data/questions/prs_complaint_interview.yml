@@ -216,7 +216,15 @@ id: school info
 question: |
   Where does ${ student } go to school?
 fields:
-  - Name of school: school.name.first
+  - School Name: school.address.name
+    address autocomplete:
+      types:
+        - school
+        - primary_school
+        - secondary_school
+  - Street Address: school.address.address
+  - City: school.address.city
+  - State: school.address.state
   - School district name: school.district_name
     help: |
       This is often the name of the city where you live.  
@@ -227,8 +235,8 @@ fields:
       - Special education: special education
       - 504 plan: 504 plan
       - Home school: home school
-  - code: |
-      school.address_fields(default_state="MA")
+  #- code: |
+     # school.address_fields(default_state="MA")
 ---
 sets:
   - parent.name.first
@@ -502,7 +510,7 @@ fields:
       Bureau of Special Education Appeals (BSEA), either in a mediation or
       by a hearing?
     field: hearing_in_bsea
-    datatype: yesnoradio
+    datatype: yesnomaybe
 ---
 id: choices
 question: |
