@@ -68,6 +68,17 @@ objects:
   - school: ALIndividual
   - student: ALIndividual
 ---
+objects:
+  - prs_complaint_language_access_attachment: ALDocumentUpload.using(
+          title="PRS Complaint Language Acces",
+          filename="prs_complaint_language_access",
+        )
+---
+depends on:
+  - translated_documents
+code: |
+  prs_complaint_language_access_attachment.enabled=translated_documents
+---
 mandatory: True
 id: mac prs language access complaint interview order block
 code: |
@@ -84,6 +95,8 @@ code: |
   if not (translated_documents.there_are_any or meetings.there_are_any):
     kickout_no_problems
   explain_one_at_a_time
+  if translated_documents:
+    prs_complaint_language_access_attachment.file
   translated_documents.gather()
   if len(translated_documents):
     translated_documents_review
@@ -109,6 +122,9 @@ code: |
   parent.signature
   prs_complaint_language_access_download
 ---
+objects:
+  - al_user_bundle_2: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment], filename="user_bundle_2.pdf", title="All forms to download for your records")
+---
 code: |
   translated_documents[i].name
   translated_documents[i].complete = True
@@ -129,7 +145,7 @@ subquestion: |
   You can use this website if:
   
   1. You are the parent of a child in a Massachusetts public school, and
-  1. you speak a language other than English as your first language.
+  2. you speak a language other than English as your first language.
 ---
 id: background info about language needs
 question: |
@@ -198,8 +214,8 @@ id: students name
 question: |
   What is the name of your child?
 fields:
-  - code: |
-      student.name_fields()
+- code: |
+      student.name_fields(show_suffix=False)
 ---
 sets:
   - school.address.address
@@ -232,7 +248,7 @@ subquestion: |
   This should be the name of the parent or legal guardian of ${ student }.
 fields:
   - code: |
-      parent.name_fields()
+      parent.name_fields(show_suffix=False)
 ---
 id: translation problems
 question: |
@@ -288,6 +304,11 @@ id: prs gather names of translated documents
 question: |
   Information about the ${ ordinal(i) } document
 fields:
+  - Do you want to upload this document now?: translated_documents
+    datatype: yesnoradio
+  - Upload it now: prs_complaint_language_access_attachment.file
+    datatype: file
+    show if: translated_documents
   - Date document was sent: translated_documents[i].date
   # TODO: figure out how to get evaluation_options not to load 
   # alphabetically (put "Other" option last)

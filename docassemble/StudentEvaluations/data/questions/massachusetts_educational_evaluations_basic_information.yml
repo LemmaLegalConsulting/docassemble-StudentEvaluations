@@ -32,6 +32,9 @@ objects:
   - requestor: ALIndividual
   - school: Person
 ---
+code: |
+  AL_ORGANIZATION_TITLE = "Massachusetts Advocates for Children"
+---
 features:
   bootstrap theme: mac-bootstrap.css
   progress bar: True
@@ -43,10 +46,14 @@ features:
 objects:
   - school.recipient: ALIndividual
   - school.special_education_director: ALIndividual
+  - school.special_education_director_or_coordinator: ALIndividual
   - school.special_education_coordinator: ALIndividual
   - student: ALIndividual
   - evaluations_list: DAList
   - evaluation: DAObject
+---
+objects:
+  - al_logo: DAStaticFile.using(filename="MAClogo.jpg")
 ---
 default screen parts:
   post: |
@@ -131,11 +138,12 @@ code: |
   if student.grade == "Not yet in school":
     student.grade = 'soon-to-be'
   else:
-    school.recipient.name = school.special_education_coordinator.name
-    school.recipient.address = school.special_education_coordinator.address
-    if not knows_special_education_director_name:
-      school.special_education_coordinator.name = "Special Education Coordinator"
-  school.recipient.name
+    school.recipient.name = school.special_education_director_or_coordinator.name
+    school.recipient.address = school.special_education_director_or_coordinator.address
+  if knows_special_education_director_or_coordinator_name:  
+    school.special_education_director_or_coordinator.name
+  else:
+    school.special_education_director_or_coordinator.name = "Special Education Coordinator or Director"
   if not student.grade == "soon-to-be": 
     school.address.address
   else:
@@ -149,8 +157,6 @@ field: welcome_screen_seen
 question: |
   Welcome to MAC's Request for Initial Special Education Evaluation Interview.
 subquestion: |
-  An evaluation is testing that a specialist does to see how your child is learning and developing. The specialist may also recommend services and supports for your child as part of their educational programming. An evaluation is sometimes called an assessment.
-  
   The following questions will help you write a letter to request a school special education evaluation for your child or a child that you know.  
   You might want to request a school {evaluation} if you think your child or a child that you know needs services to learn.
   If you want to speak to a person before deciding if you want to request an evaluation, you can call or send an email to our  [Helpline](https://massadvocates.org/helpline/) at Massachusetts Advocates for Children.  
@@ -164,6 +170,9 @@ subquestion: |
 
   **IMPORTANT!** If you bring it to the school be sure print a copy for yourself. 
   If you can’t print a copy for yourself, when you bring the letter to the school, ask them to make a copy for you to keep for your records.
+terms: 
+  evaluation: |
+    An evaluation is testing that a specialist does to see how your child is learning and developing. The specialist may also recommend services and supports for your child as part of their educational programming. An evaluation is sometimes called an assessment.
 ---
 id: is child in school screen
 question: |
@@ -173,20 +182,21 @@ yesno: is_child_in_school
 id: before you start screen child not in school
 field: before_you_start_screen_seen
 question: | 
-  Before you start, you will need:
+  Getting started
 subquestion: |
+  Before you start, you will need:
   
-  1. The name and address of the special education coordinator or director for 
-     your child's school.
+  1. The name and address of the special education coordinator or director for your child's school.
+  
   2. Your child's full name and date of birth.
   
-  You can find the name of your school's special education director 
-  [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
+  3. Name and email of your child's school principal.
+  
+  If you need help finding any of this information, contact MAC’s helpline at 
+  617-357-8431 or send a message [here.](https://www.massadvocates.org/helpline)
   
   The name of the special education coordinator is listed on your child's
   IEP.
-
-  This form is not legal or medical advice.
 help:
   label: |
     How can I get medical or legal advice?
@@ -265,7 +275,7 @@ question: |
   Who are you?
 fields:
   - code: |
-      requestor.name_fields()
+      requestor.name_fields(show_suffix=False)
 ---
 sets:
   - requestor.address.address
@@ -299,11 +309,10 @@ id: student name
 question: |
   Who is this letter for?
 subquestion: |
-  Write the name of the student who needs or currently
-  receives special education services.
+  Write the name of the student whose records you are requesting.
 fields:
   - code: |
-      student.name_fields()
+      student.name_fields(show_suffix=False)
 ---
 id: student information
 question: |
@@ -315,8 +324,6 @@ question: |
 fields:
     - Birthdate: student.birthdate
       datatype: BirthDate
-    - code: |
-        student.gender_fields()
     - Grade: student.grade
       hide if:
         code: |
@@ -372,8 +379,7 @@ fields:
         - school
         - primary_school
         - secondary_school
-      fields:
-        - address_components
+
   - Street Address: school.address.address
   - City: school.address.city
   - State: school.address.state
@@ -384,7 +390,6 @@ fields:
     required: False
 validation code: |
   school.name.text = school.address.name
-
 ---
 id: special education director address in school
 question: |
@@ -407,64 +412,50 @@ fields:
       required: False
 under: |
   Because ${ student.name.first } is not yet in school, you need to send this letter to the special education director
-  for where you live. You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
+  for where you live. 
 ---
-id: special education coordinator information
-question: |
-  Special Education **Coordinator**
-fields:
-  - "Do you know the name of the {special education coordinator} for ${ student.familiar() }?": knows_special_education_director_name
-    datatype: yesnoradio
-  - Coordinator Title: school.special_education_coordinator.title
-    required: False
-    show if: knows_special_education_director_name
-    choices:
-      - Dr.
-      - Mrs.
-      - Miss
-      - Ms.
-      - Mr.
-  - Coordinator First Name: school.special_education_coordinator.name.first
-    show if: knows_special_education_director_name
-  - Coordinator Last Name: school.special_education_coordinator.name.last
-    show if: knows_special_education_director_name
-subquestion: |
-   The name of the special education coordinator should be listed on your child’s IEP.  If you do not know the name of the special education coordinator, 
-   you can try looking at the school webpage or doing an internet search using your child’s school district.
-terms:
-  IEP: |
-    What is an IEP? An IEP is an Individualized Education Program.  It tells the school ${ student.name.first } has a disability and needs 
-    certain services and supports to learn. The IEP describes the services and supports the school must give to ${ student.name.first }. 
-    The evaluations the school does might show that ${ student.name.first } needs an IEP. If ${ student.name.first } already has an IEP, 
-    the evaluations might show that ${ student.name.first } needs more services.
-  special education coordinator: |
-    The name of the special education coordinator should be listed on your child’s IEP.  If you do not know the name of the special education coordinator, 
-    you can try looking at the school webpage or doing an internet search using your child’s school district.
----
+#id: special education coordinator information
+#question: |
+#  Special Education **Coordinator**
+#fields:
+#  - "Do you know the name of the {special education coordinator} for ${ student.familiar() }?": knows_special_education_director_name
+#    datatype: yesnoradio
+#  - Coordinator Title: school.special_education_coordinator.title
+#    required: False
+#    show if: knows_special_education_director_name
+#    choices:
+#      - Dr.
+#      - Mrs.
+#      - Miss
+#      - Ms.
+#      - Mr.
+#  - Coordinator First Name: school.special_education_coordinator.name.first
+#    show if: knows_special_education_director_name
+#  - Coordinator Last Name: school.special_education_coordinator.name.last
+#    show if: knows_special_education_director_name
+#subquestion: |
+#   The name of the special education coordinator should be listed on your child’s IEP.  If you do not know the name of the special education coordinator, 
+#   you can try looking at the school webpage or doing an internet search using your child’s school district.
+#terms:
+#  IEP: |
+#    What is an IEP? An IEP is an Individualized Education Program.  It tells the school ${ student.name.first } has a disability and needs 
+#    certain services and supports to learn. The IEP describes the services and supports the school must give to ${ student.name.first }. 
+#    The evaluations the school does might show that ${ student.name.first } needs an IEP. If ${ student.name.first } already has an IEP, 
+#    the evaluations might show that ${ student.name.first } needs more services.
+#  special education coordinator: |
+#    Your child will only have special education records if they have been evaluated by the school district and/or have an IEP.
+#---
 id: special education director information
 question: |
-  Name of Special Education **Director**
+  Name of Special Education **Director or Coordinator**
 fields:
-  - "Do you know the name of the Special Education Director for the school district?": knows_special_education_director_name 
+  - "Do you know the name of your child's Special Education Director or Special Education Coordinator?": knows_special_education_director_or_coordinator_name 
     datatype: yesnoradio
-  - Director Title: school.special_education_director.title
-    required: False
-    show if: knows_special_education_director_name
-    choices: 
-      - Dr.
-      - Mrs.
-      - Miss
-      - Ms.
-      - Mr.
-  - Director First Name: school.special_education_director.name.first
-    show if: knows_special_education_director_name
-  - Director Last Name: school.special_education_director.name.last
-    show if: knows_special_education_director_name
-subquestion: |
-  Because ${ student.name.first } is not yet in school, you need to send this letter to the special education director
-  for where you live. You can find out who your special education director is by searching [here](https://eecweb.eec.state.ma.us/ChildCareSearch/Special.aspx).
-comment : |
-  using ${ student.pronoun_possessive("school district") } in the first field resulted in a parser error. Is this a bug?
+  - First Name: school.special_education_director_or_coordinator.name.first
+    show if: knows_special_education_director_or_coordinator_name
+
+  - Last Name: school.special_education_director_or_coordinator.name.last
+    show if: knows_special_education_director_or_coordinator_name
 ---
 id: kick out language
 event: kick_out_language

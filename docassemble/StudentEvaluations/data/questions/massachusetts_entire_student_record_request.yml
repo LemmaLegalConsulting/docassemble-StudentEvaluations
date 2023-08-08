@@ -54,6 +54,42 @@ code: |
   # This controls the default state in address field questions
   AL_DEFAULT_STATE = "MA"
 ---
+id: before you start screen child not in school
+field: before_you_start_screen_seen
+question: | 
+  Getting Started
+subquestion: |
+  Before you start, you will need:
+  
+  1. Your child’s full name and date of birth.
+  
+  2. Name and email of your child’s school principal or special education contact (if your child has an IEP) 
+  OR -Name and mailing address of your child’s school principal or special education school contact (if your child has an IEP) 
+  
+  You can find this information on the webpage for your child’s school or by calling your child’s school. If you need help finding any of this information, contact MAC’s helpline at 617-357-8431 or send a message [here.](https://www.massadvocates.org/helpline)
+  
+  The name of the special education coordinator is listed on your child's IEP.
+help:
+  label: |
+    How can I get medical or legal advice?
+  content: |
+    Contact a lawyer if you need legal advice. Contact your child’s pediatrician if you have concerns about your child’s learning or development.
+
+---
+id: special education director information
+question: |
+  What is the name of your child’s school principal?
+fields:
+  - "Do you know the name of your child's school principal?": knows_special_education_director_name 
+    datatype: yesnoradio
+  - First Name: school.special_education_director.name.first
+    show if: knows_special_education_director_name
+  - Last Name: school.special_education_director.name.last
+    show if: knows_special_education_director_name
+
+comment : |
+  using ${ student.pronoun_possessive("school district") } in the first field resulted in a parser error. Is this a bug?
+---
 id: child is in school if you need a school record
 initial: True
 code: |
@@ -65,7 +101,6 @@ code: |
   user_role = "na"
   user_ask_role = "na"
   
-  entire_record_request_intro_screen
   mac_shared_intro_questions
   if knows_special_education_director_name:
     school.recipient.name = school.special_education_director.name
@@ -78,6 +113,7 @@ code: |
   basic_questions_signature_flow    
   requestor.signature
   educational_evaluations_entire_record_request_download
+  
 ---
 ## TODO add back in email feature to send directy to school
 #  educational_evaluations_entire_record_request_concatenated = pdf_concatenate(educational_evaluations_entire_record_request_variable)
@@ -94,8 +130,6 @@ question: |
   Entire student record request
 subquestion: |  
   This letter will help you request your child's entire student record.
-  Here is a link to our
-  [privacy policy](https://www.gbls.org/self-help/eviction/terms-of-use).
 continue button field: entire_record_request_intro_screen
 ---
 #id: enrollment date screen
@@ -105,6 +139,7 @@ continue button field: entire_record_request_intro_screen
 #  - ${student.name.first}'s starting date: student.enrollment_date
 #    datatype: date
 #---
+#mandatory: True
 #id: entire record request letter screen
 #question: |
 #  Here is your letter
@@ -120,8 +155,9 @@ continue button field: entire_record_request_intro_screen
 #  - "I want a copy of my letter...": done
 #    datatype: checkboxes
 #    choices: 
-#      - emailed to me
-#      - emailed to the person receiving it
+#      - Emailed to me
+#      - Emailed directly to the school principal and me
+#      - Download as a Word document so that I can make edits and print it
 #---
 #id: entire student record recquest recipient email screen
 #question: |
@@ -151,11 +187,6 @@ subquestion: |
   Here is a preview of the form you will sign on the next page.   
   
   ${ al_recipient_bundle.as_pdf(key='preview') }
-
-  Click the image to open it in a new tab. Click the "Edit answers" button
-  to edit your answers.
-
-  ${ action_button_html(url_action('review_educational_evaluations_entire_record_request'), label='Edit answers', color='info') }
   
   Remember to come back to this window to continue and sign your form.
 continue button field: educational_evaluations_entire_record_request_preview_question    
@@ -178,10 +209,7 @@ question: |
 subquestion: |
   Thank you. Your form is ready to download and deliver.
   
-  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
-
-  ${ action_button_html(url_action('review_educational_evaluations_entire_record_request'), label='Edit answers', color='info') }
-  
+  View, download and send your form below.  
   
   ${ al_user_bundle.download_list_html() }
   
@@ -208,3 +236,4 @@ attachment:
   variable name: educational_evaluations_entire_record_request_attachment[i]
   skip undefined: True
   docx template file: educational_evaluations_entire_record_request.docx
+---
