@@ -65,7 +65,7 @@ objects:
   - translated_documents: PRSTranslatedDocuments.using(complete_attribute="complete")
   - meetings: PRSMeetings.using(complete_attribute="complete")
   - parent: ALIndividual
-  - school: ALIndividual
+  - school: Individual
   - student: ALIndividual
 ---
 objects:
@@ -82,7 +82,7 @@ code: |
 
   prs_intro
   student.name.first
-  parent.name.first  
+  parent.name.first
   school.district_name
   how_notified_school
   student.language
@@ -207,9 +207,6 @@ fields:
 - code: |
       student.name_fields(show_suffix=False)
 ---
-sets:
-  - school.address.address
-  - school.address.city
 id: school info
 question: |
   Where does ${ student } go to school?
@@ -223,6 +220,9 @@ fields:
   - Street Address: school.address.address
   - City: school.address.city
   - State: school.address.state
+    default: MA
+    code: |
+      states_list()
   - School district name: school.district_name
     help: |
       This is often the name of the city where you live.  
@@ -233,8 +233,9 @@ fields:
       - Special education: special education
       - 504 plan: 504 plan
       - Home school: home school
-  #- code: |
-     # school.address_fields(default_state="MA")
+---
+code: |
+  school.name.first = school.address.name
 ---
 sets:
   - parent.name.first
@@ -440,7 +441,7 @@ fields:
     default: |
       % for meeting in meetings:
       
-      On ${ meeting.date }, I had a ${ meeting.type } meeting with ${ school } about ${ meeting.name }.\
+      On ${ meeting.date }, I had a ${ meeting.type } meeting with ${ school.address.name } about ${ meeting.name }.\
       % if meeting.requested:
        I requested an interpreter who speaks ${ parent.language } at the meeting.\
       % endif
@@ -617,10 +618,10 @@ review:
     button: |
       **Student.language**:
       ${ student.language }
-  - Edit: school.name.first
+  - Edit: school.name
     button: |
-      **School.name.first**:
-      ${ school.name.first }
+      **School.name**:
+      ${ school.name }
   - Edit: school.district_name
     button: |
       **School.district name**:
