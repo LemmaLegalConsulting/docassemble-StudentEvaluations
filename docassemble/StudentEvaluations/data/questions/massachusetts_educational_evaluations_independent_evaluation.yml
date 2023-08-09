@@ -83,7 +83,8 @@ code: |
   if comfortable_sharing_income:
     free_or_reduced_lunch
     below_400_percent
-    
+  if not evaluators.there_are_any:
+    call_the_hotline
   evaluators.gather()
   
   independent_evaluation_request_preview_question

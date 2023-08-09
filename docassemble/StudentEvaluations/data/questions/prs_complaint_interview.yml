@@ -65,8 +65,14 @@ objects:
   - translated_documents: PRSTranslatedDocuments.using(complete_attribute="complete")
   - meetings: PRSMeetings.using(complete_attribute="complete")
   - parent: ALIndividual
-  - school: ALIndividual
+  - school: Individual
   - student: ALIndividual
+---
+objects:
+  - prs_complaint_language_access_attachment: ALDocumentUpload.using(
+          title="PRS Complaint Language Acces",
+          filename="prs_complaint_language_access",
+        )
 ---
 mandatory: True
 id: mac prs language access complaint interview order block
@@ -76,7 +82,7 @@ code: |
 
   prs_intro
   student.name.first
-  parent.name.first  
+  parent.name.first
   school.district_name
   how_notified_school
   student.language
@@ -103,6 +109,7 @@ code: |
   
   add_introduction
   
+  al_user_bundle.elements
   prs_complaint_language_access_preview_question
   basic_questions_signature_flow    
   parent.signature
@@ -200,14 +207,22 @@ fields:
 - code: |
       student.name_fields(show_suffix=False)
 ---
-sets:
-  - school.address.address
-  - school.address.city
 id: school info
 question: |
   Where does ${ student } go to school?
 fields:
-  - Name of school: school.name.first
+  - School Name: school.address.name
+    address autocomplete:
+      types:
+        - school
+        - primary_school
+        - secondary_school
+  - Street Address: school.address.address
+  - City: school.address.city
+  - State: school.address.state
+    default: MA
+    code: |
+      states_list()
   - School district name: school.district_name
     help: |
       This is often the name of the city where you live.  
@@ -218,8 +233,9 @@ fields:
       - Special education: special education
       - 504 plan: 504 plan
       - Home school: home school
-  - code: |
-      school.address_fields(default_state="MA")
+---
+code: |
+  school.name.first = school.address.name
 ---
 sets:
   - parent.name.first
@@ -287,6 +303,11 @@ id: prs gather names of translated documents
 question: |
   Information about the ${ ordinal(i) } document
 fields:
+  - Do you want to upload this document now?: translated_documents[i].upload_now
+    datatype: yesnoradio
+  - Upload : translated_documents[i].upload.file
+    datatype: file
+    show if: translated_documents[i].upload_now
   - Date document was sent: translated_documents[i].date
   # TODO: figure out how to get evaluation_options not to load 
   # alphabetically (put "Other" option last)
@@ -294,7 +315,6 @@ fields:
     input type: radio
     code: |
       evaluation_options
-  # TODO: make this flexible to let someone list multiple evaluations
   - The school: translated_documents[i].translation_level
     datatype: checkboxes
     choices:
@@ -315,6 +335,14 @@ fields:
       of my child’s IEP in Spanish at least two days before the team meeting,
       but they told me that they would not be able to get a copy in Spanish
       before then."
+---
+depends on: 
+  - translated_documents.there_are_any
+code: | 
+  translated_documents[i].upload.enabled = translated_documents[i].upload_now
+---
+objects: 
+  - translated_documents[i].upload: ALDocumentUpload.using(title="Document",filename="document")
 ---
 variable name: evaluation_options
 data:
@@ -389,7 +417,7 @@ fields:
     default: |
       % for document in translated_documents:
       
-      On ${ document.date }, ${ school } sent a ${ noun_singular(evaluation_options[document.name]).lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) if document.description else '' }
+      On ${ document.date }, ${ school.address.name } sent a ${ noun_singular(evaluation_options[document.name]).lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) if document.description else '' }
       % endfor
 ---
 id: review conversations
@@ -413,7 +441,7 @@ fields:
     default: |
       % for meeting in meetings:
       
-      On ${ meeting.date }, I had a ${ meeting.type } meeting with ${ school } about ${ meeting.name }.\
+      On ${ meeting.date }, I had a ${ meeting.type } meeting with ${ school.address.name } about ${ meeting.name }.\
       % if meeting.requested:
        I requested an interpreter who speaks ${ parent.language } at the meeting.\
       % endif
@@ -481,7 +509,7 @@ fields:
       Bureau of Special Education Appeals (BSEA), either in a mediation or
       by a hearing?
     field: hearing_in_bsea
-    datatype: yesnoradio
+    datatype: yesnomaybe
 ---
 id: choices
 question: |
@@ -590,10 +618,10 @@ review:
     button: |
       **Student.language**:
       ${ student.language }
-  - Edit: school.name.first
+  - Edit: school.name
     button: |
-      **School.name.first**:
-      ${ school.name.first }
+      **School.name**:
+      ${ school.name }
   - Edit: school.district_name
     button: |
       **School.district name**:
@@ -660,9 +688,9 @@ objects:
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment], filename="prs_complaint_language_access", title="All forms to download for your records", enabled=True)
-  - al_recipient_bundle: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment],  filename="prs_complaint_language_access", title="All forms to file", enabled=True)
----
+  - al_user_bundle: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment] + [doc.upload for doc in translated_documents], filename="prs_complaint_language_access", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[prs_complaint_language_access_attachment]+ [doc.upload for doc in translated_documents],  filename="prs_complaint_language_access", title="All forms to file", enabled=True)
+---  
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 
 # `i` to show or hide the user's signature
