@@ -87,8 +87,6 @@ code: |
   how_notified_school
   student.language
   parent.language
-  #if has_translated_documents:
-    #prs_complaint_language_access_attachment.file
   if not (translated_documents.there_are_any or meetings.there_are_any):
     kickout_no_problems
   explain_one_at_a_time
@@ -418,7 +416,7 @@ fields:
     default: |
       % for document in translated_documents:
       
-      On ${ document.date }, ${ school } sent a ${ noun_singular(evaluation_options[document.name]).lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) if document.description else '' }
+      On ${ document.date }, ${ school.address.name } sent a ${ noun_singular(evaluation_options[document.name]).lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) if document.description else '' }
       % endfor
 ---
 id: review conversations
