@@ -309,12 +309,22 @@ fields:
     datatype: file
     show if: translated_documents[i].upload_now
   - Date document was sent: translated_documents[i].date
-  # TODO: figure out how to get evaluation_options not to load 
-  # alphabetically (put "Other" option last)
   - Kind of document: translated_documents[i].name
     input type: radio
-    code: |
-      evaluation_options
+    choices: 
+      - School Evaluation: school_evaluation 
+      - Special Education Progress Reports/Grade Reports: progress_reports
+      - Individualized Education Programs (IEPs): ieps
+      - Evaluation Consent Forms: evaluation_consent
+      - Team Meeting Invitations: team_meeting
+      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions: discipline_notices
+      - Letter or email: letter_or_email
+      - Other: other    
+  - Other document: other_document_name
+    show if: 
+      variable: translated_documents[i].name
+      is: other
+
   - The school: translated_documents[i].translation_level
     datatype: checkboxes
     choices:
@@ -353,7 +363,7 @@ data:
    team_meeting: Team Meeting Invitations
    discipline_notices: Notice of School Discipline Hearings and/or Discipline Hearing Decisions
    letter_or_email: Letter or email
-   other: Other
+   other: ${ other_document_name }
 ---
 id: prs is there another translated document
 question: |
