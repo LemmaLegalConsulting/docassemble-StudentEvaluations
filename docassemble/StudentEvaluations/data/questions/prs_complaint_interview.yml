@@ -309,8 +309,6 @@ fields:
     datatype: file
     show if: translated_documents[i].upload_now
   - Date document was sent: translated_documents[i].date
-  # TODO: figure out how to get evaluation_options not to load 
-  # alphabetically (put "Other" option last)
   - Kind of document: translated_documents[i].name
     input type: radio
     choices: 
@@ -365,7 +363,6 @@ data:
    team_meeting: Team Meeting Invitations
    discipline_notices: Notice of School Discipline Hearings and/or Discipline Hearing Decisions
    letter_or_email: Letter or email
-   #other: Other
    other: ${ other_document_name }
 ---
 id: prs is there another translated document
