@@ -37,7 +37,7 @@ code: |
 ---
 features:
   bootstrap theme: mac-bootstrap.css
-  progress bar: True
+  progress bar: False
   question back button: True
   question help button: True
   css:

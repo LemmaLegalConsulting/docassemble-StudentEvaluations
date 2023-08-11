@@ -292,8 +292,7 @@ subquestion: |
   
   You can still download a template letter, but you will need to add your own
   reasons for the complaint.
-  
-  ${ action_button_html(url_action('translated_documents.there_are_any'), label="Edit your answer") }
+
 field: kickout_no_problems
 buttons:
   - Continue: continue
@@ -562,10 +561,7 @@ subquestion: |
   
   ${ al_recipient_bundle.as_pdf(key='preview') }
 
-  Click the image to open it in a new tab. Click the "Edit answers" button
-  to edit your answers.
-
-  ${ action_button_html(url_action('review_prs_complaint_language_access'), label='Edit answers', color='info') }
+  Click the image to open it in a new tab. 
   
   Remember to come back to this window to continue and sign your form.
 continue button field: prs_complaint_language_access_preview_question    
@@ -680,17 +676,13 @@ question: |
 subquestion: |
   Thank you. Your form is ready to download and deliver.
   
-  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
-
-  ${ action_button_html(url_action('review_prs_complaint_language_access'), label='Edit answers', color='info') }
-  
+  View, download and send your form below. 
   
   ${ al_user_bundle.download_list_html() }
   
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
 
-progress: 100
 ---
 # ALDocument objects specify the metadata for each template
 objects:
