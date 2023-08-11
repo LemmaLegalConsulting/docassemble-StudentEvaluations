@@ -690,7 +690,6 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
 
-progress: 100
 ---
 # ALDocument objects specify the metadata for each template
 objects:
