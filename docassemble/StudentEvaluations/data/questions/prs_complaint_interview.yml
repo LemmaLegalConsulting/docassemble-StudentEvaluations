@@ -90,7 +90,7 @@ code: |
   if not (translated_documents.there_are_any or meetings.there_are_any):
     kickout_no_problems
   explain_one_at_a_time
-  translated_documents.gather()
+  translated_documents.gather(complete_attribute="complete")
   if len(translated_documents):
     translated_documents_review
   # TODO: can we have people upload images of the docs?

@@ -86,7 +86,7 @@ code: |
   if not evaluators.there_are_any:
     call_the_hotline
   evaluators.gather()
-  
+    
   independent_evaluation_request_preview_question
   basic_questions_signature_flow    
   requestor.signature
@@ -120,6 +120,13 @@ code: |
 #---
 #code: |
 #  independent_evaluation_request_concatenated = pdf_concatenate(independent_evaluation_request_variable)
+---
+id: does the user disagree with an evaluation
+question: |
+  Do you disagree with an evaluation that the school district conducted for ___?
+fields:
+  - no label: disagree_evaluation
+    datatype: yesnoradio
 ---
 code: |
   custom_evaluations = other_evaluations.split('\n')
