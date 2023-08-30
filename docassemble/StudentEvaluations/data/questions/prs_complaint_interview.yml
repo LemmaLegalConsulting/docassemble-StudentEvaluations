@@ -74,12 +74,18 @@ objects:
           filename="prs_complaint_language_access",
         )
 ---
+code: |
+  interval = current_datetime() - date_interval(months=16) 
+  if date_of_disagreement <= interval:
+    test = True
+  else: 
+    test = False
+---
 mandatory: True
 id: mac prs language access complaint interview order block
 code: |
   user_role = "na"
   user_ask_role = "na"
-
   prs_intro
   student.name.first
   parent.name.first
@@ -87,6 +93,11 @@ code: |
   how_notified_school
   student.language
   parent.language
+  if disagree_evaluation:
+    evaluations
+    date_of_disagreement
+    if test:
+      free_or_reduced_lunch      
   if not (translated_documents.there_are_any or meetings.there_are_any):
     kickout_no_problems
   explain_one_at_a_time
@@ -122,6 +133,48 @@ code: |
 code: |
   meetings[i].name
   meetings[i].complete = True
+---
+id: does the user disagree with an evaluation
+question: |
+  Do you disagree with an evaluation that the school district conducted for ${student.name}?
+fields:
+  - no label: disagree_evaluation
+    datatype: yesnoradio
+---
+id: evaluation type
+question: |
+  What type was the evaluation that you disagree with?
+fields:
+  - Evaluations: evaluations
+    datatype: radio
+    choices:
+      - School Evaluation: school_evaluation 
+      - Special Education Progress Reports/Grade Reports: progress_reports
+      - Individualized Education Programs (IEPs): ieps
+      - Evaluation Consent Forms: evaluation_consent
+      - Team Meeting Invitations: team_meeting
+      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions: discipline_notices
+      - Letter or email: letter_or_email
+      - Other: other    
+  - Other option: other_option
+    show if: 
+      variable: evaluations
+      is: other
+---
+id: date of disagreement 
+question: |
+  What date was the school evaluation with which you disagree completed? 
+fields:
+  - no label: date_of_disagreement
+    datatype: date
+---
+id: free or reduced lunch
+question: |
+  Is your child eligible for free or reduced cost lunch?
+fields:
+  no label: free_or_reduced_lunch
+  datatype: yesnoradio
+  
 ---
 id: prs_intro
 continue button field: prs_intro
