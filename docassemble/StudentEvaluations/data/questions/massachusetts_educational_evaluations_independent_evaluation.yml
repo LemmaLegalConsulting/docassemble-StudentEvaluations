@@ -78,15 +78,18 @@ code: |
   mac_shared_intro_questions  
   if selected_evaluations.all_false():
     call_the_hotline_select_one
-  if selected_evaluations['Other']:
-    custom_evaluations
-  if comfortable_sharing_income:
-    free_or_reduced_lunch
-    below_400_percent
+  
+  if disagree_evaluation:
+    if selected_evaluations['Other']:
+      custom_evaluations
+    date_of_disagreement
+    if date_of_disagreement_is_16months:
+      if comfortable_sharing_income:
+        free_or_reduced_lunch
+        below_400_percent
   if not evaluators.there_are_any:
     call_the_hotline
   evaluators.gather()
-    
   independent_evaluation_request_preview_question
   basic_questions_signature_flow    
   requestor.signature
@@ -120,6 +123,13 @@ code: |
 #---
 #code: |
 #  independent_evaluation_request_concatenated = pdf_concatenate(independent_evaluation_request_variable)
+---
+code: |
+  interval = current_datetime() - date_interval(months=16) 
+  if date_of_disagreement <= interval:
+    date_of_disagreement_is_16months = True
+  else: 
+    date_of_disagreement_is_16months = False
 ---
 id: does the user disagree with an evaluation
 question: |
@@ -257,6 +267,40 @@ subquestion: |
   * ${ person }
   % endfor
 yesno: evaluators.there_is_another
+---
+id: does the user disagree with an evaluation
+question: |
+  Do you disagree with an evaluation that the school district conducted for ${student.name}?
+fields:
+  - no label: disagree_evaluation
+    datatype: yesnoradio
+---
+id: evaluation type
+question: |
+  What type was the evaluation that you disagree with?
+fields:
+  - Evaluations: evaluations
+    datatype: radio
+    choices:
+      - School Evaluation: school_evaluation1 
+      - Special Education Progress Reports/Grade Reports: progress_reports1
+      - Individualized Education Programs (IEPs): ieps1
+      - Evaluation Consent Forms: evaluation_consent1
+      - Team Meeting Invitations: team_meeting1
+      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions: discipline_notices1
+      - Letter or email: letter_or_email1
+      - Other: other1
+  - Other option: other_option
+    show if: 
+      variable: evaluations
+      is: other1
+---
+id: date of disagreement 
+question: |
+  What date was the school evaluation with which you disagree completed? 
+fields:
+  - no label: date_of_disagreement
+    datatype: date
 ---
 id: comfortable sharing income screen
 question: |

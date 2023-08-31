@@ -7,6 +7,7 @@ modules:
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - massachusetts_educational_evaluations_basic_information.yml
+  - docassemble.MAPovertyScale:poverty.yml
 ---
 metadata:
   title: |
@@ -74,13 +75,6 @@ objects:
           filename="prs_complaint_language_access",
         )
 ---
-code: |
-  interval = current_datetime() - date_interval(months=16) 
-  if date_of_disagreement <= interval:
-    test = True
-  else: 
-    test = False
----
 mandatory: True
 id: mac prs language access complaint interview order block
 code: |
@@ -93,11 +87,6 @@ code: |
   how_notified_school
   student.language
   parent.language
-  if disagree_evaluation:
-    evaluations
-    date_of_disagreement
-    if test:
-      free_or_reduced_lunch      
   if not (translated_documents.there_are_any or meetings.there_are_any):
     kickout_no_problems
   explain_one_at_a_time
@@ -133,48 +122,6 @@ code: |
 code: |
   meetings[i].name
   meetings[i].complete = True
----
-id: does the user disagree with an evaluation
-question: |
-  Do you disagree with an evaluation that the school district conducted for ${student.name}?
-fields:
-  - no label: disagree_evaluation
-    datatype: yesnoradio
----
-id: evaluation type
-question: |
-  What type was the evaluation that you disagree with?
-fields:
-  - Evaluations: evaluations
-    datatype: radio
-    choices:
-      - School Evaluation: school_evaluation 
-      - Special Education Progress Reports/Grade Reports: progress_reports
-      - Individualized Education Programs (IEPs): ieps
-      - Evaluation Consent Forms: evaluation_consent
-      - Team Meeting Invitations: team_meeting
-      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions: discipline_notices
-      - Letter or email: letter_or_email
-      - Other: other    
-  - Other option: other_option
-    show if: 
-      variable: evaluations
-      is: other
----
-id: date of disagreement 
-question: |
-  What date was the school evaluation with which you disagree completed? 
-fields:
-  - no label: date_of_disagreement
-    datatype: date
----
-id: free or reduced lunch
-question: |
-  Is your child eligible for free or reduced cost lunch?
-fields:
-  no label: free_or_reduced_lunch
-  datatype: yesnoradio
-  
 ---
 id: prs_intro
 continue button field: prs_intro
@@ -363,6 +310,7 @@ fields:
   - Date document was sent: translated_documents[i].date
   - Kind of document: translated_documents[i].name
     input type: radio
+    required: False
     choices: 
       - School Evaluation: school_evaluation 
       - Special Education Progress Reports/Grade Reports: progress_reports
@@ -370,13 +318,9 @@ fields:
       - Evaluation Consent Forms: evaluation_consent
       - Team Meeting Invitations: team_meeting
       - Notice of School Discipline Hearings and/or Discipline Hearing Decisions: discipline_notices
-      - Letter or email: letter_or_email
-      - Other: other    
+      - Letter or email: letter_or_email  
   - Other document: other_document_name
-    show if: 
-      variable: translated_documents[i].name
-      is: other
-
+    required: False
   - The school: translated_documents[i].translation_level
     datatype: checkboxes
     choices:
@@ -396,7 +340,10 @@ fields:
       school to send me a copy
       of my child’s IEP in Spanish at least two days before the team meeting,
       but they told me that they would not be able to get a copy in Spanish
-      before then."
+      before then." 
+validation code: |
+  if other_document_name == "" and translated_documents[i].name == "None":
+    validation_error("Please choose one type of evaluation")
 ---
 depends on: 
   - translated_documents.there_are_any
@@ -415,7 +362,6 @@ data:
    team_meeting: Team Meeting Invitations
    discipline_notices: Notice of School Discipline Hearings and/or Discipline Hearing Decisions
    letter_or_email: Letter or email
-   other: ${ other_document_name }
 ---
 id: prs is there another translated document
 question: |
@@ -477,10 +423,20 @@ fields:
     datatype: area
     rows: 5
     default: |
+      % if not other_document_name == "":
       % for document in translated_documents:
       
-      On ${ document.date }, ${ school.address.name } sent a ${ noun_singular(evaluation_options[document.name]).lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) if document.description else '' }
+      On ${ document.date }, ${ school.address.name } sent a ${ noun_singular( other_document_name ).lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) if document.description else '' }
       % endfor
+      % endif
+      
+      % if other_document_name == "": 
+      % for document in translated_documents:
+      On ${ document.date }, ${ school.address.name } sent a ${ noun_singular(evaluation_options[document.name]).lower() } that was not translated into ${ parent.language }. ${ fix_punctuation(document.description) if document.description else '' }
+      
+      % endfor
+      % endif
+     
 ---
 id: review conversations
 question: |
