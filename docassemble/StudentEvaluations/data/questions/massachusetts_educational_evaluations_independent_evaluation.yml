@@ -275,25 +275,25 @@ fields:
   - no label: disagree_evaluation
     datatype: yesnoradio
 ---
-id: evaluation type
+id: 
 question: |
   What type was the evaluation that you disagree with?
 fields:
   - Evaluations: evaluations
     datatype: radio
     choices:
-      - School Evaluation: school_evaluation1 
-      - Special Education Progress Reports/Grade Reports: progress_reports1
-      - Individualized Education Programs (IEPs): ieps1
-      - Evaluation Consent Forms: evaluation_consent1
-      - Team Meeting Invitations: team_meeting1
-      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions: discipline_notices1
-      - Letter or email: letter_or_email1
-      - Other: other1
+      - School Evaluation: school_evaluation 
+      - Special Education Progress Reports/Grade Reports: progress_reports
+      - Individualized Education Programs (IEPs): ieps
+      - Evaluation Consent Forms: evaluation_consent
+      - Team Meeting Invitations: team_meeting
+      - Notice of School Discipline Hearings and/or Discipline Hearing Decisions: discipline_notices
+      - Letter or email: letter_or_email
+      - Other: other
   - Other option: other_option
     show if: 
       variable: evaluations
-      is: other1
+      is: other
 ---
 id: date of disagreement 
 question: |
