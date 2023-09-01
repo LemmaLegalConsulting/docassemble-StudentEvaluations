@@ -75,11 +75,10 @@ code: |
     call_the_hotline
   if not evaluators.there_are_any:
     call_the_hotline
-  mac_shared_intro_questions  
-  if selected_evaluations.all_false():
-    call_the_hotline_select_one
-  
+  mac_shared_intro_questions   
   if disagree_evaluation:
+    if selected_evaluations.all_false():
+      call_the_hotline_select_one
     if selected_evaluations['Other']:
       custom_evaluations
     date_of_disagreement
@@ -271,11 +270,9 @@ yesno: evaluators.there_is_another
 id: does the user disagree with an evaluation
 question: |
   Do you disagree with an evaluation that the school district conducted for ${student.name}?
-fields:
-  - no label: disagree_evaluation
-    datatype: yesnoradio
+yesno: disagree_evaluation
 ---
-id: 
+id: evaluation type
 question: |
   What type was the evaluation that you disagree with?
 fields:
