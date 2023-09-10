@@ -136,9 +136,7 @@ question: |
   Do you disagree with an evaluation that the school district conducted for ${ student.name.first }?
 subquestion: |
   You may disagree with the evaluation results, recommendations, or the way the evaluation was conducted. You are not required to give the reason why you disagree.
-fields:
-  - no label: disagree_evaluation
-    datatype: yesnoradio
+yesno: disagree_evaluation
 ---
 code: |
   custom_evaluations = other_evaluations.split('\n')
