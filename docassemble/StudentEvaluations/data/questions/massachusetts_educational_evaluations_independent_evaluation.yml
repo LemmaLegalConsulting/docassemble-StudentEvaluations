@@ -270,11 +270,6 @@ subquestion: |
   % endfor
 yesno: evaluators.there_is_another
 ---
-id: does the user disagree with an evaluation
-question: |
-  Do you disagree with an evaluation that the school district conducted for ${student.name}?
-yesno: disagree_evaluation
----
 id: evaluation type
 question: |
   What type was the evaluation that you disagree with?
