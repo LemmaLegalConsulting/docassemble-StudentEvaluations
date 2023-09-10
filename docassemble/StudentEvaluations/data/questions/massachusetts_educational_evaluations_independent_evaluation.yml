@@ -73,21 +73,22 @@ code: |
   independent_evaluations_intro_screen
   if not is_child_in_school:
     call_the_hotline
+  if not disagree_evaluation:
+    call_the_hotline_no_evaluation_disagreement
   if not evaluators.there_are_any:
     call_the_hotline
   mac_shared_intro_questions   
-  if disagree_evaluation:
-    if selected_evaluations.all_false():
-      call_the_hotline_select_one
-    if selected_evaluations['Other']:
-      custom_evaluations
-    date_of_disagreement
-    if date_of_disagreement_is_16months:
-      if comfortable_sharing_income:
-        free_or_reduced_lunch
-        below_400_percent
-  if not evaluators.there_are_any:
-    call_the_hotline
+  if selected_evaluations.all_false():
+    call_the_hotline_select_one
+  if selected_evaluations['Other']:
+    custom_evaluations
+  date_of_disagreement
+  if date_of_disagreement_less_than_16months:
+    free_or_reduced_lunch
+    if not free_or_reduced_lunch and comfortable_sharing_income:
+      below_400_percent
+    else: 
+      below_400_percent = False
   evaluators.gather()
   independent_evaluation_request_preview_question
   basic_questions_signature_flow    
@@ -125,14 +126,16 @@ code: |
 ---
 code: |
   interval = current_datetime() - date_interval(months=16) 
-  if date_of_disagreement <= interval:
-    date_of_disagreement_is_16months = True
+  if date_of_disagreement >= interval:
+    date_of_disagreement_less_than_16months = True
   else: 
-    date_of_disagreement_is_16months = False
+    date_of_disagreement_less_than_16months = False
 ---
 id: does the user disagree with an evaluation
 question: |
-  Do you disagree with an evaluation that the school district conducted for ___?
+  Do you disagree with an evaluation that the school district conducted for ${ student.name.first }?
+subquestion: |
+  You may disagree with the evaluation results, recommendations, or the way the evaluation was conducted. You are not required to give the reason why you disagree.
 fields:
   - no label: disagree_evaluation
     datatype: yesnoradio
@@ -294,14 +297,14 @@ fields:
 ---
 id: date of disagreement 
 question: |
-  What date was the school evaluation with which you disagree completed? 
+  What date was the school evaluation that you disagree with completed? 
 fields:
   - no label: date_of_disagreement
     datatype: date
 ---
 id: comfortable sharing income screen
 question: |
-  Are you comfortable sharing your income information with ${ school.recipient.name }?
+  Are you comfortable sharing your income information with the school?
 yesno: comfortable_sharing_income
 ---
 id: free or reduced lunch screen
@@ -377,6 +380,23 @@ subquestion: |
 #  - Leave: leave
 #
 #  - Restart: restart
+---
+id: call the hotline independent evaluation
+event: call_the_hotline_no_evaluation_disagreement
+question: |
+  This letter might not be right for you
+subquestion: |
+  The reason for requesting school district funding for an independent evaluation is usually because you disagree with a school evaluation. Other options at any time are 1) to have your child evaluated by an evaluator who accepts your insurance, or 2) pay out of pocket for the independent evaluation.  You only need to tell the school district that you are having your child evaluated independently if you are requesting that the school district fund the evaluation.
+  
+  You can still get help from Massachusetts Advocates for Children, but not
+  using this website.
+
+  Please contact MAC's helpline at ${tel("617-357-8431") } or online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/)).
+  
+  It may take up to three business days for someone to get back to you.
+buttons:
+  - Leave: leave
+  - Restart: restart
 ---
 id: call the hotline independent evaluation
 event: call_the_hotline_school
