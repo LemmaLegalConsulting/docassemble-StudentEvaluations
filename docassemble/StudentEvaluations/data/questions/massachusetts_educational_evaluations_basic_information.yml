@@ -383,7 +383,7 @@ id: special education director address in school
 question: |
   Please fill out the following:
 fields:
-    - "Do you know the Special Education Director's address?": school.special_education_director.requestor_knows_address
+    - "Do you know the Special Education Director's address or email?": school.special_education_director.requestor_knows_address
       datatype: yesnoradio
     - Street Address: school.special_education_director.address.address
       show if: school.special_education_director.requestor_knows_address
@@ -399,8 +399,7 @@ fields:
       show if: school.special_education_director.requestor_knows_address
       required: False
 under: |
-  Because ${ student.name.first } is not yet in school, you need to send this letter to the special education director
-  for where you live. 
+  ${ student.name.first } is not yet in school. You need to send this letter to your town's special education director. 
 ---
 #id: special education coordinator information
 #question: |
@@ -435,9 +434,9 @@ under: |
 #---
 id: special education director information
 question: |
-  Name of Special Education **Director or Coordinator**
+  What is the name of the Special Education **Director or Coordinator**?
 fields:
-  - "Do you know the name of your child's Special Education Director or Special Education Coordinator?": knows_special_education_director_or_coordinator_name 
+  - "Do you know the name of your child's Special Education Contact?": knows_special_education_director_or_coordinator_name 
     datatype: yesnoradio
   - First Name: school.special_education_director_or_coordinator.name.first
     show if: knows_special_education_director_or_coordinator_name
@@ -450,24 +449,23 @@ event: kick_out_language
 question: |
   We are sorry.
 under: |
-  At this time,  this resource is only available in English and in Spanish. 
+  This resource is not available in your preferred languague right now.
   
-  If you do not speak English or need help completing this form for any reason, 
-  please contact MAC’s helpline at 617-357-8431. You can leave a message with which language you speak, 
-  or you can complete any portion of this form ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/)) and include your language. 
-  A person will call you back with an interpreter if you need one. It may take up to 3 working days for someone to call you back.
-
+  Please call MAC's Helpline at 617-357-8431 if you need help filling out this form. You can leave a message in your language. A person will call you back with an interpreter if you need one. It may take up to 5 working days for someone to call you back.
+  
+  You can also complete any portion of this form and include your language.
+  ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/)) 
 ---
 id: call the hotline basic information
 event: call_the_hotline
 question: |
-  You may need more help than this form can give you
+  This form may not give you what you need.
 subquestion: |
   You can call Massachusetts Advocates for Children for one-on-one help.
   
   Call 617-357-8431 or ask for help online here ([Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/))
   
-  It may take up to three business days for someone to get back to you.
+  It may take up to 5 working days for someone to get back to you.
 buttons:
   - Leave: leave
   - Restart: restart
@@ -475,10 +473,9 @@ buttons:
 id: kick out requestor
 event: kick_out_requestor
 question: |
-  It looks like someone else needs to request these evaluations
+  Someone else needs to request these evaluations.
 subquestion: |
-  This letter can only be filled in by a parent, guardian, or the child
-  who needs services.
+  Only a parent, guardian, or the child who needs services can fill out this letter. This is because of how we made the form. If you are helping a parent, guardian, or child, you may complete it with their permission.
 buttons:
   - Leave: leave
   - Restart: restart
@@ -487,48 +484,75 @@ template: more_info
 subject: |
   What else do I need to know?
 content: |
-     When a parent requests a special education evaluation for a student, the school is required to do an educational assessment. If your child is age 14 or older the school is also required to do a transition assessment.
+    - If a parent or caregiver requests a special education evaluation for their child, the school must do an educational assessment. If the child is 14 or older, the school must do a transition assessment.
      
-     The school must also do assessments in areas that may be related to a disability. For example, if it is hard for your child to communicate, then the school is required to conduct a speech and language evaluation and maybe an Augmentative and Alternative Communication (AAC) evaluation. If your child has more trouble climbing the stairs at school than other students their age, the school may be required to do a physical therapy evaluation. It is different for every student.
+    - The school must also do assessments in **all** areas related to a child’s possible disability. For example, if it is hard for your child to communicate, the school might do a speech and language evaluation. They may do an evaluation that looks at other ways for your child to communicate (like an augmentative and alternative communication (AAC) evaluation. Or, if your child has trouble with stairs, the school may do a physical therapy evaluation. It is different for every student.
      
-     You can request specific additional evaluations if you think the school needs to evaluate your child in areas the school has not suggested.
+    - You can request additional evaluations even if the school has not suggested them.
      
-     It is also ok if you do not have any specific evaluation you want to request for you child.  Someone from your child’s school should contact you when they receive your request letter to discuss your concerns. Then you can give them information that will help the school decide which evaluations your child needs.
+    - You may not know of any evaluations to request for your child. This is okay. Before or after you complete this letter you can talk to your child’s doctor or other service providers outside of school.
+    
+    - Someone from your child’s school should also contact you when they receive this letter to talk to you about your concerns. When you talk to the school, you can give them more information. This will help the school decide which evaluations your child needs.
+    
+    - If you do not hear from the school in writing in 5 school days, try contacting them until you speak with someone or receive the consent form.
 ---
 template: evaluation_definitions
 subject: |
   What evaluations can I ask for?
 content: |
-  #### Educational Assessment
-  Educational assessments should include a history of the student’s educational progress. The history should be given by a teacher who knows the student well, in relation to the state’s learning standards. The assessments should also include the student’s attention skills, communication skills, memory, participation behaviors, and social skills with both peers and adults.
+  What evaluations can I ask for? ? Hyperlink [This is a list of common evaluations. There are types of evaluations that may not be listed here. It is a good idea to speak with your child’s doctor or other service providers with any questions.]
 
-  #### Speech and Language Evaluation
-  A speech and language evaluation assess the student’s physical ability to speak, pronunciation of speech sounds, use of language for different purposes, correct use of words in properly formed sentences, and voice quality.
-
-  #### Social Pragmatic Language
-  A social pragmatic language evaluation assesses how the student communicates in social situations. This includes assessing use of body language, eye contact, taking turns listening and speaking, and using the appropriate volume when speaking.
-
-  #### Occupational Therapy
-  An occupational therapy evaluation assesses the student’s fine motor skills, self-help skills, sensory processing, postural stability, visual and motor perception, task completion and organization, and social and play abilities.
-  (Los Angeles Unified School District)
-
-  #### Functional Behavior Assessment
-  A functional behavior assessment (FBA) assesses a student’s behavior that is affecting his/her/their own learning or the learning of others. An FBA should identify the causes of specific problem behaviors and provide interventions to address them. 
-
-  #### Psychological Assessment
-  A psychological assessment determines the child’s learning style and provides information on what learning methods are most effective for the child. The assessment may show the child’s problem-solving abilities, memory skills, processing skills, and how the child best interprets information.
-
-  #### Physical Therapy
-  A physical therapy evaluation assesses the student’s posture, balance, strength, motor control and coordination, endurance, gross motor skills, and any other area that allows the student to physically access the educational environment.
-
-  #### Augmentative and Alternative Communication Evaluation
-  An Augmentative and Alternative Communication (AAC) evaluation assesses what communication tool(s), if any, can assist the student to communicate.  Examples of AAC methods include picture boards, manual signs, gestures, finger spelling, and speech-generating devices.  AAC is a type of assistive technology.
-
-  #### Assistive Technology Evaluation
-  An Assistive technology evaluation determines whether a student requires a technological device or service to support their learning. Low-tech devices include picture books to help non-speaking and students with limited speech communicate, line magnifiers for students to focus on one line of text at a time, and seat cushions for students with physical disabilities to maintain posture. High-tech devices include eye-gaze systems for students with physical disabilities to operate computers and software that allows the student to speak into a computer and have the text appear on the screen.
-
-  #### Home Assessment
-  A home assessment includes information on the student’s family history and home.  They may include a home visit with the parent’s agreement.
-
-  #### Health Assessment
-  A health assessment identifies medical issues that may affect the student’s learning.  
+  
+  An educational assessment looks at your child&#39;s learning skills. It includes a history of your child’s progress. This progress is compared to the state’s learning standards. A teacher who knows your child well should give this history. The assessment should also look at how your child:
+  - Pays attention
+  - Communicates
+  - Remembers things
+  - Participates in school
+  - Interacts with other students and adults
+  
+  A psychological evaluation gives information about your child's problem-solving, memory, attention, and processing skills. It may look at anxiety, depression, and behavior. This information can be used to identify any disabilities and understand how your child learns best. 
+  
+  A speech and language evaluation looks at how your child understands and uses spoken and written language. This includes your child's:
+  - Use of grammar (skill of putting words together to make sentences)
+  - Use and knowledge of words
+  - Physical ability to pronounce words
+  - Stuttering (difficulty saying words smoothly)
+  - How your child share information or felings with others (can include eye contact, taking turns, voice volume)
+  
+  An occupational therapy evaluation looks at your child’s skills when doing certain activities. These skills may include:
+  - The hand muscle skills your child needs to hold a pencil, write or type, use scissors, or use a zipper (this is called fine motor skills).
+  - The skills your child needs to understand what they see (this is called visual perceptual skills).
+  - The skills your child uses to connect their body’s movements with what they see (this is called visual motor skills).
+  - How your child responds to information they get from sight, sound, touch, and taste (this is called sensory processing skills).
+  - The skills your child uses to decide how to get things done, such as planning, managing time, and organizing (this is called executive functioning skills).
+  - The skills your child uses to get dressed, eat, and go to the bathroom (this is called daily living skills).
+  Part of the evaluation could include observing your child in the classroom, lunchroom, or at recess. This helps to understand how your child does in the school setting.
+  
+  A functional behavior assessment (FBA) tries to find out why your child behaves in specific ways if there are behaviors that might keep your child from learning. Examples are leaving the classroom or pushing other students when in line. An FBA can include a plan to change behaviors.
+  
+  A physical therapy assessment looks at whether your child’s disability affects how your child, for example:
+  - Sits or stands
+  - Stays steady 
+  - Is strong
+  - Moves their body
+  - Can keep going
+  - Uses their arms, legs, and middle part of the body
+  - Moves around in schoool and other places
+  
+  An augmentative and alternative communication (AAC) evaluation looks at the tool(s) that can help your child communicate. Examples include
+  - Picture boards
+  - Sign language
+  - Speech-generating devices
+  AAC is a type of assistive technology. It is often useful for students who are non-speaking or have limited speech.
+  
+  An assistive technology evaluation looks at ways to keep your child's practical skills or make them better. Examples include:
+  - iPad App to improve a non-speaking student's communication skills (see also AAC evaluation above)
+  - Keyboard for writing
+  - Graphic organizer
+  - Electronic readers
+  
+  A home assessment looks at the student's family history and home life. If a parent says it is ok, this may include a home visit.
+  
+  A health assessment looks at medical issues that affect a student's learning.
+  
+  Transistion assessment is a process that starts before your child turns 14. It can help determine your child's strengths, preferences, interests, and needs. This information can help your child decide their adult life goals. These life goals are related to education, finding and keeping a job, and independent living. A transition assessment also identifies IEP transition services that will support your child to make progress towards their goals. 
