@@ -151,21 +151,16 @@ code: |
 id: welcome screen
 field: welcome_screen_seen
 question: |
-  Welcome to MAC's Request for Initial Special Education Evaluation Interview.
+  This form will help you write a letter requesting a school special education evaluation for your child. You can write a letter for your own child or one that you know.
 subquestion: |
-  The following questions will help you write a letter to request a school special education evaluation for your child or a child that you know.  
-  You might want to request a school {evaluation} if you think your child or a child that you know needs services to learn.
-  If you want to speak to a person before deciding if you want to request an evaluation, you can call or send an email to our  [Helpline](https://massadvocates.org/helpline/) at Massachusetts Advocates for Children.  
-  
-  It might take up to 3 business days for a person to respond to your call or email. 
+  You can request a school {evaluation} if you think your child or child you know needs special help to learn.
+  You can speak to someone at Massachusetts Advocates for Children's [Helpline](https://massadvocates.org/helpline/) before deciding to request an evaluation.
 
   [Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/)
 
-  These questions will take approximately **15 minutes** to fill out. When done, you can email the letter directly to the school district by email 
-  or you can print the letter and bring it to the school yourself.
+  These questions will take about **15 minutes** to answer. When you are done, email the letter to the school district or print it and bring it to the school.
 
-  **IMPORTANT!** If you bring it to the school be sure print a copy for yourself. 
-  If you can’t print a copy for yourself, when you bring the letter to the school, ask them to make a copy for you to keep for your records.
+  **IMPORTANT!** If you bring it to the school be sure print a copy for yourself or take a photo of it. If you can't print the letter, ask them to make a copy for your records when you are there. 
 terms: 
   evaluation: |
     An evaluation is testing that a specialist does to see how your child is learning and developing. The specialist may also recommend services and supports for your child as part of their educational programming. An evaluation is sometimes called an assessment.
@@ -182,24 +177,23 @@ question: |
 subquestion: |
   Before you start, you will need:
   
-  1. The name and address of the special education coordinator or director for your child's school.
+  1. Your child's full name and date of birth.
   
-  2. Your child's full name and date of birth.
+  2. Name and email of the special education contact for your child.
   
-  3. Name and email of your child's school principal.
+  OR
+  
+  Name and email of your child's school principal.
   
   If you need help finding any of this information, contact MAC’s helpline at 
   617-357-8431 or send a message [here.](https://www.massadvocates.org/helpline)
   
-  The name of the special education coordinator is listed on your child's
-  IEP.
+  If your child has an IEP, the name of the special education coordinator should be on their IEP paperwork.
 help:
   label: |
     How can I get medical or legal advice?
   content: |
-    Contact a lawyer if you need legal advice. Contact your child’s pediatrician if you have questions about what evaluations your child 
-    may need after completing this questionnaire. This is not intended to diagnose any condition, but rather to suggest areas in which your child may need support to 
-    learn based on your observations and concerns of your child.
+    When you finish these questions, you might wonder what evaluations your child needs. You can call your child’s doctor and ask them what they think. Your child’s doctor may give advice based on your observations and concerns. You will have the chance to ask for additional or different evaluations after you give this letter to the school.
 
 ---
 # if: |
@@ -223,7 +217,7 @@ help:
 ---
 id: primary language
 question: |
-  What language do you speak best?
+  What language do you prefer?
 fields:
   - Language: requestor.language
     choices:
@@ -260,9 +254,7 @@ template: what_if_I_am_advocate
 subject: |
   What if I am an advocate representing ${ student.familiar() }?
 content: |
-  Choose the option that represents the person that you want the letter to
-  be **from**. If you are requesting the documents to be sent directly to
-  you, you will need a release of information.
+  Choose the option for the person that you want the letter to be **from**. You will need a release of information if asking for documents to go directly to you.
 ---
 sets:
   - requestor.name.first
@@ -287,7 +279,7 @@ id: requestor phone number and email
 question: |
   How can the school reach you? 
 subquestion: | 
-  You need to tell us at least one way to get in contact with you.
+  What is at least one way to get in contact with you?
 fields:
   - Phone Number: requestor.phone_number
     datatype: al_international_phone
@@ -303,7 +295,7 @@ sets:
   - student.name.first
 id: student name
 question: |
-  Who is this letter for?
+  Who is this letter about?
 subquestion: |
   Write the name of the student whose records you are requesting.
 fields:
@@ -389,7 +381,7 @@ validation code: |
 ---
 id: special education director address in school
 question: |
-  Please fill out the following information.
+  Please fill out the following:
 fields:
     - "Do you know the Special Education Director's address?": school.special_education_director.requestor_knows_address
       datatype: yesnoradio
