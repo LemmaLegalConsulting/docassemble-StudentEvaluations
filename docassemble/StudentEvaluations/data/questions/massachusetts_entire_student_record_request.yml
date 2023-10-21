@@ -187,6 +187,7 @@ continue button field: entire_record_request_intro_screen
 ---
 id: preview educational_evaluations_entire_record_request
 question: |
+subquestion: |
   1. Preview your form before you sign it. This previews the form you will sign on the next page.
   
   2. Click the image to open it in a new tab.
@@ -194,8 +195,7 @@ question: |
   3. Click the "Edit answers" button to edit your answers.
   
   4. Return to this window to continue and sign your letter. 
-subquestion: |
-  Here is a preview of the form you will sign on the next page.   
+    
   
   ${ al_recipient_bundle.as_pdf(key='preview') }
   
