@@ -168,6 +168,7 @@ subquestion: |
   
   ${ collapse_template(evaluation_example_template) }
   
+  ${ collapse_template(evaluation_definitions) }
 fields:
   - Please describe your concern: parent_concern
     datatype: area

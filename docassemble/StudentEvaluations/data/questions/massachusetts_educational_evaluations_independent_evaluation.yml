@@ -173,6 +173,10 @@ question : |
   What type of independent evaluation do you want your child’s school to fund?
 subquestion: |
   You can request that the school district fund an independent evaluation of any type that the school has already evaluated your child. It is like a second opinion. 
+  
+  ${ collapse_template(evaluation_definitions) }
+  
+  ${ collapse_template(more_info) }
 fields:
   - no label: selected_evaluations
     required: False
@@ -194,28 +198,6 @@ fields:
     show if:
       variable: selected_evaluations['Other']
       is: True
-comment: |
-  help:
-  label: |
-    How do I choose?
-  content: |
-    Educational Assessment - Explanatory Text
-    
-    Speech and Language Therapy Evaluation - Explanatory Text
-    
-    Social Pragmatic Language - Explanatory Text
-    
-    Occupational Therapy - Explanatory Text
-    
-    Functional Behavior Assessment - Explanatory Text
-    
-    Psychological Assessment - Explanatory Text
-    
-    Physical Therapy - Explanatory Text
-    
-    Augmentative and Alternative Communication Evaluation - Explanatory Text
-    
-    Assistive Technology Evaluation - Explanatory Text
 ---
 id: evaluators name screen
 sets:
