@@ -63,17 +63,20 @@ subquestion: |
   
   1. Your child’s full name and date of birth.
   
-  2. Name and email of your child’s school principal or special education contact (if your child has an IEP) 
-  OR -Name and mailing address of your child’s school principal or special education school contact (if your child has an IEP) 
+  2. Name and email of your child’s school principal.
   
-  You can find this information on the webpage for your child’s school or by calling your child’s school. If you need help finding any of this information, contact MAC’s helpline at 617-357-8431 or send a message [here.](https://www.massadvocates.org/helpline)
+  3. If your child has an IEP, the name, and email of the special education contact.
+  You can find the school principal&#39;s information on the school's webpage. The name of the special education should be on your child's IEP. You can also call your child’s school for information.
   
-  The name of the special education coordinator is listed on your child's IEP.
+  If you need help finding this information, contact MAC's helpline at 617-357-8431. You can also send a message [here.](https://www.massadvocates.org/helpline)
+
 help:
   label: |
     How can I get medical or legal advice?
   content: |
-    Contact a lawyer if you need legal advice. Contact your child’s pediatrician if you have concerns about your child’s learning or development.
+    Contact your child's doctor if you worry about your child's learning or development. 
+    
+    Contact a lawyer if you need legal advice. While MAC cannot provide a lawyer or advocate for everyone who needs one, we can make suggestions and referrals.
 
 ---
 id: special education director information
@@ -102,6 +105,9 @@ code: |
   user_ask_role = "na"
   
   mac_shared_intro_questions
+  
+  student.years_enrolled
+  
   if knows_special_education_director_name:
     school.recipient.name = school.special_education_director.name
     school.recipient.address = school.special_education_director.address
@@ -127,10 +133,21 @@ code: |
 ---
 id: entire record request intro screen
 question: |
-  Entire student record request
+  Ask for your child's entire student records.
 subquestion: |  
-  This letter will help you request your child's entire student record.
+  This letter helps you write a letter to ask for your child's school records. 
+  
+  Your child's student records can show patterns in their learning over time. Service providers at home may need to review your child's records. Service providers at home may need to review your child's records. SErvice providers in the community may need to review them as well.
 continue button field: entire_record_request_intro_screen
+---
+id: years enrolled
+question: |
+  How many years of student records do you want to request?
+fields:
+  - Years: student.years_enrolled
+    datatype: integer
+  - Since my child enrolled in school: student.since_enrolled
+    datatype: yesno
 ---
 #id: enrollment date screen
 #question: |
@@ -184,11 +201,14 @@ id: preview educational_evaluations_entire_record_request
 question: |
   Preview your form before you sign it
 subquestion: |
-  Here is a preview of the form you will sign on the next page.   
+  This is a preview of the form you will sign on the next page.
+  
+  1. Click the image to open it in a new tab.
+  
+  2. Return to this window to continue and sign your letter. 
   
   ${ al_recipient_bundle.as_pdf(key='preview') }
   
-  Remember to come back to this window to continue and sign your form.
 continue button field: educational_evaluations_entire_record_request_preview_question    
 ---
 code: |
@@ -207,16 +227,12 @@ event: educational_evaluations_entire_record_request_download
 question: |
   All done
 subquestion: |
-  Thank you. Your form is ready to download and deliver.
-  
-  View, download and send your form below.  
+  View, download, and send your letter below. 
   
   ${ al_user_bundle.download_list_html() }
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
   
-
-
 ---
 # ALDocument objects specify the metadata for each template
 objects:

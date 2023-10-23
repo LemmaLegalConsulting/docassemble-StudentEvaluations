@@ -168,6 +168,7 @@ subquestion: |
   
   ${ collapse_template(evaluation_example_template) }
   
+  ${ collapse_template(evaluation_definitions) }
 fields:
   - Please describe your concern: parent_concern
     datatype: area
@@ -341,13 +342,13 @@ id: ask for evaluation intro
 question: |
   Ask for an evaluation for your child
 subquestion: |
-  This website helps you write a letter to ask for your child to be
-  evaluated.
+  This website helps you write a letter to ask your child's school to evaluate your child.
     
-  An evaluation is testing that a specialist does to see how your child is learning and developing.  Often the specialist will also recommend services and supports for your child.
- 
-  You may want to ask for an evaluation if your child is having a hard time in school socially, academically, or behaviorally. 
+  You can ask for an evaluation if your child is having a hard time in school. For example, your child may need help making or keeping friends. They may need help with schoolwork or how they behave.
 
+  Evaluations will help decide if your child needs special education services. They will help decide what services and supports your child needs, if any.
+  
+  [An evaluation is when an expert tests your child. The testing can see how your child is learning and developing and if your child has any kind of disability. An expert is a trained person in a specific content area. The expert can recommend services and supports for your child. Assessment is another word for an evaluation.]
   
   For more information on requesting an evaluation, watch this short video
 Video: | 
