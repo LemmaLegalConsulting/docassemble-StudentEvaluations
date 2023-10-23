@@ -105,6 +105,9 @@ code: |
   user_ask_role = "na"
   
   mac_shared_intro_questions
+  
+  student.years_enrolled
+  
   if knows_special_education_director_name:
     school.recipient.name = school.special_education_director.name
     school.recipient.address = school.special_education_director.address
@@ -136,6 +139,15 @@ subquestion: |
   
   Your child's student records can show patterns in their learning over time. Service providers at home may need to review your child's records. Service providers at home may need to review your child's records. SErvice providers in the community may need to review them as well.
 continue button field: entire_record_request_intro_screen
+---
+id: years enrolled
+question: |
+  How many years of student records do you want to request?
+fields:
+  - Years: student.years_enrolled
+    datatype: integer
+  - Since my child enrolled in school: student.since_enrolled
+    datatype: yesno
 ---
 #id: enrollment date screen
 #question: |
@@ -187,19 +199,17 @@ continue button field: entire_record_request_intro_screen
 ---
 id: preview educational_evaluations_entire_record_request
 question: |
+  Preview your form before you sign it
 subquestion: |
-  1. Preview your form before you sign it. This previews the form you will sign on the next page.
+  This is a preview of the form you will sign on the next page.
   
-  2. Click the image to open it in a new tab.
+  1. Click the image to open it in a new tab.
   
-  3. Click the "Edit answers" button to edit your answers.
-  
-  4. Return to this window to continue and sign your letter. 
+  2. Return to this window to continue and sign your letter. 
     
   
   ${ al_recipient_bundle.as_pdf(key='preview') }
   
-  Remember to come back to this window to continue and sign your form.
 continue button field: educational_evaluations_entire_record_request_preview_question    
 ---
 code: |
