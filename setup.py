@@ -54,7 +54,7 @@ setup(name='docassemble.StudentEvaluations',
       url='https://www.massadvocates.org/',
       packages=find_packages(),
       namespace_packages=['docassemble'],
-      install_requires=['docassemble.AssemblyLine>=2.25.0', 'docassemble.MAPovertyScale>=2022.1.18', 'docassemble.MassAccess>=0.3.0'],
+      install_requires=['docassemble.AssemblyLine>=2.26.0', 'docassemble.MAPovertyScale>=2022.1.18', 'docassemble.MassAccess>=0.4.1'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/StudentEvaluations/', package='docassemble.StudentEvaluations'),
      )

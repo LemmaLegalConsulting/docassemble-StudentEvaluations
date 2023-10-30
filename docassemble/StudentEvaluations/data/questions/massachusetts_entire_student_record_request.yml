@@ -12,16 +12,18 @@ include:
 ---
 metadata:
   title: |
-    MAC Request for Entire Student Record
+    Request for Student Record
   short title: |
-    Entire Record
+    Request for Student Record
   authors:
     - Quinten Steenhuis
     - Matt Brooks
+    - Mia Bonardi
+    - Stavros Constantinou
+    - Chris Emrich
 ---
 features:
   bootstrap theme: mac-bootstrap.css
-
 ---
 ## did not generate with weaver, c&p and edited from prs which was 
 ## generated with weaver
@@ -54,6 +56,15 @@ code: |
   # This controls the default state in address field questions
   AL_DEFAULT_STATE = "MA"
 ---
+#id: entire_intro
+#field: entire_intro
+#question: | 
+#  Ask for your child’s student records.
+#subquestion: |
+#  This web app helps you write a letter to ask for your child’s school records.
+#
+#  Your child’s student records can help understand what services and programs your child needs. Service providers at home may need to review your child’s records. Service providers in the community may need to review them too.
+---
 id: before you start screen child not in school
 field: before_you_start_screen_seen
 question: | 
@@ -66,6 +77,7 @@ subquestion: |
   2. Name and email of your child’s school principal.
   
   3. If your child has an IEP, the name, and email of the special education contact.
+  
   You can find the school principal&#39;s information on the school's webpage. The name of the special education should be on your child's IEP. You can also call your child’s school for information.
   
   If you need help finding this information, contact MAC's helpline at 617-357-8431. You can also send a message [here.](https://www.massadvocates.org/helpline)
@@ -77,7 +89,6 @@ help:
     Contact your child's doctor if you worry about your child's learning or development. 
     
     Contact a lawyer if you need legal advice. While MAC cannot provide a lawyer or advocate for everyone who needs one, we can make suggestions and referrals.
-
 ---
 id: special education director information
 question: |
@@ -199,13 +210,11 @@ fields:
 ---
 id: preview educational_evaluations_entire_record_request
 question: |
-  Preview your form before you sign it
+  Preview your letter before you sign it
 subquestion: |
-  This is a preview of the form you will sign on the next page.
-  
   1. Click the image to open it in a new tab.
-  
-  2. Return to this window to continue and sign your letter. 
+  2. Preview the letter you will sign on the next page.
+  3. Return to this window to continue and sign your letter. 
   
   ${ al_recipient_bundle.as_pdf(key='preview') }
   
@@ -227,7 +236,7 @@ event: educational_evaluations_entire_record_request_download
 question: |
   All done
 subquestion: |
-  View, download, and send your letter below. 
+  Thank you. Your letter is ready to download and deliver.
   
   ${ al_user_bundle.download_list_html() }
 

@@ -217,7 +217,7 @@ help:
 ---
 id: primary language
 question: |
-  What language do you prefer?
+  What language do you speak best?
 fields:
   - Language: requestor.language
     choices:
@@ -238,7 +238,7 @@ fields:
 --- 
 id: requestor right to send
 question: |
-  How are **you** related to ${ student.familiar() }?
+  How are you related to ${ student.familiar() }?
 subquestion: |
   ${ collapse_template(what_if_I_am_advocate) }
 fields:
@@ -260,7 +260,7 @@ sets:
   - requestor.name.first
 id: requestor name
 question: |
-  Who are you?
+  What is your name?
 fields:
   - code: |
       requestor.name_fields(show_suffix=False)
@@ -279,7 +279,7 @@ id: requestor phone number and email
 question: |
   How can the school reach you? 
 subquestion: | 
-  What is at least one way to get in contact with you?
+  What is the best way to get in contact with you?
 fields:
   - Phone Number: requestor.phone_number
     datatype: al_international_phone
@@ -297,7 +297,7 @@ id: student name
 question: |
   Who is this letter about?
 subquestion: |
-  Write the name of the student whose records you are requesting.
+  Type the name of the child whose records you are asking for.
 fields:
   - code: |
       student.name_fields(show_suffix=False)
@@ -431,16 +431,15 @@ under: |
 #    the evaluations might show that ${ student.name.first } needs more services.
 #  special education coordinator: |
 #    Your child will only have special education records if they have been evaluated by the school district and/or have an IEP.
-#---
+---
 id: special education director information
 question: |
-  What is the name of the Special Education **Director or Coordinator**?
+  What is the name the school principal or special education contact?
 fields:
-  - "Do you know the name of your child's Special Education Contact?": knows_special_education_director_or_coordinator_name 
+  - "Do you know the name of the school principal or special education contact": knows_special_education_director_or_coordinator_name 
     datatype: yesnoradio
   - First Name: school.special_education_director_or_coordinator.name.first
     show if: knows_special_education_director_or_coordinator_name
-
   - Last Name: school.special_education_director_or_coordinator.name.last
     show if: knows_special_education_director_or_coordinator_name
 ---
