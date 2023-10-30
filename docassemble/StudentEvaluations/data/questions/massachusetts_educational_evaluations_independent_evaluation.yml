@@ -71,7 +71,7 @@ code: |
   user_role = "na"
   user_ask_role = "na"
   
-  before_you_start_screen_seen = True
+  independent_before_you_start_screen_seen
   letter_created_date
   independent_evaluations_intro_screen
   if not is_child_in_school:
@@ -520,7 +520,7 @@ code: |
 # For IEE interview, disabling question, only need SPEC question.
 ---
 id: before you start screen child not in school
-field: before_you_start_screen_seen
+field: independent_before_you_start_screen_seen
 question: | 
   Getting started
 subquestion: |

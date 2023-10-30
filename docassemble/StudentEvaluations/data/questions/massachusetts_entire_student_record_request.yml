@@ -66,7 +66,7 @@ code: |
 #  Your child’s student records can help understand what services and programs your child needs. Service providers at home may need to review your child’s records. Service providers in the community may need to review them too.
 ---
 id: before you start screen child not in school
-field: before_you_start_screen_seen
+field: entire_before_you_start_screen_seen
 question: | 
   Getting Started
 subquestion: |
@@ -115,6 +115,7 @@ code: |
   user_role = "na"
   user_ask_role = "na"
   
+  entire_before_you_start_screen_seen
   mac_shared_intro_questions
   
   student.years_enrolled
