@@ -280,7 +280,7 @@ id: student name
 question: |
   Who is this letter about?
 subquestion: |
-  Type the name of the child whose records you are asking for.
+  Type the name of the child for whom you are requesting a special education evaluation.
 fields:
   - code: |
       student.name_fields(show_suffix=False)
@@ -314,6 +314,7 @@ fields:
         - 10th: 10th
         - 11th: 11th
         - 12th: 12th
+        - 12+: 12_plus
     - Language: student.language
       choices:
         - English: English
@@ -491,15 +492,15 @@ content: |
   * Participates in school 
   * Interacts with other students and adults
   
-  A psychological evaluation gives information about your child’s problem-solving, memory, attention, and processing skills. It may look at anxiety, depression, and behavior. This information can be used to identify any disabilities and understand how your child learns best.
+  A **psychological evaluation** gives information about your child’s problem-solving, memory, attention, and processing skills. It may look at anxiety, depression, and behavior. This information can be used to identify any disabilities and understand how your child learns best.
   
-  A speech and language evaluation looks at how your child understands and uses spoken and written language. This includes your child’s:
+  A **speech and language evaluation** looks at how your child understands and uses spoken and written language. This includes your child’s:
   * Use of grammar (skill of putting words together to make sentences) 
   * Use and knowledge of words 
   * Physical ability to pronounce words - Stuttering (difficulty saying words smoothly) 
   * How your child share information or felings with others (can include eye contact, taking turns, voice volume)
 
-  An occupational therapy evaluation looks at your child’s skills when doing certain activities. These skills may include: 
+  An **occupational therapy evaluation** looks at your child’s skills when doing certain activities. These skills may include: 
   * The hand muscle skills your child needs to hold a pencil, write or type, use scissors, or use a zipper (this is called fine motor skills). 
   * The skills your child needs to understand what they see (this is called visual perceptual skills). 
   * The skills your child uses to connect their body’s movements with what they see (this is called visual motor skills). 
@@ -507,9 +508,9 @@ content: |
   * The skills your child uses to get dressed, eat, and go to the bathroom (this is called daily living skills). 
   Part of the evaluation could include observing your child in the classroom, lunchroom, or at recess. This helps to understand how your child does in the school setting.
 
-  A functional behavior assessment (FBA) tries to find out why your child behaves in specific ways if there are behaviors that might keep your child from learning. Examples are leaving the classroom or pushing other students when in line. An FBA can include a plan to change behaviors.
+  A **functional behavior assessment** (FBA) tries to find out why your child behaves in specific ways if there are behaviors that might keep your child from learning. Examples are leaving the classroom or pushing other students when in line. An FBA can include a plan to change behaviors.
 
-  A physical therapy assessment looks at whether your child’s disability affects how your child, for example: 
+  A **physical therapy assessment** looks at whether your child’s disability affects how your child, for example: 
   * Sits or stands 
   * Stays steady 
   * Is strong 
@@ -518,19 +519,19 @@ content: |
   * Uses their arms, legs, and middle part of the body 
   * Moves around in schoool and other places
 
-  An augmentative and alternative communication (AAC) evaluation looks at the tool(s) that can help your child communicate. Examples include 
+  An **augmentative and alternative communication (AAC) evaluation** looks at the tool(s) that can help your child communicate. Examples include 
   * Picture boards 
   * Sign language 
   * Speech-generating devices AAC is a type of assistive technology. It is often useful for students who are non-speaking or have limited speech.
   
-  An assistive technology evaluation looks at ways to keep your child’s practical skills or make them better. Examples include: 
+  An **assistive technology evaluation** looks at ways to keep your child’s practical skills or make them better. Examples include: 
   * iPad App to improve a non-speaking student’s communication skills (see also AAC evaluation above) 
   * Keyboard for writing 
   * Graphic organizer 
   * Electronic readers
 
-  A home assessment looks at the student’s family history and home life. If a parent says it is ok, this may include a home visit.
+  A **home assessment** looks at the student’s family history and home life. If a parent says it is ok, this may include a home visit.
 
-  A health assessment looks at medical issues that affect a student’s learning.
+  A **health assessment** looks at medical issues that affect a student’s learning.
 
-  Transistion assessment is a process that starts before your child turns 14. It can help determine your child’s strengths, preferences, interests, and needs. This information can help your child decide their adult life goals. These life goals are related to education, finding and keeping a job, and independent living. A transition assessment also identifies IEP transition services that will support your child to make progress towards their goals.
+  **Transistion assessment** is a process that starts before your child turns 14. It can help determine your child’s strengths, preferences, interests, and needs. This information can help your child decide their adult life goals. These life goals are related to education, finding and keeping a job, and independent living. A transition assessment also identifies IEP transition services that will support your child to make progress towards their goals.
