@@ -237,7 +237,7 @@ template: what_if_I_am_advocate
 subject: |
   What if I am an advocate representing ${ student.familiar() }?
 content: |
-  Choose the option for the person that you want the letter to be **from**. You will need a release of information if asking for documents to go directly to you.
+  Choose the option for the person that you want the letter to be **from**. You will need a release of information signed by the parent or guardian if asking for documents to go directly to you.
 ---
 sets:
   - requestor.name.first
@@ -314,7 +314,7 @@ fields:
         - 10th: 10th
         - 11th: 11th
         - 12th: 12th
-        - 12+: 12_plus
+        - After grade 12: After grade 12
     - Language: student.language
       choices:
         - English: English
