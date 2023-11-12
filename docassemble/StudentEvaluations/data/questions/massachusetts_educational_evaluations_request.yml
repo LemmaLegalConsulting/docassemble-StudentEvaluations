@@ -146,6 +146,13 @@ subquestion: |
 terms: 
   evaluation: |
     An evaluation is when an expert tests your child. The testing can see how your child is learning and developing and if your child has any kind of disability. An expert is a trained person in a specific content area. The expert can recommend services and supports for your child. Assessment is another word for an evaluation.
+help:
+  label: |
+    How can I get medical or legal advice?
+  content: |
+    Contact your child's doctor if you worry about your child's learning or development. 
+    
+    Contact a lawyer if you need legal advice. While MAC cannot provide a lawyer or advocate for everyone who needs one, we can make suggestions and referrals.
 ---
 id: before you start screen child not in school
 field: eval_before_you_start_screen_seen

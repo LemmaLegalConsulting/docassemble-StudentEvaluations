@@ -426,6 +426,9 @@ fields:
     show if: knows_special_education_director_or_coordinator_name
   - Last Name: school.special_education_director_or_coordinator.name.last
     show if: knows_special_education_director_or_coordinator_name
+  - Email: school.special_education_director_or_coordinator.email
+    required: False
+    show if: knows_special_education_director_or_coordinator_name
 ---
 id: kick out language
 event: kick_out_language
