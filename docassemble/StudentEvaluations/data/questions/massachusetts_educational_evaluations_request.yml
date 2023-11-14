@@ -276,7 +276,6 @@ fields:
         help: |
           Transition assessment is a process that starts before your child turns 14.  It can help determine your child’s strengths, preferences, interests, and needs. This information can help your child decide their adult life goals.  These life goals are related to education, finding and keeping a job, and independent living. A transition assessment also identifies IEP transition services that will support your child to make progress towards their goals.
         show if: student.age_in_years() >= 13
-      - Social pragmatic language: Social prgamatic language
       - Other: Other
     none of the above: False
   - Other Evaluation (put each evaluation on a separate line).: other_evaluations
@@ -780,7 +779,7 @@ subquestion: |
 objects:
   - initial_request_attachment: ALDocument.using(title="Evaluation Request", filename="initial_request", enabled=True, has_addendum=False)
   - educational_evaluations_copy_request_attachment: ALDocument.using(title="Evaluation Copy Request", filename="educational_evaluations_copy_request", enabled=True, has_addendum=False)
-  - educational_evaluations_transition_assessment_request_attachment: ALDocument.using(title="Transition Assessment Request (added here automatically if STUDENT is aged 14 or older)", filename="educational_evaluations_transition_assessment_request", has_addendum=False)
+  - educational_evaluations_transition_assessment_request_attachment: ALDocument.using(title=f"Transition Assessment Request (added here automatically if { student.name } is aged 14 or older)", filename="educational_evaluations_transition_assessment_request", has_addendum=False)
 ---
 code: |
   if student.age_in_years() >= 13:
@@ -818,7 +817,7 @@ attachment:
   docx template file: educational_evaluations_copy_request.docx
 ---
 attachment:
-  name: Transition Assessment Request (added here automatically if STUDENT is aged 14 or older)
+  name: Transition Assessment Request (added here automatically if ${ student.name } is aged 14 or older)
   filename: educational_evaluations_transition_assessment_request
   variable name: educational_evaluations_transition_assessment_request_attachment[i]
   skip undefined: True
