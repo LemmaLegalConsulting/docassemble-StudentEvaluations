@@ -140,14 +140,19 @@ subquestion: |
   
   You can speak to someone at Massachusetts Advocates for Children's [Helpline](https://massadvocates.org/helpline/) before deciding to request an evaluation.
 
-  [Massachusetts Advocates for Children Helpline](https://massadvocates.org/helpline/)
-
   These questions will take about **15 minutes** to answer. When you are done, email the letter to the school district or print it and bring it to the school.
 
   **IMPORTANT!** If you bring it to the school, be sure print a copy for yourself or take a photo of it. If you can't print the letter, ask them to make a copy for your records when you are there. 
 terms: 
   evaluation: |
     An evaluation is when an expert tests your child. The testing can see how your child is learning and developing and if your child has any kind of disability. An expert is a trained person in a specific content area. The expert can recommend services and supports for your child. Assessment is another word for an evaluation.
+help:
+  label: |
+    How can I get medical or legal advice?
+  content: |
+    Contact your child's doctor if you worry about your child's learning or development. 
+    
+    Contact a lawyer if you need legal advice. While MAC cannot provide a lawyer or advocate for everyone who needs one, we can make suggestions and referrals.
 ---
 id: before you start screen child not in school
 field: eval_before_you_start_screen_seen
@@ -271,7 +276,6 @@ fields:
         help: |
           Transition assessment is a process that starts before your child turns 14.  It can help determine your child’s strengths, preferences, interests, and needs. This information can help your child decide their adult life goals.  These life goals are related to education, finding and keeping a job, and independent living. A transition assessment also identifies IEP transition services that will support your child to make progress towards their goals.
         show if: student.age_in_years() >= 13
-      - Social pragmatic language: Social prgamatic language
       - Other: Other
     none of the above: False
   - Other Evaluation (put each evaluation on a separate line).: other_evaluations
@@ -286,9 +290,13 @@ content: |
   There are no “magic words”, but it helps to be specific. Use facts that describe how ${ student.familiar() } may have challenges in school. This information will be used by the school to choose the right kind of evaluations.
   
   Examples 
+  
   “I have noticed that ${ student.familiar() } has trouble saying certain sounds. I am concerned that others cannot understand what they say.” 
+  
   “${ student.familiar() } can’t focus in school and is getting frustrated a lot. I think he needs more support for him to learn.” 
+  
   “${ student.familiar() } doesn’t have any friends in school and does not have basic social skills.”  
+  
   “${ student.familiar() }’s pediatrician said that I should request a school evaluation because of concerns about his development.”
 ---
 # if: |
@@ -416,6 +424,13 @@ video: |
  [YOUTUBE yGDtWXyRiXA?si=mdBqH5Fz7Dyu-vc0]
   
 continue button field: educational_evaluations_intro
+help:
+  label: |
+    How can I get medical or legal advice?
+  content: |
+    Contact your child's doctor if you worry about your child's learning or development. 
+    
+    Contact a lawyer if you need legal advice. While MAC cannot provide a lawyer or advocate for everyone who needs one, we can make suggestions and referrals.
 ---
 terms:
   evaluation: |
@@ -762,9 +777,9 @@ subquestion: |
 ---
 # ALDocument objects specify the metadata for each template
 objects:
-  - initial_request_attachment: ALDocument.using(title="Initial Request", filename="initial_request", enabled=True, has_addendum=False)
+  - initial_request_attachment: ALDocument.using(title="Evaluation Request", filename="initial_request", enabled=True, has_addendum=False)
   - educational_evaluations_copy_request_attachment: ALDocument.using(title="Evaluation Copy Request", filename="educational_evaluations_copy_request", enabled=True, has_addendum=False)
-  - educational_evaluations_transition_assessment_request_attachment: ALDocument.using(title="Transition Assessment Request", filename="educational_evaluations_transition_assessment_request", has_addendum=False)
+  - educational_evaluations_transition_assessment_request_attachment: ALDocument.using(title=f"Transition Assessment Request (added here automatically if { student.name } is aged 14 or older)", filename="educational_evaluations_transition_assessment_request", has_addendum=False)
 ---
 code: |
   if student.age_in_years() >= 13:
@@ -788,7 +803,7 @@ objects:
 # used for "preview" and "final" keys, and logic in the template checks the value of 
 # `i` to show or hide the user's signature
 attachment:
-  name: Initial Request
+  name: Evaluation Request
   filename: initial_request
   variable name: initial_request_attachment[i]
   skip undefined: True
@@ -802,7 +817,7 @@ attachment:
   docx template file: educational_evaluations_copy_request.docx
 ---
 attachment:
-  name: Transition Assessment Request
+  name: Transition Assessment Request (added here automatically if ${ student.name } is aged 14 or older)
   filename: educational_evaluations_transition_assessment_request
   variable name: educational_evaluations_transition_assessment_request_attachment[i]
   skip undefined: True

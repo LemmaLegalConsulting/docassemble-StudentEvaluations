@@ -76,9 +76,9 @@ subquestion: |
   
   2. Name and email of your child’s school principal.
   
-  3. If your child has an IEP, the name, and email of the special education contact.
+  3. If your child has an {IEP}, the name, and email of the special education contact.
   
-  You can find the school principal&#39;s information on the school's webpage. The name of the special education should be on your child's IEP. You can also call your child’s school for information.
+  You can find the school principal's information on the school's webpage. The name of the special education should be on your child's IEP. You can also call your child’s school for information.
   
   If you need help finding this information, contact MAC's helpline at 617-357-8431. You can also send a message [here.](https://www.massadvocates.org/helpline)
 
@@ -89,6 +89,9 @@ help:
     Contact your child's doctor if you worry about your child's learning or development. 
     
     Contact a lawyer if you need legal advice. While MAC cannot provide a lawyer or advocate for everyone who needs one, we can make suggestions and referrals.
+terms: 
+  IEP: |
+    An IEP is an Individualized Education Program.  It tells the school your child has a disability and needs certain services and supports to learn. The IEP describes the services and supports the school must give your child.
 ---
 id: special education director information
 question: |
