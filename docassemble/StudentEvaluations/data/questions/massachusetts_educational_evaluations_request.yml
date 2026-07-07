@@ -1,3 +1,10 @@
+---
+translations:
+  - massachusetts_educational_evaluations_request_es(es-419).xlsx
+  - massachusetts_educational_evaluations_request_ht(ht).xlsx
+  - massachusetts_educational_evaluations_request_pt(pt).xlsx
+  - massachusetts_educational_evaluations_request_zh(zh-Hans)_rev1.xlsx
+---
 modules:
     - docassemble.base.util
     - docassemble.base.legal
@@ -49,6 +56,9 @@ code: |
 code: |
   # This controls the default state in address field questions
   AL_DEFAULT_STATE = "MA"
+---
+code: |
+  al_interview_languages = ["en", "es-419", "ht", "pt", "zh-Hans"]
 ---
 id: process action initial request
 initial: True
