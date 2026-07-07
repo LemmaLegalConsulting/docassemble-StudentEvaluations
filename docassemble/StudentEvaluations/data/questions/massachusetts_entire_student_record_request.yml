@@ -1,9 +1,9 @@
 ---
 translations:
-  - massachusetts_entire_student_record_request_es(es-419).xlsx
-  - massachusetts_entire_student_record_request_ht(ht).xlsx
-  - massachusetts_entire_student_record_request_pt(pt).xlsx
-  - massachusetts_entire_student_record_request_zh(zh-Hans)_rev1.xlsx
+  - massachusetts_entire_student_record_request_es.xlsx
+  - massachusetts_entire_student_record_request_ht.xlsx
+  - massachusetts_entire_student_record_request_pt.xlsx
+  - massachusetts_entire_student_record_request_zh-Hans_rev1.xlsx
 ---
 modules:
     - docassemble.base.util
@@ -63,7 +63,7 @@ code: |
   AL_DEFAULT_STATE = "MA"
 ---
 code: |
-  al_interview_languages = ["en", "es-419", "ht", "pt", "zh-Hans"]
+  al_interview_languages = ["en", "es", "ht", "pt", "zh-Hans"]
 ---
 #id: entire_intro
 #field: entire_intro
