@@ -1,4 +1,10 @@
 ---
+translations:
+  - massachusetts_entire_student_record_request_es.xlsx
+  - massachusetts_entire_student_record_request_ht.xlsx
+  - massachusetts_entire_student_record_request_pt.xlsx
+  - massachusetts_entire_student_record_request_zh-Hans_rev1.xlsx
+---
 modules:
     - docassemble.base.util
     - docassemble.base.legal
@@ -55,6 +61,9 @@ code: |
 code: |
   # This controls the default state in address field questions
   AL_DEFAULT_STATE = "MA"
+---
+code: |
+  al_interview_languages = ["en", "es", "ht", "pt", "zh-Hans"]
 ---
 #id: entire_intro
 #field: entire_intro

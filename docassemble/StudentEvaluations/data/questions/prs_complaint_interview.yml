@@ -1,4 +1,10 @@
 ---
+translations:
+  - prs_complaint_interview_es.xlsx
+  - prs_complaint_interview_ht.xlsx
+  - prs_complaint_interview_pt.xlsx
+  - prs_complaint_interview_zh-Hans_rev1.xlsx
+---
 modules:
   - docassemble.income.income
   - .prs
@@ -46,6 +52,9 @@ code: |
 code: |
   # This controls the default state in address field questions
   AL_DEFAULT_STATE = "MA"
+---
+code: |
+  al_interview_languages = ["en", "es", "ht", "pt", "zh-Hans"]
 ---
 imports:
   - pycountry

@@ -1,4 +1,10 @@
 ---
+translations:
+  - massachusetts_educational_evaluations_independent_evaluation_es.xlsx
+  - massachusetts_educational_evaluations_independent_evaluation_ht.xlsx
+  - massachusetts_educational_evaluations_independent_evaluation_pt.xlsx
+  - massachusetts_educational_evaluations_independent_evaluation_zh-Hans_rev1.xlsx
+---
 modules:
     - docassemble.base.util
     - docassemble.base.legal
@@ -53,6 +59,9 @@ code: |
 code: |
   # This controls the default state in address field questions
   AL_DEFAULT_STATE = "MA"
+---
+code: |
+  al_interview_languages = ["en", "es", "ht", "pt", "zh-Hans"]
 ---
 objects: 
   - evaluators: ALPeopleList.using(complete_attribute='complete')
