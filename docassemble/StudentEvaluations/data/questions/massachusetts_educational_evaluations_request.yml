@@ -30,7 +30,7 @@ metadata:
 ---
 ## did not generate with weaver, c&p and edited from prs which was 
 ## generated with weaver
-mandatory: True
+id: metadata
 comment: |
   Global interview metadata
 variable name: interview_metadata["initial_request"]
@@ -38,9 +38,9 @@ data:
   al_weaver_version: "1.10.0a2"
   generated on: "2023-06-03"
   title: MAC Request for Initial Special Education Evaluation
-short title: Initial Evaluation
-description: |-
-  An interview to request an independent evaluation from a school. 
+  short title: Initial Evaluation
+  description: |-
+    An interview to request an independent evaluation from a school. 
   allowed courts: []
   categories: []
   typical role: "na"
@@ -68,6 +68,7 @@ code: |
 id: interview order initial request
 mandatory: True
 code: |
+  interview_metadata["initial_request"]
   user_role = "na"
   user_ask_role = "na"
 
@@ -715,7 +716,9 @@ subquestion: |
   five school days of receiving this form.
 
   Would you like a reminder to follow up with the school?
-yesno: wants_reminders
+fields:
+  - no label: wants_reminders
+    datatype: yesno
 ---
 #id: end screen initial request
 #event: end_screen
