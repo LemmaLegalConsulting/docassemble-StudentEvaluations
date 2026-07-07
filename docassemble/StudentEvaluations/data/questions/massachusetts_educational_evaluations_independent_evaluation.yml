@@ -22,7 +22,26 @@ metadata:
     MAC Request for Independent Special Education Evaluation
   short title: |
     Independent Eval
+  description: |
+    Use this guided interview to request an Independent Educational Evaluation (IEE) at public expense in Massachusetts. If you disagree with the school district's evaluation of your child, this tool helps you formally request an independent assessment. This interview was authored and approved by Massachusetts Advocates for Children.
+  can_I_use_this_form: |
+    You can use this interview if you are a parent or guardian of a student in Massachusetts and you disagree with a special education evaluation recently conducted by your school district.
+  before_you_start: |
+    You will need the date of the school's evaluation that you disagree with, student information, and the school district's details before you begin.
+  when_you_are_finished: |
+    After completing the interview, you will have a ready-to-sign letter to send to your school district requesting the IEE.
+  LIST_topics:
+    - ED-07-00-00-00
+    - ED-07-03-00-00
+  tags:
+    - IEE
+    - independent evaluation
+    - IEP
+    - Massachusetts
+    - special education
+  typical_role: parent
   authors:
+    - Massachusetts Advocates for Children
     - Quinten Steenhuis
     - Matt Brooks
     - Chris Emrich

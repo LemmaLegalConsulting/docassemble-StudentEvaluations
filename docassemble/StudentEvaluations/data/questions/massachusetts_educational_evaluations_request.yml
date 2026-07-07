@@ -21,7 +21,25 @@ metadata:
     Request for a School Special Education Evaluation
   short title: |
     Request for a School Special Education Evaluation
+  description: |
+    Use this guided interview to request a special education evaluation for a student in Massachusetts. This tool will help you generate a formal letter to your school district asking them to evaluate your child for an Individualized Education Program (IEP). This interview was authored and approved by Massachusetts Advocates for Children.
+  can_I_use_this_form: |
+    You can use this interview if you are a parent or guardian of a student in Massachusetts and you want to formally request a special education evaluation for your child.
+  before_you_start: |
+    Before you begin, you will need basic information about the student, the school, and the specific areas of concern you have regarding their education.
+  when_you_are_finished: |
+    Once complete, you can download, print, and send the generated request to your school's Special Education Director or Principal.
+  LIST_topics:
+    - ED-07-00-00-00
+    - ED-07-03-00-00
+  tags:
+    - IEP
+    - evaluation
+    - Massachusetts
+    - special education
+  typical_role: parent
   authors:
+    - Massachusetts Advocates for Children
     - Quinten Steenhuis
     - Matt Brooks
     - Mia Bonardi

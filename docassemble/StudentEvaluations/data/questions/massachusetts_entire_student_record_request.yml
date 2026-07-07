@@ -21,7 +21,25 @@ metadata:
     Request for Student Record
   short title: |
     Request for Student Record
+  description: |
+    Use this guided interview to request a complete copy of a student's educational record from their school in Massachusetts. This tool assists parents and eligible students in exercising their right to access school records. This interview was authored and approved by Massachusetts Advocates for Children.
+  can_I_use_this_form: |
+    You can use this interview if you are a parent, guardian, or eligible student in Massachusetts who wants to request a complete copy of a student's educational records.
+  before_you_start: |
+    You should have the student's basic information and the name and address of the school or district office before starting.
+  when_you_are_finished: |
+    When finished, you will get a formally drafted letter that you can send to the school to request the records within the legally required timeframe.
+  LIST_topics:
+    - ED-07-00-00-00
+  tags:
+    - student record
+    - education records
+    - Massachusetts
+    - FERPA
+    - school
+  typical_role: parent
   authors:
+    - Massachusetts Advocates for Children
     - Quinten Steenhuis
     - Matt Brooks
     - Mia Bonardi

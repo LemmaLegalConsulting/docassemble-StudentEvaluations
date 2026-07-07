@@ -20,7 +20,25 @@ metadata:
     MAC PRS Complaint (Language Access)
   short title: |
     MAC PRS Complaint
+  description: |
+    Use this guided interview to file a Problem Resolution System (PRS) complaint with the Massachusetts Department of Elementary and Secondary Education (DESE) regarding language access issues. This tool helps parents and advocates formally report when a school fails to provide required translation or interpretation services. This interview was authored and approved by Massachusetts Advocates for Children.
+  can_I_use_this_form: |
+    You can use this interview if you are a parent or advocate in Massachusetts and a school has failed to provide required translation or interpretation services for you or your child.
+  before_you_start: |
+    Before starting, gather details about the specific incidents where language access was denied, the student's information, and the school involved.
+  when_you_are_finished: |
+    Upon completion, you will receive a drafted PRS complaint ready to be submitted to DESE to ensure the student's and parents' rights are protected.
+  LIST_topics:
+    - ED-07-00-00-00
+  tags:
+    - PRS complaint
+    - language access
+    - DESE
+    - Massachusetts
+    - special education
+  typical_role: parent
   authors:
+    - Massachusetts Advocates for Children
     - Quinten Steenhuis
     - Matt Brooks
 ---
