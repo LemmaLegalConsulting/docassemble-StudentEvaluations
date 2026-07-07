@@ -24,7 +24,7 @@ metadata:
     - Quinten Steenhuis
     - Matt Brooks
 ---
-mandatory: True
+id: metadata
 comment: |
   Global interview metadata
 variable name: interview_metadata["prs_complaint_language_access"]
@@ -75,6 +75,7 @@ objects:
 mandatory: True
 id: mac prs language access complaint interview order block
 code: |
+  interview_metadata["prs_complaint_language_access"]
   user_role = "na"
   user_ask_role = "na"
   prs_intro
@@ -363,7 +364,9 @@ data:
 id: prs is there another translated document
 question: |
   Is there another document with a translation problem?
-yesno: translated_documents.there_is_another
+fields:
+  - no label: translated_documents.there_is_another
+    datatype: yesno
 ---
 id: prs gather names of meetings
 question: |
@@ -401,7 +404,9 @@ fields:
 id: prs is there another meeting
 question: |
   Was there another meeting with an interpretation problem?
-yesno: meetings.there_is_another
+fields:
+  - no label: meetings.there_is_another
+    datatype: yesno
 ---
 id: review translated documents
 question: |

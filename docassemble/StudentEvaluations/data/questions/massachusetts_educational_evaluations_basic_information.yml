@@ -151,7 +151,9 @@ code: |
 id: is child in school screen
 question: |
   Is ${ student.familiar() } enrolled in school?
-yesno: is_child_in_school
+fields:
+  - no label: is_child_in_school
+    datatype: yesno
 ---
 id: before you start screen child not in school
 field: generic_before_you_start_screen_seen

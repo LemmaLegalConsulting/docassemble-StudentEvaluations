@@ -33,7 +33,7 @@ features:
 ---
 ## did not generate with weaver, c&p and edited from prs which was 
 ## generated with weaver
-mandatory: True
+id: metadata
 comment: |
   Global interview metadata
 variable name: interview_metadata["educational_evaluations_entire_record_request"]
@@ -124,6 +124,7 @@ code: |
 id: interview order entire record
 mandatory: True
 code: |
+  interview_metadata["educational_evaluations_entire_record_request"]
   user_role = "na"
   user_ask_role = "na"
   

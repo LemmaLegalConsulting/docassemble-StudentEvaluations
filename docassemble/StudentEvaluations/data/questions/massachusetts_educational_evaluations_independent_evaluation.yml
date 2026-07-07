@@ -31,7 +31,7 @@ metadata:
 ---
 ## did not generate with weaver, c&p and edited from prs which was 
 ## generated with weaver
-mandatory: True
+id: metadata
 comment: |
   Global interview metadata
 variable name: interview_metadata["educational_evaluations_entire_record_request"]
@@ -77,6 +77,7 @@ mandatory: True
 scan for variables: False
 id: interview order independent eval request
 code: |
+  interview_metadata["educational_evaluations_entire_record_request"]
   user_role = "na"
   user_ask_role = "na"
   
@@ -148,7 +149,9 @@ question: |
   Do you disagree with an evaluation that the school district conducted for ${ student.name.first }?
 subquestion: |
   You may disagree with the evaluation results, recommendations, or the way the evaluation was conducted. You are not required to give the reason why you disagree.
-yesno: disagree_evaluation
+fields:
+  - no label: disagree_evaluation
+    datatype: yesno
 ---
 code: |
   custom_evaluations = other_evaluations.split('\n')
@@ -175,7 +178,9 @@ continue button field: independent_evaluations_intro_screen
 id: are there any evaluators screen
 question: |
   Do you know the name of the independent evaluator you want for ${ student.name.first }?
-yesno: evaluators.there_are_any
+fields:
+  - no label: evaluators.there_are_any
+    datatype: yesno
 ---
 id: select independent evaluations
 question : |
@@ -260,7 +265,9 @@ subquestion: |
   % for person in evaluators:
   * ${ person }
   % endfor
-yesno: evaluators.there_is_another
+fields:
+  - no label: evaluators.there_is_another
+    datatype: yesno
 ---
 id: evaluation type
 question: |
@@ -292,12 +299,16 @@ fields:
 id: comfortable sharing income screen
 question: |
   Are you comfortable sharing your income information with the school?
-yesno: comfortable_sharing_income
+fields:
+  - no label: comfortable_sharing_income
+    datatype: yesno
 ---
 id: free or reduced lunch screen
 question: |
   Is ${ student.name.first } eligible for free or reduced lunch?
-yesno: free_or_reduced_lunch
+fields:
+  - no label: free_or_reduced_lunch
+    datatype: yesno
 ---
 code: poverty_multiplier = 4
 ---
@@ -311,7 +322,9 @@ subquestion: |
   ${ poverty_scale_table }
   
   Does your family earn less than the limit for your family size?
-yesno: below_400_percent
+fields:
+  - no label: below_400_percent
+    datatype: yesno
 ---
 #id: independent evaluation letter screen
 #question: |
@@ -355,7 +368,9 @@ yesno: below_400_percent
 id: independent evaluation wants reminders screen
 question: |
   The School District is required to provide you with a consent form within five school   days of receiving this form.
-yesno: wants_reminders
+fields:
+  - no label: wants_reminders
+    datatype: yesno
 subquestion: |
   Would you like a reminder to follow up with the school?
 ---
@@ -385,7 +400,7 @@ buttons:
   - Leave: leave
   - Restart: restart
 ---
-id: call the hotline independent evaluation
+id: call the hotline independent evaluation school
 event: call_the_hotline_school
 question: |
   This letter is for a child who is already in school
@@ -399,7 +414,7 @@ buttons:
   - Leave: leave
   - Restart: restart
 ---
-id: call the hotline independent evaluation
+id: call the hotline independent evaluation select one
 event: call_the_hotline_select_one
 question: |
   You need to choose the evaluations your child needs
