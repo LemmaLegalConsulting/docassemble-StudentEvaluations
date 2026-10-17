@@ -98,7 +98,7 @@ id: interview order
 sets: mac_shared_intro_questions
 scan for variables: False
 comment: |
-	## Mandatory block that determines interview order.
+  ## Mandatory block that determines interview order.
 # mandatory: True
 code: |
   allow_cron = True

@@ -37,7 +37,6 @@ Feature: Parent requests complete student records
       | school.special_education_director.name.last | Jones |
       | school.special_education_director.requestor_knows_address | False |
       | student.years_enrolled | 3 |
-      | student.since_enrolled | False |
       | signature_choice | this_device |
       | requestor.signature | /s/ Jane Smith |
     Then I should see the phrase "All done"
