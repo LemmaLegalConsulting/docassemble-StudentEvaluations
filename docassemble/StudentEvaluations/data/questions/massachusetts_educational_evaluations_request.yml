@@ -236,11 +236,11 @@ fields:
         help: |
           An educational assessment looks at your child's learning skills. It includes a history of your child’s progress. This progress is compared to the state’s learning standards. A teacher who knows your child well should give this history. The assessment should also look at how your child:
           
-          *	Pays attention 
-          *	Communicates 
-          *	Remembers things 
-          *	Participates in school 
-          *	Interacts with other students and adults  
+          * Pays attention 
+          * Communicates 
+          * Remembers things 
+          * Participates in school 
+          * Interacts with other students and adults  
       - Psychological assessment: Psychological assessment
         help: |
           A psychological evaluation gives information about your child’s problem-solving, memory, attention, and processing skills. It may look at anxiety, depression, and behavior. This information can be used to identify any disabilities and understand how your child learns best.
