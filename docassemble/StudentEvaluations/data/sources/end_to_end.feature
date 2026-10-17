@@ -7,7 +7,6 @@ Feature: Parent requests complete student records
     And the maximum seconds for each Step in this Scenario is 240
     And the user gets to "download educational_evaluations_entire_record_request" with this data:
       | var | value |
-      | acknowledged_information_use | True |
       | requestor.name.first | Jane |
       | requestor.name.last | Smith |
       | requestor.address.address | 123 Main Street |
@@ -35,8 +34,6 @@ Feature: Parent requests complete student records
       | knows_special_education_director_name | True |
       | school.special_education_director.name.first | Casey |
       | school.special_education_director.name.last | Jones |
-      | school.special_education_director.requestor_knows_address | False |
       | student.years_enrolled | 3 |
       | signature_choice | typed_signature |
-      | requestor.typed_signature | Jane Smith |
     Then I should see the phrase "All done"
